@@ -5,14 +5,19 @@
  */
 package controllers;
 
+import daos.ProductDAO;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.util.Hashtable;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import supportMethods.CurrentPathGetting;
@@ -40,22 +45,57 @@ public class ProductCreatingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        CurrentPathGetting currentPath = new CurrentPathGetting();
-        String uploadPath = currentPath.getPath() + "/web/uploads"; 
-        uploadPath = uploadPath.replace('\\', '/');
-
-        String fileName = "";
-        if (ServletFileUpload.isMultipartContent(request)) {
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        if (isMultipart) {
+            ProductDAO productDAO = new ProductDAO();
+            String url = ERROR;
             try {
-                List<FileItem> multipart = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-                for (FileItem item : multipart) {
-                    if (!item.isFormField()) {
-                        fileName = new File(item.getName()).getName();
-                        item.write(new File(uploadPath + File.separator + fileName));
-                    }
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                List<FileItem> items = upload.parseRequest(request);
+
+                Hashtable params = new Hashtable();
+                int itemsSize = items.size();
+
+                for (int i = 0; i < itemsSize - 1; i++) {
+                    FileItem item = items.get(i);
+                    params.put(item.getFieldName(), item.getString());
                 }
-                System.out.println("File Uploaded Successfully!");
-            } catch (Exception e) {
+
+                String productName = (String) params.get("productName");
+                String description = (String) params.get("description");
+                String quantity = (String) params.get("quantity");
+                int parsedQuantity = Integer.parseInt(quantity);
+                String price = (String) params.get("price");
+                double parsedPrice = Double.parseDouble(price);
+                String category = (String) params.get("category");
+                Timestamp createdTime = new Timestamp(System.currentTimeMillis());
+                String imgPath = category; 
+                String imageName = null;
+
+                CurrentPathGetting currentPath = new CurrentPathGetting();
+                String uploadPath = currentPath.getPath() + "/web/uploads/" + category;
+                uploadPath = uploadPath.replace('\\', '/');
+                try {
+                    FileItem imageItem = items.get(itemsSize - 1);
+                    imageName = new File(imageItem.getName()).getName();
+                    imageItem.write(new File(uploadPath + File.separator + imageName));
+                } catch (Exception e) {
+                }
+
+                imgPath = imgPath + "/" + imageName;
+                try {
+                    boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime); 
+                    if (isSuccess) {
+                      url = SUCCESS;  
+                    } else {
+                        request.setAttribute("ERROR", "Create Product Failed");
+                    }
+                } catch (Exception e) {
+                }
+            } catch (UnsupportedEncodingException | FileUploadException e) {
+            } finally {
+                request.getRequestDispatcher(url).forward(request, response);
             }
         }
     }

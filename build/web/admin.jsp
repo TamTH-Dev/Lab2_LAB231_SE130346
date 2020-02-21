@@ -15,11 +15,15 @@
         <h1>Hello World!</h1>
         <form action="ProductCreating" enctype="multipart/form-data" method="POST">
             <input type="text" name="productName">
-            <input type="file" name="image" />
-<!--            <input type="text" name="description">
+            <input type="text" name="description">
             <input type="text" name="quantity">
             <input type="text" name="price">
-            <input type="text" name="category">-->
+            <select name="category">
+                <option value="food">Food</option>
+                <option value="drink">Drink</option>
+                <option value="pudding">Pudding</option>
+            </select>
+            <input type="file" name="image" />
             <input type="submit" value="Submit" />
         </form>
     </body>
