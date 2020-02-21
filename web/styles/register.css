@@ -1,0 +1,131 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 13, 2020, 9:49:58 AM
+    Author     : hoang
+*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.signup-form-container {
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: url('../images/login_signup_background.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-form-container form {
+    width: 60%;
+    height: 85%;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    background: rgba(19, 22, 39, 0.8);
+    box-sizing: border-box;
+    padding: 0 100px 0 100px;
+    color: #fff;
+}
+
+.signup-form-container form h3 {
+    font-size: 46px;
+    font-weight: 500;
+    text-align: center;
+    padding: 30px 0 20px 0;
+}
+
+.signup-form-container form .form-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    position: relative;
+    margin-bottom: 35px;
+}
+
+.signup-form-container form .form-item label {
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+}
+
+.signup-form-container form .form-item input {
+    width: 60%;
+    height: 50px;
+    padding: 0 20px;
+    font-size: 18px;
+    box-sizing: border-box;
+    color: #666;
+    transition: all 0.5s;
+    outline: none;
+    border: 1px solid #eee;
+}
+
+.signup-form-container form .form-item input:focus {
+    box-shadow: 0 0 5px #21d397;
+    border: 1px solid #21d397;
+    padding: 0 20px;
+}
+
+.signup-form-container form button[type='submit'] {
+    width: 30%;
+    height: 50px;
+    line-height: 50px;
+    display: block;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 22px;
+    position: relative;
+    margin: 0 auto;
+    border: none;
+    outline: none;
+    background: linear-gradient(to right, #7450fe, #21d397);
+    z-index: 1;
+    transition: all 0.5s;
+    color: #131627;
+}
+
+.signup-form-container form button[type='submit']::before {
+    content: '';
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    top: 2px;
+    left: 2px;
+    position: absolute;
+    background: #fff;
+    transition: all 0.5s;
+    border-radius: 3px;
+    z-index: -1;
+    opacity: 1;
+}
+
+.signup-form-container form button[type='submit']:hover {
+    color: #fff;
+    cursor: pointer;
+}
+
+.signup-form-container form button[type='submit']:hover::before {
+    opacity: 0;
+}
+
+.signup-form-container .form-item .error {
+    color: #f00;
+    position: absolute;
+    left: 40%;
+    top: 50px;
+    font-size: 14px;
+}
+
+.signup-form-container form .home-back {
+    color: #f00;
+    display: block;
+    text-align: right;
+    padding: 10px 0 0 0;
+}
+

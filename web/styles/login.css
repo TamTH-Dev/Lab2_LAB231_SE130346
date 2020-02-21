@@ -1,0 +1,154 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 13, 2020, 9:15:23 AM
+    Author     : hoang
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a:visited {
+    color: #0055ff;
+}
+
+.login-page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('../images/login_signup_background.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.login-form {
+    background: rgba(19, 22, 39, 0.8);
+    width: 500px;
+    height: auto;
+    padding-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+}
+
+.login-form .form-title {
+    text-align: center;
+    font-size: 36px;
+    padding: 60px 0 10px 0;
+}
+
+.login-form .form-input {
+    height: auto;
+    display: flex;
+    flex-flow: column wrap;
+    padding: 0 50px;
+    box-sizing: border-box;
+    position: relative;
+    height: 130px;
+}
+
+.login-form .form-input div {
+    padding: 10px 0 5px 0;
+    display: block;
+    width: 100%;
+}
+
+.login-form .form-input .icon {
+    position: absolute;
+    left: 12%;
+    top: 44%;
+}
+
+.login-form .form-input .error {
+    color: #f00;
+    position: absolute;
+    left: 50px;
+    top: 100px;
+}
+
+.login-form .form-input .fas {
+    font-size: 24px;
+    color: #666;
+}
+
+.login-form .form-input .input-field {
+    display: block;
+    height: 60px;
+    width: 100%;
+    font-size: 20px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    color: #666;
+    transition: all 0.5s;
+    outline: none;
+    border: 1px solid #fff;
+}
+
+.login-form .form-input .input-field:focus {
+    box-shadow: 0 0 5px #21d397;
+    border: 1px solid #21d397;
+    padding: 0 40px;
+}
+
+.login-form .new-account-creation {
+    margin-top: 20px;
+    text-align: center;
+    padding: 0 0 0 0;
+}
+
+.login-form button[type='submit'] {
+    width: 40%;
+    height: 50px;
+    line-height: 50px;
+    display: block;
+    margin: 20px auto;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 22px;
+    position: relative;
+    border: none;
+    outline: none;
+    background: linear-gradient(to right, #7450fe, #21d397);
+    z-index: 1;
+    transition: all 0.5s;
+    color: #131627;
+}
+
+.login-form button[type='submit']::before {
+    content: '';
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    top: 2px;
+    left: 2px;
+    position: absolute;
+    background: #fff;
+    transition: all 0.5s;
+    border-radius: 3px;
+    z-index: -1;
+    opacity: 1;
+}
+
+.login-form button[type='submit']:hover {
+    color: #fff;
+    cursor: pointer;
+}
+
+.login-form button[type='submit']:hover::before {
+    opacity: 0;
+}
+
+.login-form .home-back {
+    color: #f00;
+    display: block;
+    text-align: right;
+    margin-bottom: 15px;
+    padding-right: 20px;
+}
+
+
+
