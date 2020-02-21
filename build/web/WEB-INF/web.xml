@@ -28,6 +28,10 @@
         <servlet-name>ProductsDeletingController</servlet-name>
         <servlet-class>controllers.ProductsDeletingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductDetailLoadingController</servlet-name>
+        <servlet-class>controllers.ProductDetailLoadingController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/RegisterController</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>ProductsDeletingController</servlet-name>
         <url-pattern>/ProductsDeletingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductDetailLoadingController</servlet-name>
+        <url-pattern>/ProductDetailLoadingController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

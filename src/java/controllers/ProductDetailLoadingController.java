@@ -5,25 +5,24 @@
  */
 package controllers;
 
-import daos.AccountDAO;
+import daos.ProductDAO;
+import dtos.ProductDTO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import supportMethods.SHA_256;
 
 /**
  *
  * @author hoang
  */
-public class LoginController extends HttpServlet {
+public class ProductDetailLoadingController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
-    private static final String ADMIN = "index.jsp";
-    private static final String USER = "index.jsp";
-    private static final String INVALID = "login.jsp";
+    private static final String PRODUCTDETAIL = "product-detail.jsp";
+    private static final String PRODUCTDETAILMANAGEMENT = "product-detail-management.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,39 +36,30 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String url = ERROR;
+        String url = ERROR;
+
         try {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+            String productName = request.getParameter("productName");
 
-            AccountDAO accountDAO = new AccountDAO();
-            SHA_256 sha = new SHA_256();
-            String encodedPassword = sha.getEncodedString(password);
-            String role = accountDAO.handleLogin(email, encodedPassword);
-            if (role.equals("failed")) {
-                request.setAttribute("InvalidAccount", "Username or Password is invalid!");
-                url = INVALID;
-            } else {
-                HttpSession session = request.getSession();
-                String name = accountDAO.getLoginName(email, encodedPassword);
-                session.setAttribute("EMAIL", email);
-                session.setAttribute("NAME", name);
-                session.setAttribute("ROLE", role);
-
-                switch (role) {
-                    case "Admin":
-                        url = ADMIN;
-                        break;
-                    case "User":
-                        url = USER;
-                        break;
-                    default:
-                        request.setAttribute("ERROR", "Your role is invalid");
-                        break;
+            ProductDAO productDAO = new ProductDAO();
+            ProductDTO productDetail = productDAO.getBlogDetailByBlogID(productName);
+            if (productDetail != null) {
+                HttpSession session = request.getSession(false);
+                if (session.getAttribute("ROLE") != null) {
+                    String role = request.getSession(false).getAttribute("ROLE").toString();
+                    if (role.equals("Admin")) {
+                        url = PRODUCTDETAILMANAGEMENT;
+                    }
+                } else {
+                    url = PRODUCTDETAIL;
                 }
+                request.setAttribute("ProductDetail", productDetail);
+            } else {
+                url = ERROR;
+                request.setAttribute("ERROR", "Load Product's Detail Failed!");
             }
         } catch (Exception e) {
-            log("Error at LoginController:" + e.getMessage());
+            log("ERROR at ProductDetailLoadingController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

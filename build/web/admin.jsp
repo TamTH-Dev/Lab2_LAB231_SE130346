@@ -17,20 +17,6 @@
         <link rel="stylesheet" href="./styles/admin.css" />
     </head>
     <body>
-        <form action="ProductCreating" enctype="multipart/form-data" method="POST">
-            <input type="text" name="productName">
-            <input type="text" name="description">
-            <input type="text" name="quantity">
-            <input type="text" name="price">
-            <select name="category">
-                <option value="food">Food</option>
-                <option value="drink">Drink</option>
-                <option value="pudding">Pudding</option>
-            </select>
-            <input type="file" name="image" />
-            <input type="submit" value="Submit" />
-        </form>
-
         <c:if test="${param.searchedContent == null}">
             <c:if test="${requestScope.ProductsData == null}">
                 <c:redirect url="DataLoading" />
@@ -61,9 +47,8 @@
         </header>
 
         <div class="container">
-            <c:if test="${requestScope.ProductsData != null}">
-                <c:if test="${requestScope.DeleteError != null}"><span style="color: #f00; font-size: 40px;">${requestScope.DeleteError}</span></c:if>
-                <form class="blog-table" action="ProductsDeleting" method="POST">
+            <c:if test="${requestScope.ProductsData.size() != 0}">
+                <form class="product-table" action="ProductsDeleting" method="POST">
                     <table class="table table-striped" style=" box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 0.2);">
                         <thead style="background: #131627; color: #fff;">
                             <tr>
@@ -88,11 +73,7 @@
                                     <td>${product.category}</td>
                                     <td>${product.status}</td>
                                     <td>
-                                        <c:url var="handleBlogDetail" value="MainController">
-                                            <c:param name="action" value="getBlogDetail" />
-                                            <c:param name="blogID" value="${blog.blogID}" />
-                                        </c:url>
-                                        <a href="${handleBlogDetail}">View</a>
+                                        <a href="ProductDetailLoading?productName=${product.productName}">View</a>
                                     </td>
                                     <td style="text-align: center;">
                                         <input type="checkbox" name="selectedProducts" value="${product.productName}" <c:if test="${product.status.equals('Inactive')}">disabled="disabled"</c:if> />
@@ -101,7 +82,14 @@
                             </c:forEach>
                         </tbody>
                     </table>
-                    <button class="delete-articles-btn" type="submit" name="action" value="deleteArticles">Delete Selected Items</button>
+                    <button class="delete-products-btn" type="submit">
+                        Delete Selected Items
+                        <c:if test="${requestScope.DeleteError != null}">
+                            <span style="width: 220px; color: #f00; font-size: 14px; position: absolute; top: 30px; right:50%; transform: translateX(50%);">${requestScope.DeleteError}
+                            </span>
+                        </c:if>
+                    </button>
+                    <a class="view-all-btn" href="DataLoading">View All</a>
                 </form>
 
                 <div class="page-container">

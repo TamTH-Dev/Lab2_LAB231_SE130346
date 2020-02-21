@@ -29,8 +29,8 @@ import supportMethods.CurrentPathGetting;
 public class ProductCreatingController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "index.jsp";
-    private static final String INVALID = "admin.jsp";
+    private static final String SUCCESS = "DataLoadingController";
+    private static final String INVALID = "product-creating.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
