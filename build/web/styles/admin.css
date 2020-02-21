@@ -1,0 +1,125 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 13, 2020, 6:35:20 PM
+    Author     : hoang
+*/
+.container {
+    font-family: 'Roboto', sans-serif;
+    padding: 40px 0 0 0;
+}
+
+.container table a {
+    color: #0055ff;
+}
+
+.container table a:hover {
+    text-decoration: underline;
+}
+
+.container table a:visited {
+    color: #0055ff;
+}
+
+.container .page-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 40px 0;
+}
+
+.container .page-container .page-item {
+    margin: 0 5px;
+    border: 1px solid #333;
+    border-top: 4px solid #131627;
+    border-bottom: 4px solid #131627;
+    display: block;
+    width: 30px;
+    text-align: center;
+    height: 35px;
+    line-height: 27px;
+    color: #131627;
+    transition: all .2s;
+}
+
+.container .page-container .page-item:hover {
+    background: #131627;
+    color: #21d397;
+}
+
+.container .page-container .active {
+    background: #131627;
+    color: #21d397;
+}
+
+
+.container .search-form {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.container .search-form .form-group {
+    margin-bottom: 25px;
+}
+
+.container .search-form button[type='submit'] {
+    border: none;
+    height: 40px;
+    width: 100px;
+    background: #131627;
+    color: #fff;
+    transition: all 0.2s;
+}
+
+.container .search-form button[type='submit']:hover {
+    color: #21d397;
+}
+
+.container .search-form a {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #131627;
+    color: #fff;
+    transition: all 0.2s;
+}
+
+.container .search-form a:hover {
+    color: #21d397;
+}
+
+.container .search-form .error {
+    color: #f00;
+    position: absolute;
+    font-size: 14px;
+}
+
+.container .blog-table {
+    position: relative;
+}
+
+.container .blog-table .delete-articles-btn {
+    position: absolute; 
+    top: -70px; 
+    right: 120px; 
+    display: block; 
+    padding: 0 20px; 
+    height: 40px; 
+    line-height: 40px; 
+    border: none;
+    color: #fff;
+    background: #131627;
+    transition: all .2s;
+}
+
+.container .blog-table .delete-articles-btn:hover {
+    color: #21d397
+}
+

@@ -1,0 +1,133 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 12, 2020, 8:19:33 PM
+    Author     : hoang
+*/
+
+.main-footer {
+    background-color: #131627;
+    color: #b5aec4;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+}
+
+.main-footer .row {
+    padding: 50px 105px 50px 105px;
+}
+
+.main-footer .col-lg-3,
+.main-footer .col-md-6 {
+    padding: 0 15px;
+}
+
+.main-footer h3 {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0 0 30px 0;
+}
+
+.main-footer-newsletter form {
+    position: relative;
+    padding: 5px 0 25px 0;
+}
+
+.main-footer-newsletter form input {
+    height: 40px;
+    width: 65%;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    color: #b5aec4;
+    background-color: #04081d;
+    border: none;
+    padding: 0 15px;
+    box-sizing: border-box;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.main-footer-newsletter form button {
+    width: 36%;
+    height: 40px;
+    border: none;
+    font-size: 13px;
+    color: #fff;
+    background: linear-gradient(to right, #7450fe, #21d397);
+    font-weight: 500;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    position: absolute;
+    right: 0;
+}
+
+.main-footer-newsletter form input:focus {
+    outline: 1px solid #7450fe;
+    outline-offset: -1px;
+}
+
+.main-footer-newsletter .links-list {
+    display: flex;
+}
+
+.main-footer-newsletter .links-list li {
+    width: 20%;
+}
+
+.main-footer-newsletter .links-list li i {
+    font-size: 16px;
+    color: #21d397;
+    transition: all 0.5s;
+}
+
+.main-footer-newsletter .links-list li i:hover {
+    color: #7450fe;
+    cursor: pointer;
+}
+
+.main-footer-services .services-list li {
+    margin-bottom: 15px;
+}
+
+.main-footer-services .services-list li a {
+    color: #b5aec4;
+    transition: all 0.5s;
+}
+
+.main-footer-services .services-list li a:hover {
+    color: #21d397;
+}
+
+.main-footer-contacts .contacts-list li {
+    margin-bottom: 16px;
+}
+
+.main-footer-contacts .contacts-list li p {
+    margin: 0;
+}
+
+.main-footer-legal .legal-list li {
+    margin-bottom: 15px;
+}
+
+.main-footer-legal .legal-list li a {
+    color: #b5aec4;
+    transition: all 0.5s;
+}
+
+.main-footer-legal .legal-list li a:hover {
+    color: #21d397;
+}
+
+.main-footer .footer-reserved {
+    color: #51545f;
+    background: #04081d;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+

@@ -11,9 +11,22 @@ package dtos;
  */
 public class ProductDTO {
 
-    private String productName, imgPath, description, quantity, price, category;
+    private String productName, imgPath, description, category, createdTime, status;
+    private int quantity;
+    private double price;
 
     public ProductDTO() {
+    }
+
+    public ProductDTO(String productName, String imgPath, String description, int quantity, double price, String category, String createdTime, String status) {
+        this.productName = productName;
+        this.imgPath = imgPath;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+        this.category = category;
+        this.createdTime = createdTime;
+        this.status = status;
     }
 
     public String getProductName() {
@@ -40,19 +53,19 @@ public class ProductDTO {
         this.description = description;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -62,5 +75,21 @@ public class ProductDTO {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

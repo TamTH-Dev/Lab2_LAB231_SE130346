@@ -5,24 +5,26 @@
  */
 package controllers;
 
-import daos.AccountDAO;
+import daos.ProductDAO;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import supportMethods.SHA_256;
 
 /**
  *
  * @author hoang
  */
-public class RegisterController extends HttpServlet {
+public class ProductsDeletingController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "index.jsp";
-    private static final String INVALID = "register.jsp";
+    private static final String SUCCESS = "DataLoadingController";
+    private static final String INVALID = "DataLoadingController";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,35 +37,32 @@ public class RegisterController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+         String url = ERROR;
         try {
-            AccountDAO accountDAO = new AccountDAO();
-            String email = request.getParameter("email");
-            String name = request.getParameter("name");
-            String password = request.getParameter("password");
+            ProductDAO productDAO = new ProductDAO();
+            String[] slProducts = request.getParameterValues("selectedProducts");
 
-            boolean isDuplicate = accountDAO.checkDuplicate(email);
-            if (!isDuplicate) {
-                HttpSession session = request.getSession();
-                SHA_256 sha = new SHA_256();
+            if (slProducts != null) {
+                List<String> selectedBlogs = new ArrayList<>();
+                int slProductsLength = slProducts.length;
+                for (int i = 0; i < slProductsLength; i++) {
+                    selectedBlogs.add((slProducts[i]));
+                }
 
-                String encodedPassword = sha.getEncodedString(password);
-                String role = accountDAO.createAccount(email, name, encodedPassword);
-                if (role != null) {
-                    session.setAttribute("EMAIL", email);
-                    session.setAttribute("NAME", name);
-                    session.setAttribute("ROLE", role);
+                boolean isSuccess = productDAO.deleteSelectedProducts(selectedBlogs);
+                if (isSuccess) {
+                    Timestamp deleteTime = new Timestamp(System.currentTimeMillis());
+                    productDAO.recordDeletedProducts(selectedBlogs, deleteTime);
                     url = SUCCESS;
                 } else {
-                    request.setAttribute("ERROR", "Register Account Failed!");
+                    request.setAttribute("ERROR", "Delete Selected Products Failed!");
                 }
             } else {
-                request.setAttribute("DuplicateError", "The email existed!");
                 url = INVALID;
+                request.setAttribute("DeleteError", "Select at least 1 blog to delete!");
             }
-            
         } catch (Exception e) {
-            log("Error at RegisterController: " + e.getMessage());
+            log("ERROR at ProductsDeletingController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

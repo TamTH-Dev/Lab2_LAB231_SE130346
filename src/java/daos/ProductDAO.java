@@ -6,10 +6,15 @@
 package daos;
 
 import db.MyConnection;
+import dtos.ProductDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -50,6 +55,91 @@ public class ProductDAO {
             preStm.setDouble(5, price);
             preStm.setString(6, category);
             preStm.setTimestamp(7, createdTime);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public List<ProductDTO> getAllProductsForAdminPage(int page, int numOfbBlogsPerPage) throws Exception {
+        List<ProductDTO> productsList = null;
+
+        try {
+            String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status from (select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status, ROW_NUMBER() over (order by CreatedTime desc) as rowNum from Product) as product where product.rowNum between ? and ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setInt(1, (page - 1) * numOfbBlogsPerPage + 1);
+            preStm.setInt(2, (page - 1) * numOfbBlogsPerPage + numOfbBlogsPerPage);
+            rs = preStm.executeQuery();
+            productsList = new ArrayList<>();
+            while (rs.next()) {
+                String productName = rs.getString("ProductName");
+                String imgPath = rs.getString("ImgPath");
+                String description = rs.getString("Description");
+                int quantity = Integer.parseInt(rs.getString("Quantity"));
+                double price = Double.parseDouble(rs.getString("Price"));
+                String category = rs.getString("Category");
+                Timestamp createdTime = rs.getTimestamp("CreatedTime");
+                String status = rs.getString("Status");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+
+                ProductDTO product = new ProductDTO(productName, imgPath, description, quantity, price, category, sdf.format(createdTime), status);
+                productsList.add(product);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return productsList;
+    }
+
+    public int getProductsTotalForAdminPage() throws Exception {
+        int total = 0;
+
+        try {
+            String sql = "select count(*) from Product";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return total;
+    }
+
+    public boolean deleteSelectedProducts(List<String> selectedProducts) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "update Product set Status = 'Inactive' where ProductName in (?)";
+            String sqlIn = selectedProducts.stream().map(x -> "'" + x + "'").collect(Collectors.joining(",", "(", ")"));
+            sql = sql.replace("(?)", sqlIn);
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public boolean recordDeletedProducts(List<String> selectedProducts, Timestamp deleteTime) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "insert into ProductUpdatingRecord(ProductName, UpdateTime, Action) values (?)";
+            String sqlIn = selectedProducts.stream().map(x -> "('" + x + "','" + deleteTime + "'," + "'Delete" + "')").collect(Collectors.joining(","));
+            System.out.println(sqlIn);
+            sql = sql.replace("(?)", sqlIn);
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
             isSuccess = preStm.executeUpdate() > 0;
         } finally {
             closeConnection();

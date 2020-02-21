@@ -1,0 +1,125 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 12, 2020, 8:01:08 PM
+    Author     : hoang
+*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input:focus {
+    outline: none;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.row {
+    margin: 0;
+    padding: 0;
+}
+
+.col-lg-4,
+.col-md-6,
+.col-md-3 {
+    padding: 0;
+    margin: 0;
+}
+
+a,
+a:hover {
+    text-decoration: none;
+    color: #255;
+}
+
+header {
+    position: relative;
+    z-index: 1000;
+    width: 100%;
+}
+
+ul {
+    margin: 0;
+    list-style: none;
+}
+
+.nav-app {
+    height: 80px;
+    display: flex;
+    padding: 0 40px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    background: #131627;
+    transition: all 1s;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 1000;
+}
+
+.nav-app .logo {
+    display: flex;
+    align-items: center;
+}
+
+.nav-app .logo img {
+    display: block;
+    height: 65%;
+}
+
+.nav-app .nav-menu {
+    display: flex;
+    height: 100%;
+}
+
+.nav-app .nav-menu > li {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.nav-app .nav-menu > li a {
+    display: block;
+    height: 100%;
+    line-height: 80px;
+    padding: 0 20px;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.nav-app .nav-menu > li > button {
+    height: 40px;
+    display: block;
+    margin: 0 10px;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
+.nav-app .nav-menu > li > button a {
+    line-height: 40px;
+    padding: 0 18px;
+    background: rgba(1, 2, 12, 0);
+    color: #21d397;
+    border: 1px solid #21d397;
+    font-weight: 600;
+    transition: all 0.4s;
+}
+
+.nav-app .nav-menu > li:hover > button a {
+    color: #fff;
+    background: linear-gradient(to right, #7450fe, #21d397);
+    border: 1px solid #131627;
+}
+
+.nav-app .nav-menu > li:hover > a {
+    color: #21d397;
+}
+

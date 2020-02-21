@@ -5,24 +5,27 @@
  */
 package controllers;
 
-import daos.AccountDAO;
+import daos.ProductDAO;
+import dtos.ProductDTO;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import supportMethods.SHA_256;
+import supportMethods.PagingHandler;
 
 /**
  *
  * @author hoang
  */
-public class RegisterController extends HttpServlet {
-
+public class DataLoadingController extends HttpServlet {
+    
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "index.jsp";
-    private static final String INVALID = "register.jsp";
+    private static final String INDEX = "index.jsp";
+    private static final String ADMIN = "admin.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,34 +39,35 @@ public class RegisterController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        HttpSession session = request.getSession(false);
+        
+        String pg = request.getParameter("pg");
+        int numOfBlogsPerPage = 20;
         try {
-            AccountDAO accountDAO = new AccountDAO();
-            String email = request.getParameter("email");
-            String name = request.getParameter("name");
-            String password = request.getParameter("password");
-
-            boolean isDuplicate = accountDAO.checkDuplicate(email);
-            if (!isDuplicate) {
-                HttpSession session = request.getSession();
-                SHA_256 sha = new SHA_256();
-
-                String encodedPassword = sha.getEncodedString(password);
-                String role = accountDAO.createAccount(email, name, encodedPassword);
-                if (role != null) {
-                    session.setAttribute("EMAIL", email);
-                    session.setAttribute("NAME", name);
-                    session.setAttribute("ROLE", role);
-                    url = SUCCESS;
-                } else {
-                    request.setAttribute("ERROR", "Register Account Failed!");
-                }
-            } else {
-                request.setAttribute("DuplicateError", "The email existed!");
-                url = INVALID;
-            }
+            ProductDAO productDAO = new ProductDAO();
+            PagingHandler pagingHandler = new PagingHandler();
             
+            int productsTotal = productDAO.getProductsTotalForAdminPage();
+            int page = pagingHandler.getPage(pg);
+            int totalPage = pagingHandler.getTotalPage(pg, productsTotal, numOfBlogsPerPage);
+            List<ProductDTO> productsData = productDAO.getAllProductsForAdminPage(page, numOfBlogsPerPage);
+            if (productsData != null) {
+                url = INDEX;
+                if (session.getAttribute("ROLE") != null) {
+                    String role = session.getAttribute("ROLE").toString();
+                    if (role.equals("Admin")) {
+                        url = ADMIN;
+                    }
+                }
+                if (page > 0 && page <= totalPage) {
+                    request.setAttribute("TotalPage", totalPage);
+                }
+                request.setAttribute("ProductsData", productsData);
+            } else {
+                request.setAttribute("ERROR", "Load Data Failed");
+            }
         } catch (Exception e) {
-            log("Error at RegisterController: " + e.getMessage());
+            log("Error at DataLoadingController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

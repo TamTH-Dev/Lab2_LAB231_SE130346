@@ -20,6 +20,14 @@
         <servlet-name>ProductCreatingController</servlet-name>
         <servlet-class>controllers.ProductCreatingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DataLoadingController</servlet-name>
+        <servlet-class>controllers.DataLoadingController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductsDeletingController</servlet-name>
+        <servlet-class>controllers.ProductsDeletingController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/RegisterController</url-pattern>
@@ -31,6 +39,14 @@
     <servlet-mapping>
         <servlet-name>ProductCreatingController</servlet-name>
         <url-pattern>/ProductCreatingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DataLoadingController</servlet-name>
+        <url-pattern>/DataLoadingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductsDeletingController</servlet-name>
+        <url-pattern>/ProductsDeletingController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

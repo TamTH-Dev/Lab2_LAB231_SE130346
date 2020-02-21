@@ -70,7 +70,7 @@ public class ProductCreatingController extends HttpServlet {
                 double parsedPrice = Double.parseDouble(price);
                 String category = (String) params.get("category");
                 Timestamp createdTime = new Timestamp(System.currentTimeMillis());
-                String imgPath = category; 
+                String imgPath = category;
                 String imageName = null;
 
                 CurrentPathGetting currentPath = new CurrentPathGetting();
@@ -85,15 +85,16 @@ public class ProductCreatingController extends HttpServlet {
 
                 imgPath = imgPath + "/" + imageName;
                 try {
-                    boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime); 
+                    boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime);
                     if (isSuccess) {
-                      url = SUCCESS;  
+                        url = SUCCESS;
                     } else {
                         request.setAttribute("ERROR", "Create Product Failed");
                     }
                 } catch (Exception e) {
                 }
             } catch (UnsupportedEncodingException | FileUploadException e) {
+                log("ERROR at ProductCreatingController: " + e.getMessage());
             } finally {
                 request.getRequestDispatcher(url).forward(request, response);
             }
