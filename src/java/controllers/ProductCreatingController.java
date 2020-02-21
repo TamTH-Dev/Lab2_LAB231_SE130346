@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import supportMethods.CurrentPathGetting;
 
 /**
  *
@@ -25,7 +26,7 @@ public class ProductCreatingController extends HttpServlet {
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "index.jsp";
     private static final String INVALID = "admin.jsp";
-    private static final String UPLOAD_DIRECTORY="C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/uploads";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,14 +38,20 @@ public class ProductCreatingController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String fname = "";
+        response.setContentType("text/html;charset=UTF-8");
+
+        CurrentPathGetting currentPath = new CurrentPathGetting();
+        String uploadPath = currentPath.getPath() + "/web/uploads"; 
+        uploadPath = uploadPath.replace('\\', '/');
+
+        String fileName = "";
         if (ServletFileUpload.isMultipartContent(request)) {
             try {
                 List<FileItem> multipart = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-                for (FileItem item: multipart) {
+                for (FileItem item : multipart) {
                     if (!item.isFormField()) {
-                        fname = new File(item.getName()).getName();
-                        item.write(new File(UPLOAD_DIRECTORY + File.separator +fname));
+                        fileName = new File(item.getName()).getName();
+                        item.write(new File(uploadPath + File.separator + fileName));
                     }
                 }
                 System.out.println("File Uploaded Successfully!");
