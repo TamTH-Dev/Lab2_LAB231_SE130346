@@ -113,6 +113,35 @@ public class ProductDAO {
         return total;
     }
 
+    public ProductDTO getProductDetailByProductName(String pdName) throws Exception {
+        ProductDTO product = null;
+
+        try {
+            String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status from Product where ProductName = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, pdName);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                String productName = rs.getString("ProductName");
+                String imgPath = rs.getString("ImgPath");
+                String description = rs.getString("Description");
+                int quantity = Integer.parseInt(rs.getString("quantity"));
+                double price = Double.parseDouble(rs.getString("Price"));
+                String category = rs.getString("Category");
+                Timestamp createdTime = rs.getTimestamp("CreatedTime");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                String status = rs.getString("Status");
+
+                product = new ProductDTO(productName, imgPath, description, quantity, price, category, sdf.format(createdTime), status);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return product;
+    }
+
     public boolean deleteProduct(String productName) throws Exception {
         boolean isSuccess = false;
 
@@ -230,35 +259,6 @@ public class ProductDAO {
         return isSuccess;
     }
 
-    public ProductDTO getProductDetailByProductName(String pdName) throws Exception {
-        ProductDTO product = null;
-
-        try {
-            String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status from Product where ProductName = ?";
-            conn = MyConnection.getMyConnection();
-            preStm = conn.prepareStatement(sql);
-            preStm.setString(1, pdName);
-            rs = preStm.executeQuery();
-            if (rs.next()) {
-                String productName = rs.getString("ProductName");
-                String imgPath = rs.getString("ImgPath");
-                String description = rs.getString("Description");
-                int quantity = Integer.parseInt(rs.getString("quantity"));
-                double price = Double.parseDouble(rs.getString("Price"));
-                String category = rs.getString("Category");
-                Timestamp createdTime = rs.getTimestamp("CreatedTime");
-                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-                String status = rs.getString("Status");
-
-                product = new ProductDTO(productName, imgPath, description, quantity, price, category, sdf.format(createdTime), status);
-            }
-        } finally {
-            closeConnection();
-        }
-
-        return product;
-    }
-
     public boolean updateProductWithImage(String productName, String imgPath, String description, int quantity, double price, String category) throws Exception {
         boolean isSuccess = false;
 
@@ -298,5 +298,141 @@ public class ProductDAO {
         }
 
         return isSuccess;
+    }
+
+    public List<ProductDTO> getSearchedProductsDataForAdminPage(String searchedProductName, String searchedPriceLevel, int page, int numOfProductsPerPage) throws Exception {
+        List<ProductDTO> productsList = null;
+
+        try {
+            conn = MyConnection.getMyConnection();
+
+            if (!searchedProductName.equals("") && searchedPriceLevel == null) {
+                searchDataByProductNameForAdminPage(searchedProductName, page, numOfProductsPerPage);
+            } else if (!searchedProductName.equals("") && searchedPriceLevel != null) {
+                searchDataByProductNameAndPriceLevelForAdminPage(searchedProductName, searchedPriceLevel, page, numOfProductsPerPage);
+            }
+
+            productsList = new ArrayList<>();
+            int count = 0;
+            while (rs.next()) {
+                System.out.println(++count);
+                String productName = rs.getString("ProductName");
+                String imgPath = rs.getString("ImgPath");
+                String description = rs.getString("Description");
+                int quantity = Integer.parseInt(rs.getString("Quantity"));
+                double price = Double.parseDouble(rs.getString("Price"));
+                String category = rs.getString("Category");
+                String status = rs.getString("Status");
+                Timestamp createdTime = rs.getTimestamp("CreatedTime");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+
+                ProductDTO product = new ProductDTO(productName, imgPath, description, quantity, price, category, sdf.format(createdTime), status);
+                productsList.add(product);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return productsList;
+    }
+
+    private void searchDataByProductNameForAdminPage(String searchedProductName, int page, int numOfProductsPerPage) throws Exception {
+        String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status from (select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status, ROW_NUMBER() over (order by CreatedTime desc) as rowNum from Product where ProductName like ?) as product where product.rowNum between ? and ?";
+        preStm = conn.prepareStatement(sql);
+        preStm.setString(1, "%" + searchedProductName + "%");
+        preStm.setInt(2, (page - 1) * numOfProductsPerPage + 1);
+        preStm.setInt(3, (page - 1) * numOfProductsPerPage + numOfProductsPerPage);
+        rs = preStm.executeQuery();
+    }
+
+    private void searchDataByProductNameAndPriceLevelForAdminPage(String searchedProductName, String searchedPriceLevel, int page, int numOfProductsPerPage) throws Exception {
+        String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status from (select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status, ROW_NUMBER() over (order by CreatedTime desc) as rowNum from Product where ProductName like ? and Price between ? and ?) as product where product.rowNum between ? and ?";
+
+        double minValue;
+        double maxValue;
+        switch (searchedPriceLevel) {
+            case "level-1":
+                minValue = 0;
+                maxValue = 20;
+                break;
+            case "level-2":
+                minValue = 20;
+                maxValue = 50;
+                break;
+            default:
+                minValue = 50;
+                maxValue = 999999;
+                break;
+        }
+
+        preStm = conn.prepareStatement(sql);
+        preStm.setString(1, "%" + searchedProductName + "%");
+        preStm.setDouble(2, minValue);
+        preStm.setDouble(3, maxValue);
+        preStm.setInt(4, (page - 1) * numOfProductsPerPage + 1);
+        preStm.setInt(5, (page - 1) * numOfProductsPerPage + numOfProductsPerPage);
+        rs = preStm.executeQuery();
+    }
+
+    public int getSearchedProductsTotalForAdminPage(String searchedProductName, String searchedPriceLevel) throws Exception {
+        int total = 0;
+        try {
+            conn = MyConnection.getMyConnection();
+            if (!searchedProductName.equals("") && searchedPriceLevel == null) {
+                total = getSearchedProductsTotalByProductNameForAdminPage(searchedProductName);
+            } else if (!searchedProductName.equals("") && searchedPriceLevel != null) {
+                total = getSearchedProductsTotalByProductNameAndPriceLevelForAdminPage(searchedProductName, searchedPriceLevel);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return total;
+    }
+
+    private int getSearchedProductsTotalByProductNameForAdminPage(String searchedProductName) throws Exception {
+        int total = 0;
+
+        String sql = "select count(*) from Product where ProductName like ?";
+        preStm = conn.prepareStatement(sql);
+        preStm.setString(1, "%" + searchedProductName + "%");
+        rs = preStm.executeQuery();
+        if (rs.next()) {
+            total = rs.getInt(1);
+        }
+
+        return total;
+    }
+
+    private int getSearchedProductsTotalByProductNameAndPriceLevelForAdminPage(String searchedProductName, String searchedPriceLevel) throws Exception {
+        int total = 0;
+        String sql = "select count(*) from Product where ProductName like ? and Price between ? and ?";
+
+        double minValue;
+        double maxValue;
+        switch (searchedPriceLevel) {
+            case "level-1":
+                minValue = 0;
+                maxValue = 20;
+                break;
+            case "level-2":
+                minValue = 20;
+                maxValue = 50;
+                break;
+            default:
+                minValue = 50;
+                maxValue = 999999;
+        }
+
+        preStm = conn.prepareStatement(sql);
+        preStm.setString(1, "%" + searchedProductName + "%");
+        preStm.setDouble(2, minValue);
+        preStm.setDouble(3, maxValue);
+        rs = preStm.executeQuery();
+        if (rs.next()) {
+            total = rs.getInt(1);
+        }
+
+        return total;
     }
 }

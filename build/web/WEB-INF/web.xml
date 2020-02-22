@@ -48,6 +48,10 @@
         <servlet-name>LogoutController</servlet-name>
         <servlet-class>controllers.LogoutController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductNameAndPriceLevelSearchingController</servlet-name>
+        <servlet-class>controllers.ProductNameAndPriceLevelSearchingController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/RegisterController</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>LogoutController</servlet-name>
         <url-pattern>/LogoutController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductNameAndPriceLevelSearchingController</servlet-name>
+        <url-pattern>/ProductNameAndPriceLevelSearchingController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="./styles/admin.css" />
     </head>
     <body>
-        <c:if test="${param.searchedContent == null}">
+        <c:if test="${param.searchedProductName == null && param.searchedPriceLevel == null}">
             <c:if test="${requestScope.ProductsData == null}">
                 <c:redirect url="DataLoading" />
             </c:if>
@@ -52,6 +52,34 @@
         </header>
 
         <div class="container">
+            <form action="ProductNameAndPriceLevelSearching" method="POST" class="form-inline search-form">
+                <div class="form-group mr-3">
+                    <label for="productName" class="sr-only">Product Name</label>
+                    <input id="productName" name="searchedProductName" value="${param.searchedProductName}" type="text" class="form-control" placeholder="Product Name" />
+                </div>
+
+                <div class="form-group mx-sm-3">
+                    <div class="form-check form-check-inline mr-3">
+                        <input class="form-check-input" type="radio" name="searchedPriceLevel" id="level-1" value="level-1">
+                        <label class="form-check-label" for="level-1">0$ - 20$</label>
+                    </div>
+                    <div class="form-check form-check-inline mr-3">
+                        <input class="form-check-input" type="radio" name="searchedPriceLevel" id="level-2" value="level-2">
+                        <label class="form-check-label" for="level-2">20$ - 50$</label>
+                    </div>
+                    <div class="form-check form-check-inline mr-3">
+                        <input class="form-check-input" type="radio" name="searchedPriceLevel" id="level-3" value="level-3">
+                        <label class="form-check-label" for="level-3"> Greater than 50$</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary search-btn" name="action" value="search" id="search-btn">
+                    Search
+                </button>
+            </form>
+
+
+
             <c:if test="${requestScope.ProductsData.size() != 0}">
                 <form class="product-table" action="ProductsDeleting" method="POST">
                     <table class="table table-striped" style=" box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 0.2);">
