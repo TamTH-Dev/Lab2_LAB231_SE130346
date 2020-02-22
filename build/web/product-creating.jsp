@@ -22,6 +22,19 @@
             padding: 0 150px 40px 150px;
             box-shadow: 0 1px 20px 5px rgba(0, 0, 0, 0.2);
         }
+
+        .container form .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .container form .form-group .error {
+            color: #f00;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            font-size: 16px;
+        }
     </style>
     <body>
         <header>
@@ -58,33 +71,39 @@
                 <div class="form-group">
                     <label for="productName">Product Name</label>
                     <input type="text" name="productName" class="form-control" id="productName" />
+                    <span class="error" id="product-name-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea type="text" name="description" class="form-control" style="resize: none;" rows="3" id="description"></textarea>
+                    <span class="error" style="top: 120px;" id="description-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="quantity">Quantity</label>
                     <input type="text" name="quantity" class="form-control" id="quantity">
+                    <span class="error" id="quantity-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="price">Price</label>
                     <input type="text" name="price" class="form-control" id="price">
+                    <span class="error" id="price-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="category">Category</label>
                     <select name="category" class="form-control" id="category">
-                        <option selected>Choose...</option>
+                        <option value="" selected>Choose...</option>
                         <option value="food">Food</option>
                         <option value="drink">Drink</option>
                         <option value="pudding">Pudding</option>
                     </select>
+                    <span class="error" id="category-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="image">Image</label>
                     <input type="file" name="image" class="form-control-file" id="image">
+                    <span class="error" style="top: 60px;" id="image-error"></span>
                 </div>
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-primary" id="add-btn">Add</button>
             </form>
         </div>
 
@@ -135,5 +154,6 @@
             </div>
         </footer>
         <script src="./scripts/all.js"></script>
+        <script src="./scripts/product-creating-handling.js"></script>
     </body>
 </html>

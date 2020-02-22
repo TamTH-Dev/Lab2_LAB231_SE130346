@@ -37,29 +37,24 @@ public class ProductsDeletingController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String url = ERROR;
+        String url = ERROR;
         try {
             ProductDAO productDAO = new ProductDAO();
             String[] slProducts = request.getParameterValues("selectedProducts");
 
-            if (slProducts != null) {
-                List<String> selectedBlogs = new ArrayList<>();
-                int slProductsLength = slProducts.length;
-                for (int i = 0; i < slProductsLength; i++) {
-                    selectedBlogs.add((slProducts[i]));
-                }
+            List<String> selectedBlogs = new ArrayList<>();
+            int slProductsLength = slProducts.length;
+            for (int i = 0; i < slProductsLength; i++) {
+                selectedBlogs.add((slProducts[i]));
+            }
 
-                boolean isSuccess = productDAO.deleteSelectedProducts(selectedBlogs);
-                if (isSuccess) {
-                    Timestamp deleteTime = new Timestamp(System.currentTimeMillis());
-                    productDAO.recordDeletedProducts(selectedBlogs, deleteTime);
-                    url = SUCCESS;
-                } else {
-                    request.setAttribute("ERROR", "Delete Selected Products Failed!");
-                }
+            boolean isSuccess = productDAO.deleteSelectedProducts(selectedBlogs);
+            if (isSuccess) {
+                Timestamp deleteTime = new Timestamp(System.currentTimeMillis());
+                productDAO.recordDeletedProducts(selectedBlogs, deleteTime);
+                url = SUCCESS;
             } else {
-                url = INVALID;
-                request.setAttribute("DeleteError", "Select at least 1 blog to delete!");
+                request.setAttribute("ERROR", "Delete Selected Products Failed!");
             }
         } catch (Exception e) {
             log("ERROR at ProductsDeletingController: " + e.getMessage());

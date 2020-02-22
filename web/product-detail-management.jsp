@@ -24,6 +24,19 @@
             position: relative;
         }
 
+        .container form .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .container form .form-group .error {
+            color: #f00;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            font-size: 16px;
+        }
+
         .product-img {
             width: 300px;
             height: 200px;
@@ -110,30 +123,52 @@
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea type="text" name="description" class="form-control" rows="3" style="resize: none;" id="description">${ProductDetail.description}</textarea>
+                    <span class="error" style="top: 120px;" id="description-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="quantity">Quantity</label>
                     <input type="text" name="quantity" class="form-control" id="quantity" value="${ProductDetail.quantity}" />
+                    <span class="error" id="quantity-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="price">Price</label>
                     <input type="text" name="price" class="form-control" id="price" value="${ProductDetail.price}">
+                    <span class="error" id="price-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="category">Category</label>
                     <select name="category" class="form-control" id="category">
-                        <option value="food" <c:if test="${ProductDetail.category eq 'food'}">selected</c:if>>Food</option>
-                        <option value="drink" <c:if test="${ProductDetail.category eq 'drink'}">selected</c:if>>Drink</option>
-                        <option value="pudding" <c:if test="${ProductDetail.category eq 'pudding'}">selected</c:if>>Pudding</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="position: relative; height: 300px;">
-                        <label for="image">Image</label>
-                        <img src="./uploads/${ProductDetail.imgPath}" class="product-img" />
+                        <option value="food" 
+                                <c:if test="${ProductDetail.category eq 'food'}">
+                                    selected
+                                </c:if>
+                                >
+                            Food
+                        </option>
+                        <option value="drink" 
+                                <c:if test="${ProductDetail.category eq 'drink'}">
+                                    selected
+                                </c:if>
+                                >
+                            Drink
+                        </option>
+                        <option value="pudding" 
+                                <c:if test="${ProductDetail.category eq 'pudding'}">
+                                    selected
+                                </c:if>
+                                >
+                            Pudding
+                        </option>
+                    </select>
+                    <span class="error" id="category-error"></span>
+                </div>
+                <div class="form-group" style="position: relative; height: 300px;">
+                    <label for="image">Image</label>
+                    <img src="./uploads/${ProductDetail.imgPath}" class="product-img" />
                     <input type="file" name="image" class="form-control-file" id="image" style="position: absolute; top: 250px;">
                 </div>
                 <c:if test="${ProductDetail.status eq 'Active'}">
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary" id="update-btn">Update</button>
                     <button style="padding: 0" type="button" class="btn"><a class="delete-btn" href="ProductDeleting?productName=${ProductDetail.productName}">Delete</a></button>
                 </c:if>
                 <c:if test="${ProductDetail.status eq 'Inactive'}">
@@ -189,5 +224,6 @@
             </div>
         </footer>
         <script src="./scripts/all.js"></script>
+        <script src="./scripts/product-updating-handling.js"></script>
     </body>
 </html>

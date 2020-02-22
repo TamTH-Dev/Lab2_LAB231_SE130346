@@ -121,18 +121,17 @@
                                         <a href="ProductDetailLoading?productName=${product.productName}">View</a>
                                     </td>
                                     <td style="text-align: center;">
-                                        <input type="checkbox" name="selectedProducts" value="${product.productName}" <c:if test="${product.status.equals('Inactive')}">disabled="disabled"</c:if> />
+                                        <input class="product-selecting" type="checkbox" name="selectedProducts" value="${product.productName}" <c:if test="${product.status.equals('Inactive')}">disabled="disabled"</c:if> />
                                         </td>
                                     </tr>
                             </c:forEach>
                         </tbody>
                     </table>
-                    <button class="products-deleting-btn" type="submit">
+                    <button class="products-deleting-btn" type="submit" id="products-deleting-btn">
                         Delete Selected Items
-                        <c:if test="${requestScope.DeleteError != null}">
-                            <span style="width: 220px; color: #f00; font-size: 14px; position: absolute; top: 30px; right:50%; transform: translateX(50%);">${requestScope.DeleteError}
-                            </span>
-                        </c:if>
+                        <span style="width: 300px; display: none; color: #f00; font-size: 14px; position: absolute; top: 30px; right:50%; transform: translateX(50%);" id="products-deleting-error">
+                            Please Select At Least One Product To Delete
+                        </span>
                     </button>
                     <a class="product-adding-btn" href="product-creating.jsp">Add Product</a>
                 </form>
@@ -215,6 +214,6 @@
         </footer>
 
         <script src="./scripts/all.js"></script>
-        <script src="./scripts/search-handling.js"></script>
+        <script src="./scripts/admin-page-handling.js"></script>
     </body>
 </html>

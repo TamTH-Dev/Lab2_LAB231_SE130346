@@ -315,9 +315,7 @@ public class ProductDAO {
             }
 
             productsList = new ArrayList<>();
-            int count = 0;
             while (rs.next()) {
-                System.out.println(++count);
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
