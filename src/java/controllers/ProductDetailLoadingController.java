@@ -42,7 +42,7 @@ public class ProductDetailLoadingController extends HttpServlet {
             String productName = request.getParameter("productName");
 
             ProductDAO productDAO = new ProductDAO();
-            ProductDTO productDetail = productDAO.getBlogDetailByBlogID(productName);
+            ProductDTO productDetail = productDAO.getProductDetailByProductName(productName);
             if (productDetail != null) {
                 HttpSession session = request.getSession(false);
                 if (session.getAttribute("ROLE") != null) {

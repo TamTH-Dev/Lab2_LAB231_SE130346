@@ -32,6 +32,22 @@
         <servlet-name>ProductDetailLoadingController</servlet-name>
         <servlet-class>controllers.ProductDetailLoadingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductDeletingController</servlet-name>
+        <servlet-class>controllers.ProductDeletingController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductRestoringController</servlet-name>
+        <servlet-class>controllers.ProductRestoringController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductUpdatingController</servlet-name>
+        <servlet-class>controllers.ProductUpdatingController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>controllers.LogoutController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/RegisterController</url-pattern>
@@ -55,6 +71,22 @@
     <servlet-mapping>
         <servlet-name>ProductDetailLoadingController</servlet-name>
         <url-pattern>/ProductDetailLoadingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductDeletingController</servlet-name>
+        <url-pattern>/ProductDeletingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductRestoringController</servlet-name>
+        <url-pattern>/ProductRestoringController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductUpdatingController</servlet-name>
+        <url-pattern>/ProductUpdatingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/LogoutController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

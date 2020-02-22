@@ -8,7 +8,6 @@ package controllers;
 import daos.ProductDAO;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.Hashtable;
 import java.util.List;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import supportMethods.CurrentPathGetting;
@@ -79,21 +77,22 @@ public class ProductCreatingController extends HttpServlet {
                 try {
                     FileItem imageItem = items.get(itemsSize - 1);
                     imageName = new File(imageItem.getName()).getName();
-                    imageItem.write(new File(uploadPath + File.separator + imageName));
-                } catch (Exception e) {
-                }
-
-                imgPath = imgPath + "/" + imageName;
-                try {
-                    boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime);
-                    if (isSuccess) {
-                        url = SUCCESS;
-                    } else {
-                        request.setAttribute("ERROR", "Create Product Failed");
+                    File newImage = new File(uploadPath + File.separator + imageName);
+                    if (!newImage.exists()) {
+                        imageItem.write(newImage);
                     }
                 } catch (Exception e) {
+                    log("ERROR at ProductCreatingController: " + e.getMessage());
                 }
-            } catch (UnsupportedEncodingException | FileUploadException e) {
+                imgPath = imgPath + "/" + imageName;
+
+                boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime);
+                if (isSuccess) {
+                    url = SUCCESS;
+                } else {
+                    request.setAttribute("ERROR", "Create Product Failed");
+                }
+            } catch (Exception e) {
                 log("ERROR at ProductCreatingController: " + e.getMessage());
             } finally {
                 request.getRequestDispatcher(url).forward(request, response);

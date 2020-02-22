@@ -26,13 +26,18 @@
         <header>
             <nav class="nav-app">
                 <div class="logo">
-                    <a href="index.jsp"><img src="./images/logo.png" alt=""></a>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="
-                           <c:if test="${sessionScope.ROLE ne 'Admin'}">index.jsp</c:if>
-                           <c:if test="${sessionScope.ROLE eq 'Admin'}">admin.jsp</c:if>
-                               ">Home</a></li>
+                    <a href="
+                       <c:if test="${sessionScope.ROLE ne 'Admin'}">index.jsp</c:if>
+                       <c:if test="${sessionScope.ROLE eq 'Admin'}">admin.jsp</c:if> 
+                           ">
+                           <img src="./images/logo.png" alt="">
+                       </a>
+                    </div>
+                    <ul class="nav-menu">
+                        <li><a href="
+                            <c:if test="${sessionScope.ROLE ne 'Admin'}">index.jsp</c:if>
+                            <c:if test="${sessionScope.ROLE eq 'Admin'}">admin.jsp</c:if>
+                                ">Home</a></li>
                     <c:if test="${sessionScope.ROLE eq 'User'}"><li><a href="article-posting.jsp">Blog Posting</a></li></c:if>
                         <c:if test="${sessionScope.ROLE ne 'User' && sessionScope.ROLE ne 'Admin'}">
                         <li><button><a class="header-btn" href="login.jsp">Sign In</a></li>
@@ -40,7 +45,7 @@
                                 </c:if>
                                 <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
                         <li><a href="#">Hello, ${sessionScope.NAME}!</a></li>
-                        <li><button><a class="header-btn" href="LogoutController">Sign Out</a></button></li>
+                        <li><button><a class="header-btn" href="Logout">Sign Out</a></button></li>
                                 </c:if>
                 </ul>
             </nav>
@@ -82,7 +87,7 @@
                             </c:forEach>
                         </tbody>
                     </table>
-                    <button class="delete-products-btn" type="submit">
+                    <button class="products-deleting-btn" type="submit">
                         Delete Selected Items
                         <c:if test="${requestScope.DeleteError != null}">
                             <span style="width: 220px; color: #f00; font-size: 14px; position: absolute; top: 30px; right:50%; transform: translateX(50%);">${requestScope.DeleteError}
@@ -90,6 +95,7 @@
                         </c:if>
                     </button>
                     <a class="view-all-btn" href="DataLoading">View All</a>
+                    <a class="product-adding-btn" href="product-creating.jsp">Add Product</a>
                 </form>
 
                 <div class="page-container">

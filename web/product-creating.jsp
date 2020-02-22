@@ -27,13 +27,18 @@
         <header>
             <nav class="nav-app">
                 <div class="logo">
-                    <a href="index.jsp"><img src="./images/logo.png" alt=""></a>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="
-                           <c:if test="${sessionScope.ROLE ne 'Admin'}">index.jsp</c:if>
-                           <c:if test="${sessionScope.ROLE eq 'Admin'}">admin.jsp</c:if>
-                               ">Home</a></li>
+                    <a href="
+                       <c:if test="${sessionScope.ROLE ne 'Admin'}">index.jsp</c:if>
+                       <c:if test="${sessionScope.ROLE eq 'Admin'}">admin.jsp</c:if> 
+                           ">
+                           <img src="./images/logo.png" alt="">
+                       </a>
+                    </div>
+                    <ul class="nav-menu">
+                        <li><a href="
+                            <c:if test="${sessionScope.ROLE ne 'Admin'}">index.jsp</c:if>
+                            <c:if test="${sessionScope.ROLE eq 'Admin'}">admin.jsp</c:if>
+                                ">Home</a></li>
                     <c:if test="${sessionScope.ROLE eq 'User'}"><li><a href="article-posting.jsp">Blog Posting</a></li></c:if>
                         <c:if test="${sessionScope.ROLE ne 'User' && sessionScope.ROLE ne 'Admin'}">
                         <li><button><a class="header-btn" href="login.jsp">Sign In</a></li>
@@ -41,7 +46,7 @@
                                 </c:if>
                                 <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
                         <li><a href="#">Hello, ${sessionScope.NAME}!</a></li>
-                        <li><button><a class="header-btn" href="LogoutController">Sign Out</a></button></li>
+                        <li><button><a class="header-btn" href="Logout">Sign Out</a></button></li>
                                 </c:if>
                 </ul>
             </nav>
@@ -56,7 +61,7 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <input type="text" name="description" class="form-control" id="description">
+                    <textarea type="text" name="description" class="form-control" style="resize: none;" rows="3" id="description"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="quantity">Quantity</label>
@@ -70,16 +75,16 @@
                     <label for="category">Category</label>
                     <select name="category" class="form-control" id="category">
                         <option selected>Choose...</option>
-                        <option value="Food">Food</option>
-                        <option value="Drink">Drink</option>
-                        <option value="Pudding">Pudding</option>
+                        <option value="food">Food</option>
+                        <option value="drink">Drink</option>
+                        <option value="pudding">Pudding</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="image">Image</label>
                     <input type="file" name="image" class="form-control-file" id="image">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Add</button>
             </form>
         </div>
 

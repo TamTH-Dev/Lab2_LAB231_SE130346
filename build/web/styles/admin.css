@@ -105,7 +105,7 @@ and open the template in the editor.
     position: relative;
 }
 
-.container .product-table .delete-products-btn {
+.container .product-table .products-deleting-btn {
     position: absolute; 
     top: -70px; 
     right: 120px; 
@@ -117,6 +117,10 @@ and open the template in the editor.
     color: #fff;
     background: #131627;
     transition: all .2s;
+}
+
+.container .product-table .products-deleting-btn:hover {
+    color: #21d397;
 }
 
 .container .product-table .view-all-btn {
@@ -133,7 +137,25 @@ and open the template in the editor.
     transition: all .2s;
 }
 
-.container .product-table .delete-articles-btn:hover {
-    color: #21d397
+.container .product-table .view-all-btn:hover {
+    color: #21d397;
+}
+
+.container .product-table .product-adding-btn {
+    position: absolute; 
+    top: -70px; 
+    left: 0; 
+    display: block; 
+    padding: 0 20px; 
+    height: 40px; 
+    line-height: 40px; 
+    border: none;
+    color: #fff;
+    background: #131627;
+    transition: all .2s;
+}
+
+.container .product-table .product-adding-btn:hover {
+    color: #21d397;
 }
 

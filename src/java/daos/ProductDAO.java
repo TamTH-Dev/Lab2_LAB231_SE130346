@@ -113,6 +113,38 @@ public class ProductDAO {
         return total;
     }
 
+    public boolean deleteProduct(String productName) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "update Product set Status = 'Inactive' where ProductName = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, productName);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public boolean restoreProduct(String productName) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "update Product set Status = 'Active' where ProductName = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, productName);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
     public boolean deleteSelectedProducts(List<String> selectedProducts) throws Exception {
         boolean isSuccess = false;
 
@@ -147,7 +179,58 @@ public class ProductDAO {
         return isSuccess;
     }
 
-     public ProductDTO getBlogDetailByBlogID(String pdName) throws Exception {
+    public boolean recordUpdatedProduct(String productName, Timestamp updateTime) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "insert into ProductUpdatingRecord(ProductName, UpdateTime, Action) values (?, ?, 'Update')";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, productName);
+            preStm.setTimestamp(2, updateTime);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public boolean recordDeletedProduct(String productName, Timestamp deleteTime) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "insert into ProductUpdatingRecord(ProductName, UpdateTime, Action) values (?, ?, 'Delete')";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, productName);
+            preStm.setTimestamp(2, deleteTime);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public boolean recordRestoredProduct(String productName, Timestamp restoreTime) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "insert into ProductUpdatingRecord(ProductName, UpdateTime, Action) values (?, ?, 'Restore')";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, productName);
+            preStm.setTimestamp(2, restoreTime);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public ProductDTO getProductDetailByProductName(String pdName) throws Exception {
         ProductDTO product = null;
 
         try {
@@ -174,5 +257,26 @@ public class ProductDAO {
         }
 
         return product;
+    }
+
+    public boolean updateProduct(String productName, String imgPath, String description, int quantity, double price, String category) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "update Product set ImgPath = ?, Description = ?, Quantity = ?, Price = ?, Category = ? where ProductName = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, imgPath);
+            preStm.setString(2, description);
+            preStm.setInt(3, quantity);
+            preStm.setDouble(4, price);
+            preStm.setString(5, category);
+            preStm.setString(6, productName);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
     }
 }
