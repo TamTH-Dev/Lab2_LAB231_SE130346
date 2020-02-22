@@ -52,7 +52,7 @@
         </header>
 
         <div class="container">
-            <form action="ProductNameAndPriceLevelSearching" method="POST" class="form-inline search-form">
+            <form action="ProductNameAndPriceLevelSearching" method="POST" class="form-inline search-form" id="search-form">
                 <div class="form-group mr-3">
                     <label for="productName" class="sr-only">Product Name</label>
                     <input id="productName" name="searchedProductName" value="${param.searchedProductName}" type="text" class="form-control" placeholder="Product Name" />
@@ -60,15 +60,27 @@
 
                 <div class="form-group mx-sm-3">
                     <div class="form-check form-check-inline mr-3">
-                        <input class="form-check-input" type="radio" name="searchedPriceLevel" id="level-1" value="level-1">
+                        <input class="form-check-input price-level" type="radio" name="searchedPriceLevel" id="level-1" value="level-1" 
+                               <c:if test="${param.searchedPriceLevel.equals('level-1')}">
+                                   checked="checked"
+                               </c:if>
+                               >
                         <label class="form-check-label" for="level-1">0$ - 20$</label>
                     </div>
                     <div class="form-check form-check-inline mr-3">
-                        <input class="form-check-input" type="radio" name="searchedPriceLevel" id="level-2" value="level-2">
+                        <input class="form-check-input price-level" type="radio" name="searchedPriceLevel" id="level-2" value="level-2"
+                               <c:if test="${param.searchedPriceLevel.equals('level-2')}">
+                                   checked="checked"
+                               </c:if>
+                               >
                         <label class="form-check-label" for="level-2">20$ - 50$</label>
                     </div>
                     <div class="form-check form-check-inline mr-3">
-                        <input class="form-check-input" type="radio" name="searchedPriceLevel" id="level-3" value="level-3">
+                        <input class="form-check-input price-level" type="radio" name="searchedPriceLevel" id="level-3" value="level-3"
+                               <c:if test="${param.searchedPriceLevel.equals('level-3')}">
+                                   checked="checked"
+                               </c:if>
+                               >
                         <label class="form-check-label" for="level-3"> Greater than 50$</label>
                     </div>
                 </div>
@@ -76,9 +88,9 @@
                 <button type="submit" class="btn btn-primary search-btn" name="action" value="search" id="search-btn">
                     Search
                 </button>
+                <span id="search-error" style="display: none; color: #f00; position: absolute; top: 42px;">Please Fill Out Or Select One Price Level To Search</span>
+                <a class="view-all-btn" href="DataLoading">View All</a>
             </form>
-
-
 
             <c:if test="${requestScope.ProductsData.size() != 0}">
                 <form class="product-table" action="ProductsDeleting" method="POST">
@@ -122,15 +134,27 @@
                             </span>
                         </c:if>
                     </button>
-                    <a class="view-all-btn" href="DataLoading">View All</a>
                     <a class="product-adding-btn" href="product-creating.jsp">Add Product</a>
                 </form>
 
                 <div class="page-container">
                     <c:forEach var = "index" begin = "1" end = "${requestScope.TotalPage}">
-                        <c:url value="DataLoading" var="handlePage">
-                            <c:param value="${index}" name="pg" />
-                        </c:url>
+                        <c:if test="${param.searchedProductName == null && param.searchedPriceLevel == null}">
+                            <c:url value="DataLoading" var="handlePage">
+                                <c:param value="${index}" name="pg" />
+                            </c:url>
+                        </c:if>
+                        <c:if test="${param.searchedProductName != null || param.searchedPriceLevel != null}">
+                            <c:url value="ProductNameAndPriceLevelSearching" var="handlePage">
+                                <c:param value="${index}" name="pg" />
+                                <c:if test="${param.searchedProductName != null}">
+                                    <c:param name="searchedProductName" value="${param.searchedProductName}" /> 
+                                </c:if>
+                                <c:if test="${param.searchedPriceLevel != null}">
+                                    <c:param name="searchedPriceLevel" value="${param.searchedPriceLevel}" /> 
+                                </c:if>
+                            </c:url>
+                        </c:if>
                         <a class="page-item <c:if test="${param.pg == index}">active</c:if>" href="${handlePage}">${index}</a>
                     </c:forEach>
                 </div>
@@ -138,7 +162,7 @@
             </c:if>
             <c:if test="${requestScope.SearchError == null}">
                 <c:if test="${requestScope.ProductsData.size() == 0}">
-                    <h1 style="color: #f00; text-align: center; padding-bottom: 30px;">There isn't any data!</h1>
+                    <h1 style="color: #f00; text-align: center;">There isn't any data!</h1>
                 </c:if>
             </c:if>
         </div>
@@ -192,44 +216,5 @@
 
         <script src="./scripts/all.js"></script>
         <script src="./scripts/search-handling.js"></script>
-        <script>
-            const articleFilter = document.getElementById('article-filter')
-            const statusFilter = document.getElementById('status-filter')
-            const articleFilterContainer = document.getElementById('article-filter-container')
-            const statusFilterContainer = document.getElementById('status-filter-container')
-            const article = document.getElementById('article')
-            const st = document.getElementsByClassName('st')
-
-            if (${param.articleFilter != null}) {
-                articleFilterContainer.style.display = 'block'
-            } else {
-                articleFilterContainer.style.display = 'none'
-            }
-            if (${param.statusFilter != null}) {
-                statusFilterContainer.style.display = 'block'
-            } else {
-                statusFilterContainer.style.display = 'none'
-            }
-
-            articleFilter.addEventListener('click', () => {
-                if (articleFilter.checked) {
-                    articleFilterContainer.style.display = 'block'
-                } else {
-                    articleFilterContainer.style.display = 'none'
-                    article.value = ''
-                }
-            })
-            statusFilter.addEventListener('click', () => {
-                if (statusFilter.checked) {
-                    statusFilterContainer.style.display = 'block'
-                } else {
-                    statusFilterContainer.style.display = 'none'
-                    for (let i = 0; i < st.length; i++) {
-                        st[i].checked = false
-                    }
-                }
-            })
-        </script>
-
     </body>
 </html>

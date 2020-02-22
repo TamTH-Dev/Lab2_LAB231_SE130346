@@ -308,6 +308,8 @@ public class ProductDAO {
 
             if (!searchedProductName.equals("") && searchedPriceLevel == null) {
                 searchDataByProductNameForAdminPage(searchedProductName, page, numOfProductsPerPage);
+            } else if (searchedProductName.equals("") && searchedPriceLevel != null) {
+                searchDataByPriceLevelForAdminPage(searchedPriceLevel, page, numOfProductsPerPage);
             } else if (!searchedProductName.equals("") && searchedPriceLevel != null) {
                 searchDataByProductNameAndPriceLevelForAdminPage(searchedProductName, searchedPriceLevel, page, numOfProductsPerPage);
             }
@@ -342,6 +344,34 @@ public class ProductDAO {
         preStm.setString(1, "%" + searchedProductName + "%");
         preStm.setInt(2, (page - 1) * numOfProductsPerPage + 1);
         preStm.setInt(3, (page - 1) * numOfProductsPerPage + numOfProductsPerPage);
+        rs = preStm.executeQuery();
+    }
+
+    private void searchDataByPriceLevelForAdminPage(String searchedPriceLevel, int page, int numOfProductsPerPage) throws Exception {
+        String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status from (select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status, ROW_NUMBER() over (order by CreatedTime desc) as rowNum from Product where Price between ? and ?) as product where product.rowNum between ? and ?";
+
+        double minValue;
+        double maxValue;
+        switch (searchedPriceLevel) {
+            case "level-1":
+                minValue = 0;
+                maxValue = 20;
+                break;
+            case "level-2":
+                minValue = 20;
+                maxValue = 50;
+                break;
+            default:
+                minValue = 50;
+                maxValue = 999999;
+                break;
+        }
+
+        preStm = conn.prepareStatement(sql);
+        preStm.setDouble(1, minValue);
+        preStm.setDouble(2, maxValue);
+        preStm.setInt(3, (page - 1) * numOfProductsPerPage + 1);
+        preStm.setInt(4, (page - 1) * numOfProductsPerPage + numOfProductsPerPage);
         rs = preStm.executeQuery();
     }
 
@@ -380,6 +410,8 @@ public class ProductDAO {
             conn = MyConnection.getMyConnection();
             if (!searchedProductName.equals("") && searchedPriceLevel == null) {
                 total = getSearchedProductsTotalByProductNameForAdminPage(searchedProductName);
+            } else if (searchedProductName.equals("") && searchedPriceLevel != null) {
+                total = getSearchedProductsTotalByPriceLevelForAdminPage(searchedPriceLevel);
             } else if (!searchedProductName.equals("") && searchedPriceLevel != null) {
                 total = getSearchedProductsTotalByProductNameAndPriceLevelForAdminPage(searchedProductName, searchedPriceLevel);
             }
@@ -396,6 +428,37 @@ public class ProductDAO {
         String sql = "select count(*) from Product where ProductName like ?";
         preStm = conn.prepareStatement(sql);
         preStm.setString(1, "%" + searchedProductName + "%");
+        rs = preStm.executeQuery();
+        if (rs.next()) {
+            total = rs.getInt(1);
+        }
+
+        return total;
+    }
+
+    private int getSearchedProductsTotalByPriceLevelForAdminPage(String searchedPriceLevel) throws Exception {
+        int total = 0;
+        String sql = "select count(*) from Product where Price between ? and ?";
+
+        double minValue;
+        double maxValue;
+        switch (searchedPriceLevel) {
+            case "level-1":
+                minValue = 0;
+                maxValue = 20;
+                break;
+            case "level-2":
+                minValue = 20;
+                maxValue = 50;
+                break;
+            default:
+                minValue = 50;
+                maxValue = 999999;
+        }
+
+        preStm = conn.prepareStatement(sql);
+        preStm.setDouble(1, minValue);
+        preStm.setDouble(2, maxValue);
         rs = preStm.executeQuery();
         if (rs.next()) {
             total = rs.getInt(1);

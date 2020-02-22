@@ -63,12 +63,11 @@ public class ProductNameAndPriceLevelSearchingController extends HttpServlet {
                     }
                 }
                 if (page > 0 && page <= totalPage) {
-
-                    request.setAttribute("ProductsData", productsData);
                     request.setAttribute("TotalPage", totalPage);
                 }
+                request.setAttribute("ProductsData", productsData);
             } else {
-                request.setAttribute("ERROR", "Search Products Failed");
+                request.setAttribute("SearchError", "Search Products Failed");
             }
         } catch (Exception e) {
             log("ERROR at SearchController: " + e.getMessage());
