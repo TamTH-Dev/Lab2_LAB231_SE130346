@@ -259,7 +259,7 @@ public class ProductDAO {
         return product;
     }
 
-    public boolean updateProduct(String productName, String imgPath, String description, int quantity, double price, String category) throws Exception {
+    public boolean updateProductWithImage(String productName, String imgPath, String description, int quantity, double price, String category) throws Exception {
         boolean isSuccess = false;
 
         try {
@@ -272,6 +272,26 @@ public class ProductDAO {
             preStm.setDouble(4, price);
             preStm.setString(5, category);
             preStm.setString(6, productName);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public boolean updateProductWithoutImage(String productName, String description, int quantity, double price, String category) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "update Product set Description = ?, Quantity = ?, Price = ?, Category = ? where ProductName = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, description);
+            preStm.setInt(2, quantity);
+            preStm.setDouble(3, price);
+            preStm.setString(4, category);
+            preStm.setString(5, productName);
             isSuccess = preStm.executeUpdate() > 0;
         } finally {
             closeConnection();

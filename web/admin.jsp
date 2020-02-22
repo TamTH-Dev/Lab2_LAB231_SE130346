@@ -101,9 +101,6 @@
                 <div class="page-container">
                     <c:forEach var = "index" begin = "1" end = "${requestScope.TotalPage}">
                         <c:url value="DataLoading" var="handlePage">
-                            <c:if test="${param.searchedContent == null && param.searchedArticle == null && paramValues.searchedStatus == null}">
-                                <c:param value="loadData" name="action" />
-                            </c:if>
                             <c:param value="${index}" name="pg" />
                         </c:url>
                         <a class="page-item <c:if test="${param.pg == index}">active</c:if>" href="${handlePage}">${index}</a>

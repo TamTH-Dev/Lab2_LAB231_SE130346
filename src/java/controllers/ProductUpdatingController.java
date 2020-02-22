@@ -73,18 +73,27 @@ public class ProductUpdatingController extends HttpServlet {
                 uploadPath = uploadPath.replace('\\', '/');
                 try {
                     FileItem imageItem = items.get(itemsSize - 1);
-                    imageName = new File(imageItem.getName()).getName();
-                    File newImage = new File(uploadPath + File.separator + imageName);
-                    if (!newImage.exists()) {
-                        imageItem.write(newImage);
+                    if (imageItem.getSize() != 0) {
+                        imageName = new File(imageItem.getName()).getName();
+                        File newImage = new File(uploadPath + File.separator + imageName);
+                        if (!newImage.exists()) {
+                            imageItem.write(newImage);
+                        }
+                    } else {
+                        imageName = "";
                     }
                 } catch (Exception e) {
                     log("ERROR at ProductUpdatingController: " + e.getMessage());
                 }
 
-                imgPath = imgPath + "/" + imageName;
+                if (!imageName.equals("")) {
+                    imgPath = imgPath + "/" + imageName;
+                }
 
-                boolean isSuccess = productDAO.updateProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category);
+                boolean isSuccess = imageName.equals("")
+                        ? productDAO.updateProductWithoutImage(productName, description, parsedQuantity, parsedPrice, category)
+                        : productDAO.updateProductWithImage(productName, imgPath, description, parsedQuantity, parsedPrice, category);
+
                 if (isSuccess) {
                     Timestamp updateTime = new Timestamp(System.currentTimeMillis());
                     productDAO.recordUpdatedProduct(productName, updateTime);
