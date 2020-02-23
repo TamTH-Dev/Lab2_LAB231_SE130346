@@ -159,10 +159,8 @@
                 </div>
 
             </c:if>
-            <c:if test="${requestScope.SearchError == null}">
-                <c:if test="${requestScope.ProductsData.size() == 0}">
-                    <h1 style="color: #f00; text-align: center;">There isn't any data!</h1>
-                </c:if>
+            <c:if test="${requestScope.ProductsData.size() == 0}">
+                <h1 style="color: #f00; text-align: center;">There isn't any data!</h1>
             </c:if>
         </div>
 

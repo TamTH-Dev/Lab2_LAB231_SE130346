@@ -77,7 +77,13 @@ public class ProductUpdatingController extends HttpServlet {
                         imageName = new File(imageItem.getName()).getName();
                         File newImage = new File(uploadPath + File.separator + imageName);
                         if (!newImage.exists()) {
-                            imageItem.write(newImage);
+                            String currentImgPath = productDAO.getCurrentImgPath(productName);
+                            String fullCurrentImgPath = currentPath.getPath() + "/web/uploads/" + currentImgPath;
+                            File currentImage = new File(fullCurrentImgPath);
+
+                            if (currentImage.delete()) {
+                                imageItem.write(newImage);
+                            }
                         }
                     } else {
                         imageName = "";

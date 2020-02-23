@@ -91,6 +91,47 @@
                 <span id="search-error" style="display: none; color: #f00; position: absolute; top: 42px;">Please Fill Out Or Select One Price Level To Search</span>
                 <a class="view-all-btn" href="DataLoading">View All</a>
             </form>
+
+            <c:if test="${requestScope.ProductsData.size() != 0}">
+                <div class="products-container">
+                    <c:forEach items="${requestScope.ProductsData}" var="product">
+                        <div class="card">
+                            <img src="./uploads/${product.imgPath}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">${product.productName}</h5>
+                                <p class="card-text">${product.description}</p>
+                                <a href="#" class="btn btn-primary">Add to Cart</a>
+                                <span class="card-price">${product.price} $</span>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+
+                <div class="page-container">
+                    <c:forEach var = "index" begin = "1" end = "${requestScope.TotalPage}">
+                        <c:if test="${param.searchedProductName == null && param.searchedPriceLevel == null}">
+                            <c:url value="DataLoading" var="handlePage">
+                                <c:param value="${index}" name="pg" />
+                            </c:url>
+                        </c:if>
+                        <c:if test="${param.searchedProductName != null || param.searchedPriceLevel != null}">
+                            <c:url value="ProductNameAndPriceLevelSearching" var="handlePage">
+                                <c:param value="${index}" name="pg" />
+                                <c:if test="${param.searchedProductName != null}">
+                                    <c:param name="searchedProductName" value="${param.searchedProductName}" /> 
+                                </c:if>
+                                <c:if test="${param.searchedPriceLevel != null}">
+                                    <c:param name="searchedPriceLevel" value="${param.searchedPriceLevel}" /> 
+                                </c:if>
+                            </c:url>
+                        </c:if>
+                        <a class="page-item <c:if test="${param.pg == index}">active</c:if>" href="${handlePage}">${index}</a>
+                    </c:forEach>
+                </div>
+            </c:if>
+            <c:if test="${requestScope.ProductsData.size() == 0}">
+                <h1 style="color: #f00; text-align: center;">There isn't any data!</h1>
+            </c:if>
         </div>
 
         <footer class="container-fluid main-footer">
@@ -141,5 +182,6 @@
         </footer>
 
         <script src="./scripts/all.js"></script>
+        <script src="./scripts/user-page-handling.js"></script>
     </body>
 </html>

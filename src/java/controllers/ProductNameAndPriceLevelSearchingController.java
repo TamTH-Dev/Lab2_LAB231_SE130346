@@ -90,6 +90,17 @@ public class ProductNameAndPriceLevelSearchingController extends HttpServlet {
                     productsTotal = productDAO.getSearchedProductsTotalByProductNameAndPriceLevelForAdminPage(searchedProductName, minValue, maxValue);
                     productsData = productDAO.searchDataByProductNameAndPriceLevelForAdminPage(searchedProductName, minValue, maxValue, page, numOfProductsPerPage);
                 }
+            } else {
+                if (!searchedProductName.equals("") && searchedPriceLevel == null) {
+                    productsTotal = productDAO.getSearchedProductsTotalByProductNameForUserPage(searchedProductName);
+                    productsData = productDAO.searchDataByProductNameForUserPage(searchedProductName, page, numOfProductsPerPage);
+                } else if (searchedProductName.equals("") && searchedPriceLevel != null) {
+                    productsTotal = productDAO.getSearchedProductsTotalByPriceLevelForUserPage(minValue, maxValue);
+                    productsData = productDAO.searchDataByPriceLevelForUserPage(minValue, maxValue, page, numOfProductsPerPage);
+                } else if (!searchedProductName.equals("") && searchedPriceLevel != null) {
+                    productsTotal = productDAO.getSearchedProductsTotalByProductNameAndPriceLevelForUserPage(searchedProductName, minValue, maxValue);
+                    productsData = productDAO.searchDataByProductNameAndPriceLevelForUserPage(searchedProductName, minValue, maxValue, page, numOfProductsPerPage);
+                }
             }
 
             int totalPage = pagingHandler.getTotalPage(pg, productsTotal, numOfProductsPerPage);
