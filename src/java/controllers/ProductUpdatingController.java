@@ -76,13 +76,26 @@ public class ProductUpdatingController extends HttpServlet {
                     if (imageItem.getSize() != 0) {
                         imageName = new File(imageItem.getName()).getName();
                         File newImage = new File(uploadPath + File.separator + imageName);
-                        if (!newImage.exists()) {
-                            String currentImgPath = productDAO.getCurrentImgPath(productName);
-                            String fullCurrentImgPath = currentPath.getPath() + "/web/uploads/" + currentImgPath;
-                            File currentImage = new File(fullCurrentImgPath);
 
-                            if (currentImage.delete()) {
+                        String currentImgPath = productDAO.getCurrentImgPath(productName);
+                        boolean isImageUsedByOtherProducts = productDAO.isImageUsedByOtherProducts(productName, currentImgPath);
+
+                        if (!newImage.exists()) {
+                            if (!isImageUsedByOtherProducts) {
+                                String fullCurrentImgPath = currentPath.getPath() + "/web/uploads/" + currentImgPath;
+                                File currentImage = new File(fullCurrentImgPath);
+
+                                if (currentImage.delete()) {
+                                    imageItem.write(newImage);
+                                }
+                            } else {
                                 imageItem.write(newImage);
+                            }
+                        } else {
+                            if (!isImageUsedByOtherProducts) {
+                                String fullCurrentImgPath = currentPath.getPath() + "/web/uploads/" + currentImgPath;
+                                File currentImage = new File(fullCurrentImgPath);
+                                currentImage.delete();
                             }
                         }
                     } else {

@@ -278,6 +278,26 @@ public class ProductDAO {
         return currentImgPath;
     }
 
+    public boolean isImageUsedByOtherProducts(String productName, String imgPath) throws Exception {
+        boolean isUsed = false;
+
+        try {
+            String sql = "select ProductName from Product where ImgPath = ? and ProductName <> ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, imgPath);
+            preStm.setString(2, productName);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                isUsed = true;
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return isUsed;
+    }
+
     public boolean updateProductWithImage(String productName, String imgPath, String description, int quantity, double price, String category) throws Exception {
         boolean isSuccess = false;
 

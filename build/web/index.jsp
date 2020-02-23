@@ -19,7 +19,8 @@
     <body>
         <c:if test="${param.searchedProductName == null && param.searchedPriceLevel == null}">
             <c:if test="${requestScope.ProductsData == null}">
-                <c:redirect url="DataLoading" />
+                <c:url value="DataLoading" var="loadData"></c:url>
+                <c:redirect url="${loadData}" />
             </c:if>
         </c:if>
 
