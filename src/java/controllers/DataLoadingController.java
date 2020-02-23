@@ -21,7 +21,7 @@ import supportMethods.PagingHandler;
  * @author hoang
  */
 public class DataLoadingController extends HttpServlet {
-    
+
     private static final String ERROR = "error.jsp";
     private static final String INDEX = "index.jsp";
     private static final String ADMIN = "admin.jsp";
@@ -40,25 +40,40 @@ public class DataLoadingController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         HttpSession session = request.getSession(false);
-        
         String pg = request.getParameter("pg");
         int numOfBlogsPerPage = 20;
+        int signal = 0;
+
+        if (session.getAttribute("ROLE") != null) {
+            String role = session.getAttribute("ROLE").toString();
+            if (role.equals("Admin")) {
+                signal = 1;
+            }
+        }
+
         try {
             ProductDAO productDAO = new ProductDAO();
             PagingHandler pagingHandler = new PagingHandler();
-            
-            int productsTotal = productDAO.getProductsTotalForAdminPage();
             int page = pagingHandler.getPage(pg);
+            List<ProductDTO> productsData = null;
+            int productsTotal = 0;
+
+            if (signal == 1) {
+                productsTotal = productDAO.getProductsTotalForAdminPage();
+                productsData = productDAO.getAllProductsForAdminPage(page, numOfBlogsPerPage);
+            } else {
+                productsTotal = productDAO.getProductsTotalForUserPage();
+                productsData = productDAO.getAllProductsForUserPage(page, numOfBlogsPerPage);
+            }
+
             int totalPage = pagingHandler.getTotalPage(pg, productsTotal, numOfBlogsPerPage);
-            List<ProductDTO> productsData = productDAO.getAllProductsForAdminPage(page, numOfBlogsPerPage);
+
             if (productsData != null) {
                 url = INDEX;
-                if (session.getAttribute("ROLE") != null) {
-                    String role = session.getAttribute("ROLE").toString();
-                    if (role.equals("Admin")) {
-                        url = ADMIN;
-                    }
+                if (signal == 1) {
+                    url = ADMIN;
                 }
+
                 if (page > 0 && page <= totalPage) {
                     request.setAttribute("TotalPage", totalPage);
                 }

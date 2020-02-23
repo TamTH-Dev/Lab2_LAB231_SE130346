@@ -44,24 +44,63 @@ public class ProductNameAndPriceLevelSearchingController extends HttpServlet {
         String url = ERROR;
         String searchedProductName = request.getParameter("searchedProductName").trim();
         String searchedPriceLevel = request.getParameter("searchedPriceLevel");
+        int signal = 0;
+
+        if (session.getAttribute("ROLE") != null) {
+            String role = session.getAttribute("ROLE").toString();
+            if (role.equals("Admin")) {
+                signal = 1;
+            }
+        }
 
         try {
             ProductDAO productDAO = new ProductDAO();
             PagingHandler pagingHandler = new PagingHandler();
-
-            int productsTotal = productDAO.getSearchedProductsTotalForAdminPage(searchedProductName, searchedPriceLevel);
             int page = pagingHandler.getPage(pg);
+            int productsTotal = 0;
+            List<ProductDTO> productsData = null;
+
+            double minValue = -1;
+            double maxValue = -1;
+            if (searchedPriceLevel != null) {
+                switch (searchedPriceLevel) {
+                    case "level-1":
+                        minValue = 0;
+                        maxValue = 20;
+                        break;
+                    case "level-2":
+                        minValue = 20;
+                        maxValue = 50;
+                        break;
+                    default:
+                        minValue = 50;
+                        maxValue = 999999;
+                        break;
+                }
+            }
+
+            if (signal == 1) {
+                if (!searchedProductName.equals("") && searchedPriceLevel == null) {
+                    productsTotal = productDAO.getSearchedProductsTotalByProductNameForAdminPage(searchedProductName);
+                    productsData = productDAO.searchDataByProductNameForAdminPage(searchedProductName, page, numOfProductsPerPage);
+                } else if (searchedProductName.equals("") && searchedPriceLevel != null) {
+                    productsTotal = productDAO.getSearchedProductsTotalByPriceLevelForAdminPage(minValue, maxValue);
+                    productsData = productDAO.searchDataByPriceLevelForAdminPage(minValue, maxValue, page, numOfProductsPerPage);
+                } else if (!searchedProductName.equals("") && searchedPriceLevel != null) {
+                    productsTotal = productDAO.getSearchedProductsTotalByProductNameAndPriceLevelForAdminPage(searchedProductName, minValue, maxValue);
+                    productsData = productDAO.searchDataByProductNameAndPriceLevelForAdminPage(searchedProductName, minValue, maxValue, page, numOfProductsPerPage);
+                }
+            }
+
             int totalPage = pagingHandler.getTotalPage(pg, productsTotal, numOfProductsPerPage);
 
-            List<ProductDTO> productsData = productDAO.getSearchedProductsDataForAdminPage(searchedProductName, searchedPriceLevel, page, numOfProductsPerPage);
             if (productsData != null) {
-                url = INDEX;
-                if (session.getAttribute("ROLE") != null) {
-                    String role = session.getAttribute("ROLE").toString();
-                    if (role.equals("Admin")) {
-                        url = ADMIN;
-                    }
+                if (signal == 1) {
+                    url = ADMIN;
+                } else {
+                    url = INDEX;
                 }
+
                 if (page > 0 && page <= totalPage) {
                     request.setAttribute("TotalPage", totalPage);
                 }

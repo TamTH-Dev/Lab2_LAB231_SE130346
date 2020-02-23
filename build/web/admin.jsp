@@ -52,7 +52,7 @@
         </header>
 
         <div class="container">
-            <form action="ProductNameAndPriceLevelSearching" method="POST" class="form-inline search-form" id="search-form">
+            <form action="ProductNameAndPriceLevelSearching" method="POST" class="form-inline search-form">
                 <div class="form-group mr-3">
                     <label for="productName" class="sr-only">Product Name</label>
                     <input id="productName" name="searchedProductName" value="${param.searchedProductName}" type="text" class="form-control" placeholder="Product Name" />
