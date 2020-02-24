@@ -1,0 +1,80 @@
+.container {
+    padding: 50px 0 80px 0;
+}
+
+.container .cart-detail-container {
+    box-shadow: 0 5px 8px 5px rgba(0, 0, 0, .2);
+}
+
+.container .cart-detail-container .cart-detail-container-header {
+    height: 50px;
+    line-height: 50px;
+    background: #131627;
+    color: #fff;
+    display: flex;
+}
+
+.container .cart-detail-container .col {
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.container .cart-detail-container .image-col {
+    width: 20%;
+    position: relative;
+}
+
+.container .cart-detail-container .product-name-col {
+    width: 20%;
+}
+
+.container .cart-detail-container .category-col {
+    width: 10%;
+}
+
+.container .cart-detail-container .quantity-col {
+    width: 10%;
+}
+
+.container .cart-detail-container .price-col {
+    width: 10%;
+}
+
+.container .cart-detail-container .total-price-col {
+    width: 15%;
+}
+
+.container .cart-detail-container .action-col {
+    width: 15%;
+    position: relative;
+}
+
+.container .cart-detail-container .product {
+    display: flex;
+    flex-flow: row wrap;
+    height: 100px;
+}
+
+.container .cart-detail-container .product .col {
+    line-height: 100px;
+}
+
+.container .cart-detail-container .product .image-col img {
+    width: 80%;
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.container .cart-detail-container .product .action-col button {
+    height: 35px;
+    display: block;
+    width: 80px;
+    border: none;
+    background: #f00;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}

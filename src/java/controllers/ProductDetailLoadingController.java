@@ -37,25 +37,34 @@ public class ProductDetailLoadingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        HttpSession session = request.getSession(false);
+        int signal = 0;
 
+        if (session.getAttribute("ROLE") != null) {
+            String role = request.getSession(false).getAttribute("ROLE").toString();
+            if (role.equals("Admin")) {
+                signal = 1;
+            }
+        }
         try {
+            ProductDAO productDAO = new ProductDAO();
+            ProductDTO productDetail = null;
             String productName = request.getParameter("productName");
 
-            ProductDAO productDAO = new ProductDAO();
-            ProductDTO productDetail = productDAO.getProductDetailByProductName(productName);
+            if (signal == 1) {
+                productDetail = productDAO.getProductDetailByProductNameForAdminPage(productName);
+            } else {
+                productDetail = productDAO.getProductDetailByProductNameForUserPage(productName);
+            }
+
             if (productDetail != null) {
-                HttpSession session = request.getSession(false);
-                if (session.getAttribute("ROLE") != null) {
-                    String role = request.getSession(false).getAttribute("ROLE").toString();
-                    if (role.equals("Admin")) {
-                        url = PRODUCTDETAILMANAGEMENT;
-                    }
+                if (signal == 1) {
+                    url = PRODUCTDETAILMANAGEMENT;
                 } else {
                     url = PRODUCTDETAIL;
                 }
                 request.setAttribute("ProductDetail", productDetail);
             } else {
-                url = ERROR;
                 request.setAttribute("ERROR", "Load Product's Detail Failed!");
             }
         } catch (Exception e) {

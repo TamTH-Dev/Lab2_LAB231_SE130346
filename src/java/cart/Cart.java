@@ -57,7 +57,6 @@ public class Cart {
 
     public int getTotalProductsFromCart() {
         int total = cart.stream().mapToInt(product -> product.getQuantity()).sum();
-        System.out.println(total);
         return total;
     }
 }

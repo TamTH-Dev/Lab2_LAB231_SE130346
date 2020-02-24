@@ -1,0 +1,84 @@
+.container {
+    padding: 30px 0 80px 0;
+    display: flex;
+}
+
+.container .left-part {
+    width: 30%; 
+}
+
+.container .left-part img {
+    display: block;
+    width: 100%;
+}
+
+.container .right-part {
+    width: 70%;
+    box-sizing: border-box;
+    padding: 0 0 0 40px;
+}
+
+.container .right-part .product-title {
+    border-bottom: 1px solid #131627;
+    color: #131627;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.container .right-part .description {
+    height: 100px;
+    line-height: 25px;
+    font-size: 18px;
+}
+
+.container .right-part .product-order {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.container .right-part .product-order #order-btn {
+    height: 40px;
+    background: #131627;
+    color: #fff;
+    width: 100px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    transition: all .5s;
+} 
+
+.container .right-part .product-order #order-btn:hover {
+    color: #21d397;
+}
+
+.container .right-part .product-order .product-amount {
+    margin-right: 30px; 
+    width: 130px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container .right-part .product-order .product-amount .edit-amount-btn {
+    width: 35px;
+    height: 35px;
+    border: none;
+    outline: none;
+    transition: all .5s;
+    background: #131627;
+    color: #fff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .right-part .product-order .product-amount .edit-amount-btn:hover {
+    color: #21d397;
+}
+
+.container .right-part .product-order .product-amount #product-amount {
+    width: 50px;
+    height: 35px;
+    text-align: center;
+} 

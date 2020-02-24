@@ -58,7 +58,7 @@
                     </c:if>
                     <c:if test="${sessionScope.ROLE ne 'Admin'}">
                         <li style="margin-right: 10px;">
-                            <a class="cart-container" href="article-posting.jsp">
+                            <a class="cart-container" href="CartDataLoading">
                                 <i class="fas fa-shopping-cart cart"></i> 
                                 <span>(${sessionScope.CART.getTotalProductsFromCart()})</span>
                             </a>
@@ -128,7 +128,14 @@
                         <div class="card">
                             <img src="./uploads/${product.imgPath}" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">${product.productName}</h5>
+                                <h5 class="card-title">
+                                    <c:url value="ProductDetailLoading" var="loadProductDetail" >
+                                        <c:param name="productName" value="${product.productName}" />
+                                    </c:url>
+                                    <a href="${loadProductDetail}" class="product-title">
+                                        ${product.productName}
+                                    </a>
+                                </h5>
                                 <p class="card-text">${product.description}</p>
                                 <c:url value="CartAdding" var="addToCart">
                                     <c:param name="productName" value="${product.productName}" />

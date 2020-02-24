@@ -133,11 +133,40 @@ public class ProductDAO implements Serializable {
         return total;
     }
 
-    public ProductDTO getProductDetailByProductName(String pdName) throws Exception {
+    public ProductDTO getProductDetailByProductNameForAdminPage(String pdName) throws Exception {
         ProductDTO product = null;
 
         try {
             String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status from Product where ProductName = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, pdName);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                String productName = rs.getString("ProductName");
+                String imgPath = rs.getString("ImgPath");
+                String description = rs.getString("Description");
+                int quantity = Integer.parseInt(rs.getString("quantity"));
+                double price = Double.parseDouble(rs.getString("Price"));
+                String category = rs.getString("Category");
+                Timestamp createdTime = rs.getTimestamp("CreatedTime");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                String status = rs.getString("Status");
+
+                product = new ProductDTO(productName, imgPath, description, quantity, price, category, sdf.format(createdTime), status);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return product;
+    }
+
+    public ProductDTO getProductDetailByProductNameForUserPage(String pdName) throws Exception {
+        ProductDTO product = null;
+
+        try {
+            String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreatedTime, Status from Product where ProductName = ? and Status = 'Active'";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, pdName);

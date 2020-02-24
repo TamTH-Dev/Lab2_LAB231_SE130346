@@ -55,6 +55,14 @@
     position: relative;
 }
 
+.container .products-container .card .card-body .card-title .product-title {
+    color: #131627;
+}
+
+.container .products-container .card .card-body .card-title .product-title:hover {
+    text-decoration: underline;
+}
+
 .container .products-container .card .card-body .card-text {
     overflow: hidden;
     display: -webkit-box;
