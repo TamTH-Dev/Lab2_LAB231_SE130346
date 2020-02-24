@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import cart.Cart;
 import daos.ProductDAO;
 import dtos.ProductDTO;
 import java.io.IOException;
@@ -43,6 +44,11 @@ public class DataLoadingController extends HttpServlet {
         String pg = request.getParameter("pg");
         int numOfBlogsPerPage = 20;
         int signal = 0;
+
+        if (session.getAttribute("CART") == null) {
+            Cart cart = new Cart();
+            request.getSession().setAttribute("CART", cart);
+        }
 
         if (session.getAttribute("ROLE") != null) {
             String role = session.getAttribute("ROLE").toString();

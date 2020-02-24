@@ -5,7 +5,10 @@
  */
 package controllers;
 
+import cart.Cart;
+import dtos.ProductDTO;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +19,10 @@ import javax.servlet.http.HttpSession;
  *
  * @author hoang
  */
-public class LogoutController extends HttpServlet {
+public class CartAddingController extends HttpServlet {
 
-    private static final String INDEX = "index.jsp";
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "index.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,16 +36,29 @@ public class LogoutController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = INDEX;
+        String url = ERROR;
+        HttpSession session = request.getSession(false);
+        Cart cart = (Cart) session.getAttribute("CART");
+
+        String productName = request.getParameter("productName");
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        double price = Double.parseDouble(request.getParameter("price"));
+        String category = request.getParameter("category");
+        String imgPath = request.getParameter("imgPath");
+
         try {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
+            List<ProductDTO> c = cart.getCart();
+            for (ProductDTO product : c) {
+                System.out.println(product.getProductName());
+                System.out.println(product.getQuantity());
             }
+            cart.addProductToCart(productName, quantity, price, category, imgPath);
+            request.getSession().setAttribute("CART", cart);
+            url = SUCCESS;
         } catch (Exception e) {
-            log("Error at LogoutController: " + e.getMessage());
+            log("ERROR at CartAddingController: " + e.getMessage());
         } finally {
-            response.sendRedirect(url);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

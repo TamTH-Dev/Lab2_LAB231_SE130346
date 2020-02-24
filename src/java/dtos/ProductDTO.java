@@ -1,5 +1,7 @@
 package dtos;
 
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,7 +11,7 @@ package dtos;
  *
  * @author hoang
  */
-public class ProductDTO {
+public class ProductDTO implements Serializable {
 
     private String productName, imgPath, description, category, createdTime, status;
     private int quantity;
@@ -27,6 +29,14 @@ public class ProductDTO {
         this.category = category;
         this.createdTime = createdTime;
         this.status = status;
+    }
+
+    public ProductDTO(String productName, int quantity, double price, String category, String imgPath) {
+        this.productName = productName;
+        this.quantity = quantity;
+        this.price = price;
+        this.category = category;
+        this.imgPath = imgPath;
     }
 
     public ProductDTO(String description, int quantity, double price, String category) {

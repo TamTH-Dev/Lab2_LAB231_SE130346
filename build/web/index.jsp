@@ -101,7 +101,14 @@
                             <div class="card-body">
                                 <h5 class="card-title">${product.productName}</h5>
                                 <p class="card-text">${product.description}</p>
-                                <a href="#" class="btn btn-primary">Add to Cart</a>
+                                <c:url value="CartAdding" var="addToCart">
+                                    <c:param name="productName" value="${product.productName}" />
+                                    <c:param name="price" value="${product.price}" />
+                                    <c:param name="quantity" value="1" />
+                                    <c:param name="category" value="${product.category}" />
+                                    <c:param name="imgPath" value="${product.imgPath}" />
+                                </c:url>
+                                <a href="${addToCart}" class="btn btn-primary">Add to Cart</a>
                                 <span class="card-price">${product.price} $</span>
                             </div>
                         </div>

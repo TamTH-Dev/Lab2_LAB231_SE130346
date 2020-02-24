@@ -7,6 +7,7 @@ package daos;
 
 import db.MyConnection;
 import dtos.ProductDTO;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author hoang
  */
-public class ProductDAO {
+public class ProductDAO implements Serializable {
 
     private Connection conn;
     private PreparedStatement preStm;
