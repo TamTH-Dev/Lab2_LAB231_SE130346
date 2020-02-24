@@ -29,6 +29,13 @@ public class ProductDTO {
         this.status = status;
     }
 
+    public ProductDTO(String description, int quantity, double price, String category) {
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+        this.category = category;
+    }
+
     public String getProductName() {
         return productName;
     }

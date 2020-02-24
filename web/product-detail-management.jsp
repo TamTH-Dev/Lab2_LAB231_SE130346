@@ -169,10 +169,10 @@
                 </div>
                 <c:if test="${ProductDetail.status eq 'Active'}">
                     <button type="submit" class="btn btn-primary" id="update-btn">Update</button>
-                    <button style="padding: 0" type="button" class="btn"><a class="delete-btn" href="ProductDeleting?productName=${ProductDetail.productName}">Delete</a></button>
+                    <button style="padding: 0" type="button" class="btn"><a class="delete-btn" href="ProductDeleting?productName=${ProductDetail.productName}" id="delete-btn">Delete</a></button>
                 </c:if>
                 <c:if test="${ProductDetail.status eq 'Inactive'}">
-                    <button style="padding: 0" type="button" class="btn"><a class="restore-btn" href="ProductRestoring?productName=${ProductDetail.productName}">Restore</a></button>
+                    <button style="padding: 0" type="button" class="btn"><a class="restore-btn" href="ProductRestoring?productName=${ProductDetail.productName}" id="restore-btn">Restore</a></button>
                 </c:if>
             </form>
         </div>

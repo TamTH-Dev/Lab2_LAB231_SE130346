@@ -71,36 +71,64 @@
                 <div class="form-group">
                     <label for="productName">Product Name</label>
                     <input type="text" name="productName" class="form-control" id="productName" />
-                    <span class="error" id="product-name-error"></span>
+                    <span class="error" id="product-name-error">
+                        <c:if test="${CreateError != null}">
+                            ${CreateError}
+                        </c:if>
+                    </span>
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea type="text" name="description" class="form-control" style="resize: none;" rows="3" id="description"></textarea>
+                    <textarea type="text" name="description" class="form-control" style="resize: none;" rows="3" id="description">${ProductInformation.description}</textarea>
                     <span class="error" style="top: 120px;" id="description-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="quantity">Quantity</label>
-                    <input type="text" name="quantity" class="form-control" id="quantity">
+                    <input type="text" name="quantity" class="form-control" id="quantity" value="${ProductInformation.quantity}" />
                     <span class="error" id="quantity-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="price">Price</label>
-                    <input type="text" name="price" class="form-control" id="price">
+                    <input type="text" name="price" class="form-control" id="price" value="${ProductInformation.price}" />
                     <span class="error" id="price-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="category">Category</label>
                     <select name="category" class="form-control" id="category">
-                        <option value="" selected>Choose...</option>
-                        <option value="food">Food</option>
-                        <option value="drink">Drink</option>
-                        <option value="pudding">Pudding</option>
+                        <option value="" 
+                                <c:if test="${ProductInformation.category == null}">
+                                    selected
+                                </c:if>
+                                >
+                            Choose...
+                        </option>
+                        <option value="food"
+                                <c:if test="${ProductInformation.category eq 'food'}">
+                                    selected
+                                </c:if>
+                                >
+                            Food
+                        </option>
+                        <option value="drink"
+                                <c:if test="${ProductInformation.category eq 'drink'}">
+                                    selected
+                                </c:if>
+                                >
+                            Drink
+                        </option>
+                        <option value="pudding"
+                                <c:if test="${ProductInformation.category eq 'pudding'}">
+                                    selected
+                                </c:if>
+                                >
+                            Pudding
+                        </option>
                     </select>
                     <span class="error" id="category-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="image">Image</label>
-                    <input type="file" name="image" class="form-control-file" id="image">
+                    <input type="file" name="image" class="form-control-file" id="image" />
                     <span class="error" style="top: 60px;" id="image-error"></span>
                 </div>
                 <button type="submit" class="btn btn-primary" id="add-btn">Add</button>

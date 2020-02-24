@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -101,8 +102,15 @@ public class FilterDispatcher implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-HttpServletRequest req = (HttpServletRequest) request;
-        String uri = req.getRequestURI();
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        if (httpRequest.isRequestedSessionIdFromURL()) {
+            HttpSession session = httpRequest.getSession();
+            if (session != null) {
+                session.invalidate();
+            }
+        }
+
+        String uri = httpRequest.getRequestURI();
         String url = indexPage;
 
         try {
@@ -126,7 +134,7 @@ HttpServletRequest req = (HttpServletRequest) request;
                 if (resource.lastIndexOf(".woff2") > 0) {
                     url = resource;
                 }
-                    if (resource.lastIndexOf(".jpg") > 0) {
+                if (resource.lastIndexOf(".jpg") > 0) {
                     url = resource;
                 }
                 if (resource.lastIndexOf(".png") > 0) {
@@ -135,7 +143,7 @@ HttpServletRequest req = (HttpServletRequest) request;
             }
 
             if (url != null) {
-                RequestDispatcher rd = req.getRequestDispatcher(url);
+                RequestDispatcher rd = httpRequest.getRequestDispatcher(url);
                 rd.forward(request, response);
             } else {
                 chain.doFilter(request, response);
@@ -147,7 +155,8 @@ HttpServletRequest req = (HttpServletRequest) request;
 
     /**
      * Return the filter configuration object for this filter.
-     * @return 
+     *
+     * @return
      */
     public FilterConfig getFilterConfig() {
         return (this.filterConfig);
@@ -171,6 +180,7 @@ HttpServletRequest req = (HttpServletRequest) request;
 
     /**
      * Init method for this filter
+     *
      * @param filterConfig
      */
     @Override
@@ -205,7 +215,7 @@ HttpServletRequest req = (HttpServletRequest) request;
                 response.setContentType("text/html");
                 try (PrintStream ps = new PrintStream(response.getOutputStream()); PrintWriter pw = new PrintWriter(ps)) {
                     pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
-                    
+
                     // PENDING! Localize this for next official release
                     pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
                     pw.print(stackTrace);

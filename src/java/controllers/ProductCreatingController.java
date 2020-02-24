@@ -6,6 +6,7 @@
 package controllers;
 
 import daos.ProductDAO;
+import dtos.ProductDTO;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -67,30 +68,38 @@ public class ProductCreatingController extends HttpServlet {
                 String price = (String) params.get("price");
                 double parsedPrice = Double.parseDouble(price);
                 String category = (String) params.get("category");
-                Timestamp createdTime = new Timestamp(System.currentTimeMillis());
-                String imgPath = category;
-                String imageName = null;
+                if (!productDAO.isDuplicate(productName)) {
+                    Timestamp createdTime = new Timestamp(System.currentTimeMillis());
+                    String imgPath = category;
+                    String imageName = null;
 
-                CurrentPathGetting currentPath = new CurrentPathGetting();
-                String uploadPath = currentPath.getPath() + "/web/uploads/" + category;
-                uploadPath = uploadPath.replace('\\', '/');
-                try {
-                    FileItem imageItem = items.get(itemsSize - 1);
-                    imageName = new File(imageItem.getName()).getName();
-                    File newImage = new File(uploadPath + File.separator + imageName);
-                    if (!newImage.exists()) {
-                        imageItem.write(newImage);
+                    CurrentPathGetting currentPath = new CurrentPathGetting();
+                    String uploadPath = currentPath.getPath() + "/web/uploads/" + category;
+                    uploadPath = uploadPath.replace('\\', '/');
+                    try {
+                        FileItem imageItem = items.get(itemsSize - 1);
+                        imageName = new File(imageItem.getName()).getName();
+                        File newImage = new File(uploadPath + File.separator + imageName);
+                        if (!newImage.exists()) {
+                            imageItem.write(newImage);
+                        }
+                    } catch (Exception e) {
+                        log("ERROR at ProductCreatingController: " + e.getMessage());
                     }
-                } catch (Exception e) {
-                    log("ERROR at ProductCreatingController: " + e.getMessage());
-                }
-                imgPath = imgPath + "/" + imageName;
+                    imgPath = imgPath + "/" + imageName;
 
-                boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime);
-                if (isSuccess) {
-                    url = SUCCESS;
+                    boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime);
+                    if (isSuccess) {
+                        url = SUCCESS;
+                    } else {
+                        request.setAttribute("ERROR", "Create Product Failed");
+                    }
                 } else {
-                    request.setAttribute("ERROR", "Create Product Failed");
+                    url = INVALID;
+                    ProductDTO product = new ProductDTO(description, parsedQuantity, parsedPrice, category);
+                    
+                    request.setAttribute("CreateError", "Product existed!");
+                    request.setAttribute("ProductInformation", product);
                 }
             } catch (Exception e) {
                 log("ERROR at ProductCreatingController: " + e.getMessage());

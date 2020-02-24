@@ -45,5 +45,9 @@ productsDeletingBtn.addEventListener('click', (e) => {
     if (!isProductsChecked()) {
         e.preventDefault()
         productsDeletingError.style.display = 'block'
+    } else {
+        const doesDeletes = confirm('Are you sure you want to delete selected products?')
+        productsDeletingError.style.display = 'none'
+        if (!doesDeletes) e.preventDefault()
     }
 })

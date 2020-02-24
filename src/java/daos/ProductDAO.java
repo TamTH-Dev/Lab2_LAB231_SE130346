@@ -63,6 +63,25 @@ public class ProductDAO {
         return isSuccess;
     }
 
+    public boolean isDuplicate(String productName) throws Exception {
+        boolean isDuplicate = false;
+
+        try {
+            String sql = "select ProductName from Product where ProductName like ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, productName);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                isDuplicate = true;
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return isDuplicate;
+    }
+
     public List<ProductDTO> getAllProductsForAdminPage(int page, int numOfbBlogsPerPage) throws Exception {
         List<ProductDTO> productsList = null;
 
