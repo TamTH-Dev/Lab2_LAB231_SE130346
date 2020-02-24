@@ -47,11 +47,6 @@ public class CartAddingController extends HttpServlet {
         String imgPath = request.getParameter("imgPath");
 
         try {
-            List<ProductDTO> c = cart.getCart();
-            for (ProductDTO product : c) {
-                System.out.println(product.getProductName());
-                System.out.println(product.getQuantity());
-            }
             cart.addProductToCart(productName, quantity, price, category, imgPath);
             request.getSession().setAttribute("CART", cart);
             url = SUCCESS;

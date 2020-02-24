@@ -7,9 +7,11 @@ package db;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 /**
  *
@@ -18,8 +20,10 @@ import javax.naming.NamingException;
 public class MyConnection implements Serializable {
 
     public static Connection getMyConnection() throws ClassNotFoundException, SQLException, NamingException {
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=Store", "sa", "Kaikunihiko265");
+        Context context = new InitialContext();
+        Context tomcatContext = (Context) context.lookup("java:comp/env");
+        DataSource ds = (DataSource) tomcatContext.lookup("Store");
+        Connection conn = ds.getConnection();
         return conn;
     }
 }

@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/Lab2_Lab231_TranHoangTam_SE130346" />
+<Context path="/Lab2_Lab231_TranHoangTam_SE130346">
+    <Resource name="Store" type="javax.sql.DataSource" auth="Container" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" url="jdbc:sqlserver://localhost:1433;databaseName=Store" username="sa" password="Kaikunihiko265" />
+</Context>

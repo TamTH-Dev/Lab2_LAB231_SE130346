@@ -123,3 +123,25 @@ ul {
     color: #21d397;
 }
 
+.nav-app .nav-menu > li .cart-container {
+    position: relative; 
+    width: 80px;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    padding: 0;
+}
+
+.nav-app .nav-menu > li .cart-container .cart {
+    width: 35px; 
+    height: 35px; 
+    margin-right: 5px;
+}
+
+.nav-app .nav-menu > li .cart-container .cart:hover {
+    color: #21d397;
+} 
+
+/*.nav-app .nav-menu > li .cart-container .cart:hover i {
+    color: #fff;
+} */

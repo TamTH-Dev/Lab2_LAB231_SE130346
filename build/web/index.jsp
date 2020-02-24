@@ -28,26 +28,55 @@
             <nav class="nav-app">
                 <div class="logo">
                     <a href="
-                       <c:if test="${sessionScope.ROLE ne 'Admin'}">index.jsp</c:if>
-                       <c:if test="${sessionScope.ROLE eq 'Admin'}">admin.jsp</c:if> 
+                       <c:if test="${sessionScope.ROLE ne 'Admin'}">
+                           index.jsp
+                       </c:if>
+                       <c:if test="${sessionScope.ROLE eq 'Admin'}">
+                           admin.jsp
+                       </c:if> 
+                       ">
+                        <img src="./images/logo.png" alt="">
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="
+                           <c:if test="${sessionScope.ROLE ne 'Admin'}">
+                               index.jsp
+                           </c:if>
+                           <c:if test="${sessionScope.ROLE eq 'Admin'}">
+                               admin.jsp
+                           </c:if>
                            ">
-                           <img src="./images/logo.png" alt="">
-                       </a>
-                    </div>
-                    <ul class="nav-menu">
-                        <li><a href="
-                            <c:if test="${sessionScope.ROLE ne 'Admin'}">index.jsp</c:if>
-                            <c:if test="${sessionScope.ROLE eq 'Admin'}">admin.jsp</c:if>
-                                ">Home</a></li>
-                    <c:if test="${sessionScope.ROLE eq 'User'}"><li><a href="article-posting.jsp">Blog Posting</a></li></c:if>
-                        <c:if test="${sessionScope.ROLE ne 'User' && sessionScope.ROLE ne 'Admin'}">
-                        <li><button><a class="header-btn" href="login.jsp">Sign In</a></li>
-                        <li><button><a class="header-btn" href="register.jsp">Sign Up</a></li>
-                                </c:if>
-                                <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
-                        <li><a href="#">Hello, ${sessionScope.NAME}!</a></li>
-                        <li><button><a class="header-btn" href="Logout">Sign Out</a></button></li>
-                                </c:if>
+                            Home
+                        </a>
+                    </li>
+                    <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
+                        <li>
+                            <a href="#">Hello, ${sessionScope.NAME}!</a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.ROLE ne 'Admin'}">
+                        <li style="margin-right: 10px;">
+                            <a class="cart-container" href="article-posting.jsp">
+                                <i class="fas fa-shopping-cart cart"></i> 
+                                <span>(${sessionScope.CART.getTotalProductsFromCart()})</span>
+                            </a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.ROLE ne 'User' && sessionScope.ROLE ne 'Admin'}">
+                        <li>
+                            <button><a class="header-btn" href="login.jsp">Sign In</a>
+                        </li>
+                        <li>
+                            <button><a class="header-btn" href="register.jsp">Sign Up</a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
+                        <li>
+                            <button><a class="header-btn" href="Logout">Sign Out</a></button>
+                        </li>
+                    </c:if>
                 </ul>
             </nav>
         </header>

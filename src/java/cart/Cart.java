@@ -28,7 +28,8 @@ public class Cart {
     public void addProductToCart(String productName, int quantity, double price, String category, String imgPath) {
         ProductDTO product = new ProductDTO(productName, quantity, price, category, imgPath);
         if (doesProductExistInCart(productName)) {
-            updateProductQuantityFromCart(productName, quantity);
+            int currentQuantity = getCurrentQuantityOfProductFromCart(productName);
+            updateProductQuantityFromCart(productName, currentQuantity + quantity);
         } else {
             cart.add(product);
         }
@@ -40,24 +41,23 @@ public class Cart {
     }
 
     public void removeProductFromCart(String productName) {
-        cart.stream().filter(product -> product.getProductName().equals(productName)).forEach((product) -> {
-            cart.remove(product);
-        });
+        ProductDTO product = cart.stream().filter(pd -> pd.getProductName().equals(productName)).findAny().get();
+        cart.remove(product);
     }
 
     public void updateProductQuantityFromCart(String productName, int quantity) {
-        cart.stream().filter(product -> product.getProductName().equals(productName)).forEach((product) -> {
-            product.setQuantity(quantity);
-        });
+        cart.stream().filter(product -> product.getProductName().equals(productName)).findAny().get().setQuantity(quantity);
     }
 
     public int getCurrentQuantityOfProductFromCart(String productName) {
-        int curQuantity = 0;
+        int currentQuantity = cart.stream().filter(product -> product.getProductName().equals(productName)).findAny().get().getQuantity();
 
-        cart.stream().filter(product -> product.getProductName().equals(productName)).forEach((product) -> {
-            curQuantity = product.getQuantity();
-        });
+        return currentQuantity;
+    }
 
-        return curQuantity;
+    public int getTotalProductsFromCart() {
+        int total = cart.stream().mapToInt(product -> product.getQuantity()).sum();
+        System.out.println(total);
+        return total;
     }
 }
