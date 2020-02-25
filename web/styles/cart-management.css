@@ -20,20 +20,20 @@
 }
 
 .container .cart-detail-container .image-col {
-    width: 20%;
+    width: 18%;
     position: relative;
 }
 
 .container .cart-detail-container .product-name-col {
-    width: 20%;
+    width: 27%;
 }
 
 .container .cart-detail-container .category-col {
-    width: 8%;
+    width: 5%;
 }
 
 .container .cart-detail-container .quantity-col {
-    width: 12%;
+    width: 10%;
     display: flex;
 }
 
@@ -57,8 +57,10 @@
     border-top: 1px solid #ccc;
 }
 
-.container .cart-detail-container .product .col {
-
+.container .cart-detail-container .product .product-name-col input {
+    width: 100%;
+    border: none;
+    outline: none;
 }
 
 .container .cart-detail-container .product .image-col img {
@@ -85,24 +87,30 @@
     display: block;
     width: 80px;
     border: none;
-    background: #e00;
-    color: #fff;
 }
 
-.container .cart-detail-container .product .action-col button:hover {
+.container .cart-detail-container .product .action-col button a {
+    background: #e00;
+    color: #fff;
+    display: block;
+    height: 35px;
+    line-height: 35px;
+}
+
+.container .cart-detail-container .product .action-col button a:hover {
     background: #c00;
 }
 
 .container .cart-detail-container .product .price-col input {
     background: transparent;
-    width: 120px;
+    width: 100%;
     border: none;
     outline: none;
 }
 
 .container .cart-detail-container .product .total-price-col input {
     background: transparent;
-    width: 120px;
+    width: 100%;
     border: none;
     outline: none;
 }

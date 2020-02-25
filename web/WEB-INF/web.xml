@@ -60,6 +60,14 @@
         <servlet-name>CartDataLoadingController</servlet-name>
         <servlet-class>controllers.CartDataLoadingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CartDeletingController</servlet-name>
+        <servlet-class>controllers.CartDeletingController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CartPayingController</servlet-name>
+        <servlet-class>controllers.CartPayingController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/RegisterController</url-pattern>
@@ -111,6 +119,14 @@
     <servlet-mapping>
         <servlet-name>CartDataLoadingController</servlet-name>
         <url-pattern>/CartDataLoadingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CartDeletingController</servlet-name>
+        <url-pattern>/CartDeletingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CartPayingController</servlet-name>
+        <url-pattern>/CartPayingController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

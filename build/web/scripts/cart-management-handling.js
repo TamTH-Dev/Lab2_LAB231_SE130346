@@ -1,3 +1,5 @@
+/* global parseFloat */
+
 // Handle quantity increasement and descreasement
 const paymentTotal = document.getElementById('payment-total')
 const quantityValues = document.getElementsByClassName('quantity-value')
@@ -7,7 +9,12 @@ const priceValues = document.getElementsByClassName('price-value')
 const productPriceTotals = document.getElementsByClassName('product-price-total')
 const length = productPriceTotals.length
 
+paymentTotal.value = parseFloat(paymentTotal.value).toFixed(2)
+
 for (let i = 0; i < length; i++) {
+    priceValues[i].value = parseFloat(priceValues[i].value).toFixed(2)
+    productPriceTotals[i].value = parseFloat(productPriceTotals[i].value).toFixed(2) 
+
     increaseAmountBtns[i].addEventListener('click', () => {
         quantityValues[i].value = parseInt(quantityValues[i].value) + 1
         let value = parseInt(quantityValues[i].value) * parseFloat(priceValues[i].value)
@@ -44,3 +51,21 @@ for (let i = 0; i < length; i++) {
         }
     })
 }
+
+// Handle deleting products
+const productDeletingBtns = document.getElementsByClassName('product-deleting-btn')
+
+for (let i = 0; i < length; i++) {
+    productDeletingBtns[i].addEventListener('click', (e) => {
+        const doesDeletes = confirm('Are you sure you want to delete this product from cart')
+        if (!doesDeletes) e.preventDefault()
+    })
+}
+
+// Handle ordering 
+const orderBtn = document.getElementById('order-btn')
+
+orderBtn.addEventListener('click', (e) => {
+    const doesOrders = confirm('Are you sure you want to order')
+    if (!doesOrders) e.preventDefault()
+})

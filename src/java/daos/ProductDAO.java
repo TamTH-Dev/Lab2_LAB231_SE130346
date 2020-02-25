@@ -761,4 +761,36 @@ public class ProductDAO implements Serializable {
 
         return total;
     }
+
+    public boolean recordUserOrder(String email, Timestamp buyTime, String paymentMethod, double totalPrice) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "insert into SaleHistory(Email, BuyTime, PaymentMethod, TotalPrice)  values(?, ?, ?, ?)";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, email);
+            preStm.setTimestamp(2, buyTime);
+            preStm.setString(3, paymentMethod);
+            preStm.setDouble(4, totalPrice);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public boolean addAllProductsFromCartToDB(List<ProductDTO> cart) throws Exception {
+       boolean isSuccess = false; 
+
+       try {
+           String sql = "insert into History()";
+       } finally {
+           closeConnection();
+       }
+
+       return isSuccess;
+    }
+
 }

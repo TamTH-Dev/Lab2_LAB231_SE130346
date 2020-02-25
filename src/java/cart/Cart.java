@@ -59,4 +59,13 @@ public class Cart {
         int total = cart.stream().mapToInt(product -> product.getQuantity()).sum();
         return total;
     }
+
+    public double getPriceTotal() {
+        double total = cart.stream().mapToDouble(product -> product.getQuantity() * product.getPrice()).sum();
+        return total;
+    }
+
+    public void removeAllProductsFromCart() {
+        cart.clear();
+    }
 }

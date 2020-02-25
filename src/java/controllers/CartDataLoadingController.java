@@ -7,7 +7,6 @@ package controllers;
 
 import cart.Cart;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +39,8 @@ public class CartDataLoadingController extends HttpServlet {
         Cart cart = (Cart) session.getAttribute("CART");
 
         try {
-           request.setAttribute("Cart", cart.getCart());
-           url = SUCCESS;
+            request.setAttribute("Cart", cart.getCart());
+            url = SUCCESS;
         } catch (Exception e) {
             log("ERROR at CartDataLoadingController: " + e.getMessage());
         } finally {
