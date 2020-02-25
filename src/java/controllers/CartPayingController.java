@@ -10,6 +10,7 @@ import daos.ProductDAO;
 import dtos.ProductDTO;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -49,6 +50,7 @@ public class CartPayingController extends HttpServlet {
                 String email = request.getSession(false).getAttribute("EMAIL").toString();
                 String[] quantities = request.getParameterValues("quantity");
                 String[] productNames = request.getParameterValues("productName");
+                double billPriceTotal = Double.parseDouble(request.getParameter("billPriceTotal"));
                 ProductDAO productDAO = new ProductDAO();
                 int size = productsList.size();
 
@@ -61,13 +63,16 @@ public class CartPayingController extends HttpServlet {
                     }
                 }
 
-                double priceTotal = cart.getPriceTotal();
                 Timestamp buyTime = new Timestamp(System.currentTimeMillis());
                 try {
-                    if (productDAO.recordUserOrder(email, buyTime, "hello", priceTotal)) {
-                        url = SUCCESS;
-                        cart.removeAllProductsFromCart();
-                        request.getSession(false).setAttribute("CART", cart);
+                    if (productDAO.recordUserOrder(email, buyTime, "hello", billPriceTotal)) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS    ");
+                        int saleID = productDAO.getSaleID(email, sdf.format(buyTime));
+                        if (productDAO.recordUserOrderDetail(saleID, productsList)) {
+                            cart.removeAllProductsFromCart();
+                            url = SUCCESS;
+                            request.getSession(false).setAttribute("CART", cart);
+                        }
                     } else {
                         request.setAttribute("ERROR", "Execute Paying Failed");
                     }

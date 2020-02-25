@@ -116,12 +116,12 @@
                                 >
                             Drink
                         </option>
-                        <option value="pudding"
-                                <c:if test="${ProductInformation.category eq 'pudding'}">
+                        <option value="icecream"
+                                <c:if test="${ProductInformation.category eq 'icecream'}">
                                     selected
                                 </c:if>
                                 >
-                            Pudding
+                            Ice Cream
                         </option>
                     </select>
                     <span class="error" id="category-error"></span>

@@ -68,6 +68,10 @@
         <servlet-name>CartPayingController</servlet-name>
         <servlet-class>controllers.CartPayingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserPaymentHistoryController</servlet-name>
+        <servlet-class>controllers.UserPaymentHistoryController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/RegisterController</url-pattern>
@@ -127,6 +131,10 @@
     <servlet-mapping>
         <servlet-name>CartPayingController</servlet-name>
         <url-pattern>/CartPayingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserPaymentHistoryController</servlet-name>
+        <url-pattern>/UserPaymentHistoryController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

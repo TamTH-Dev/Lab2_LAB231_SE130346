@@ -127,7 +127,7 @@
                         </div>
                     </div>
                     <div class="payment-total">
-                        Total: <input id="payment-total" type="text" value="${total}"  readonly="true"/> $
+                        Total: <input id="payment-total" name="billPriceTotal" type="text" value="${total}" readonly="true"/> $
                     </div>
                     <button type="submit" class="order-btn" id="order-btn">Order</button>
                 </form>

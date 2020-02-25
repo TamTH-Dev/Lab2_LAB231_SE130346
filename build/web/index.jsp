@@ -51,17 +51,24 @@
                             Home
                         </a>
                     </li>
-                    <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
-                        <li>
-                            <a href="#">Hello, ${sessionScope.NAME}!</a>
-                        </li>
-                    </c:if>
                     <c:if test="${sessionScope.ROLE ne 'Admin'}">
                         <li style="margin-right: 10px;">
                             <a class="cart-container" href="CartDataLoading">
                                 <i class="fas fa-shopping-cart cart"></i> 
                                 <span>(${sessionScope.CART.getTotalProductsFromCart()})</span>
                             </a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
+                        <li style="width: 140px;">
+                            <a class="cart-container" style="width:140px;" href="UserPaymentHistory">
+                                Payment History
+                            </a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
+                        <li>
+                            <a href="#">Hello, ${sessionScope.NAME}!</a>
                         </li>
                     </c:if>
                     <c:if test="${sessionScope.ROLE ne 'User' && sessionScope.ROLE ne 'Admin'}">

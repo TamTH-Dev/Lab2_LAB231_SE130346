@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import supportMethods.SHA_256;
 
 /**
@@ -36,6 +37,7 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession(true);
         String url = ERROR;
 
         try {
@@ -52,9 +54,9 @@ public class LoginController extends HttpServlet {
                 url = INVALID;
             } else {
                 String name = accountDAO.getLoginName(email, encodedPassword);
-                request.getSession(true).setAttribute("EMAIL", email);
-                request.getSession(true).setAttribute("NAME", name);
-                request.getSession(true).setAttribute("ROLE", role);
+                session.setAttribute("EMAIL", email);
+                session.setAttribute("NAME", name);
+                session.setAttribute("ROLE", role);
 
                 switch (role) {
                     case "Admin":

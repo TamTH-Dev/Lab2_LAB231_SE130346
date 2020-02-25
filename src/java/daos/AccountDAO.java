@@ -46,7 +46,7 @@ public class AccountDAO implements Serializable {
             preStm.setString(2, name);
             preStm.setString(3, password);
             if (preStm.executeUpdate() > 0) {
-                role = "Member";
+                role = "User";
             }
         } finally {
             closeConnection();
