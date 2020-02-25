@@ -3,7 +3,7 @@
 }
 
 .container .cart-detail-container {
-    box-shadow: 0 5px 8px 5px rgba(0, 0, 0, .2);
+    box-shadow: 0 4px 8px 3px rgba(0, 0, 0, .3);
 }
 
 .container .cart-detail-container .cart-detail-container-header {
@@ -29,11 +29,12 @@
 }
 
 .container .cart-detail-container .category-col {
-    width: 10%;
+    width: 8%;
 }
 
 .container .cart-detail-container .quantity-col {
-    width: 10%;
+    width: 12%;
+    display: flex;
 }
 
 .container .cart-detail-container .price-col {
@@ -46,25 +47,37 @@
 
 .container .cart-detail-container .action-col {
     width: 15%;
-    position: relative;
 }
 
 .container .cart-detail-container .product {
     display: flex;
     flex-flow: row wrap;
+    align-items: center;
     height: 100px;
+    border-top: 1px solid #ccc;
 }
 
 .container .cart-detail-container .product .col {
-    line-height: 100px;
+
 }
 
 .container .cart-detail-container .product .image-col img {
     width: 80%;
     display: block;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+}
+
+.container .cart-detail-container .product .quantity-col input {
+    width: 40px;
+    text-align: center;
+    margin: 0 3px;
+}
+
+.container .cart-detail-container .product .quantity-col button {
+    width: 30px;
+    height: 30px;
+    background: #131627;
+    color: #fff;
+    border: none;
 }
 
 .container .cart-detail-container .product .action-col button {
@@ -72,9 +85,62 @@
     display: block;
     width: 80px;
     border: none;
-    background: #f00;
+    background: #e00;
     color: #fff;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+}
+
+.container .cart-detail-container .product .action-col button:hover {
+    background: #c00;
+}
+
+.container .cart-detail-container .product .price-col input {
+    background: transparent;
+    width: 120px;
+    border: none;
+    outline: none;
+}
+
+.container .cart-detail-container .product .total-price-col input {
+    background: transparent;
+    width: 120px;
+    border: none;
+    outline: none;
+}
+
+.container .payment-total {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #131627;
+}
+
+.container .payment-total input {
+    width: 80px;
+    text-align: right;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    color: #131627;
+}
+
+.container form {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-end;
+}
+
+.container form .order-btn {
+    height: 40px;
+    background: #131627;
+    color: #fff;
+    transition: all .2s;
+    width: 100px;
+    border: none;
+    margin-top: 20px;
+}
+
+.container form .order-btn:hover {
+    color: #21d397;
 }

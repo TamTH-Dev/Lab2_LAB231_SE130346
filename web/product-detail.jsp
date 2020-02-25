@@ -99,7 +99,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <button type="submit" id="order-btn">Order</button>
+                    <button type="submit" id="order-btn">Add to Cart</button>
                 </form>
             </div>
         </div>

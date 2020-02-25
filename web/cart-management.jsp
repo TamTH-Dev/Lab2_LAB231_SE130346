@@ -53,7 +53,6 @@
                         <li style="margin-right: 10px;">
                             <a class="cart-container" href="article-posting.jsp">
                                 <i class="fas fa-shopping-cart cart"></i> 
-                                <span>(${sessionScope.CART.getTotalProductsFromCart()})</span>
                             </a>
                         </li>
                     </c:if>
@@ -75,34 +74,55 @@
         </header>
 
         <div class="container">
-            <div class="cart-detail-container">
-                <div class="cart-detail-container-header">
-                    <div class="image-col col">Product's Image</div>
-                    <div class="product-name-col col">Product's Name</div>
-                    <div class="category-col col">Category</div>
-                    <div class="quantity-col col">Quantity</div>
-                    <div class="price-col col">Price</div>
-                    <div class="total-price-col col">Total Price</div>
-                    <div class="action-col col">Action</div>
-                </div>
-                <div>
-                    <c:forEach items="${requestScope.Cart}" var="product">
-                        <div class="product">
-                            <div class="image-col col">
-                                <img class="product-img" src="./uploads/${product.imgPath}" />
+            <form method="POST" action="CartManagement"> 
+                <div class="cart-detail-container">
+                    <div class="cart-detail-container-header">
+                        <div class="image-col col">Product's Image</div>
+                        <div class="product-name-col col">Product's Name</div>
+                        <div class="category-col col">Category</div>
+                        <div class="quantity-col col">Quantity</div>
+                        <div class="price-col col">Price</div>
+                        <div class="total-price-col col">Total Price</div>
+                        <div class="action-col col">Action</div>
+                    </div>
+                    <div>
+                        <c:set var="total" value="${0}" />
+                        <c:forEach items="${requestScope.Cart}" var="product">
+                            <div class="product">
+                                <div class="image-col col">
+                                    <img class="product-img" src="./uploads/${product.imgPath}" />
+                                </div>
+                                <div class="product-name-col col">${product.productName}</div>
+                                <div class="category-col col">${product.category}</div>
+                                <div class="quantity-col col">
+
+                                    <button type="button" class="descrease-amount-btn">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="text" name="quantity" value="${product.quantity}" class="quantity-value" />
+                                    <button type="button" class="increase-amount-btn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="price-col col">
+                                    <input type="text" value="${product.price}" readonly="true" class="price-value"/>
+                                </div>
+                                <div class="total-price-col col">
+                                    <input type="text" value="${product.quantity * product.price}" readonly="true" class="product-price-total" />
+                                </div>
+                                <div class="action-col col">
+                                    <button type="button">Delete</button>
+                                </div>
                             </div>
-                            <div class="product-name-col col">${product.productName}</div>
-                            <div class="category-col col">${product.category}</div>
-                            <div class="quantity-col col">${product.quantity}</div>
-                            <div class="price-col col">${product.price}</div>
-                            <div class="total-price-col col"></div>
-                            <div class="action-col col">
-                                <button type="button">Delete</button>
-                            </div>
-                        </div>
-                    </c:forEach>
+                            <c:set var="total" value="${total + product.quantity * product.price}" />
+                        </c:forEach>
+                    </div>
                 </div>
-            </div>
+                <div class="payment-total">
+                    Total: <input id="payment-total" type="text" value="${String.format("%.2f", total)}"  readonly="true"/> $
+                </div>
+                <button type="submit" class="order-btn">Order</button>
+            </form>
         </div>
 
         <footer class="container-fluid main-footer">

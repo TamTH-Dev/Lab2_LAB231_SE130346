@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/styles/header.css</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/cart/Cart.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/index.jsp</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/dtos/ProductDTO.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/controllers/CartAddingController.java</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/styles/cart-management.css</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/cart-management.jsp</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/controllers/CartDataLoadingController.java</file>
         </group>
     </open-files>
 </project-private>
