@@ -38,6 +38,7 @@ public class ProductsDeletingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
             ProductDAO productDAO = new ProductDAO();
             String[] slProducts = request.getParameterValues("selectedProducts");

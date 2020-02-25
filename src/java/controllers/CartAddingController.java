@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -35,20 +34,25 @@ public class CartAddingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        HttpSession session = request.getSession(false);
-        Cart cart = (Cart) session.getAttribute("CART");
-
-        String productName = request.getParameter("productName");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        double price = Double.parseDouble(request.getParameter("price"));
-        String category = request.getParameter("category");
-        String imgPath = request.getParameter("imgPath");
+        Cart cart = null;
+        String productName = null;
+        int quantity;
+        double price;
+        String category = null;
+        String imgPath = null;
 
         try {
+            cart = (Cart) request.getSession(false).getAttribute("CART");
+            productName = request.getParameter("productName");
+            quantity = Integer.parseInt(request.getParameter("quantity"));
+            price = Double.parseDouble(request.getParameter("price"));
+            category = request.getParameter("category");
+            imgPath = request.getParameter("imgPath");
+
             cart.addProductToCart(productName, quantity, price, category, imgPath);
-            request.getSession().setAttribute("CART", cart);
+            request.getSession(false).setAttribute("CART", cart);
             url = SUCCESS;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             log("ERROR at CartAddingController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

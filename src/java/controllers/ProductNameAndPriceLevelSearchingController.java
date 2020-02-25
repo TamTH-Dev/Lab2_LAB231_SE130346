@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import supportMethods.PagingHandler;
 
 /**
@@ -38,7 +37,6 @@ public class ProductNameAndPriceLevelSearchingController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(false);
         String pg = request.getParameter("pg");
         int numOfProductsPerPage = 20;
         String url = ERROR;
@@ -46,8 +44,8 @@ public class ProductNameAndPriceLevelSearchingController extends HttpServlet {
         String searchedPriceLevel = request.getParameter("searchedPriceLevel");
         int signal = 0;
 
-        if (session.getAttribute("ROLE") != null) {
-            String role = session.getAttribute("ROLE").toString();
+        if (request.getSession(false).getAttribute("ROLE") != null) {
+            String role = request.getSession(false).getAttribute("ROLE").toString();
             if (role.equals("Admin")) {
                 signal = 1;
             }

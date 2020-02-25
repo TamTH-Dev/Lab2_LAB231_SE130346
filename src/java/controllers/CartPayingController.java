@@ -11,22 +11,20 @@ import dtos.ProductDTO;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author hoang
  */
 public class CartPayingController extends HttpServlet {
-    
+
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "index.jsp";
+    private static final String LOGIN = "login.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,38 +39,41 @@ public class CartPayingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        HttpSession session = request.getSession(false);
-        String email = session.getAttribute("EMAIL").toString();
-        Cart cart = (Cart) session.getAttribute("CART");
-        List<ProductDTO> productsList = cart.getCart();
-        String[] quantities = request.getParameterValues("quantity");
-        String[] productNames = request.getParameterValues("productName");
-        int size = productsList.size();
-        
+
         try {
-            ProductDAO productDAO = new ProductDAO();
-            
-            for (int i = 0; i < size; i++) {
-                int quantity = Integer.parseInt(quantities[i]);
-                String productName = productNames[i];
-                int currentProductQuantity = cart.getCurrentQuantityOfProductFromCart(productName);
-                if (currentProductQuantity != quantity) {
-                    cart.updateProductQuantityFromCart(productName, quantity);
+            if (request.getSession(false).getAttribute("EMAIL") == null) {
+                url = LOGIN;
+            } else {
+                Cart cart = (Cart) request.getSession(false).getAttribute("CART");
+                List<ProductDTO> productsList = cart.getCart();
+                String email = request.getSession(false).getAttribute("EMAIL").toString();
+                String[] quantities = request.getParameterValues("quantity");
+                String[] productNames = request.getParameterValues("productName");
+                ProductDAO productDAO = new ProductDAO();
+                int size = productsList.size();
+
+                for (int i = 0; i < size; i++) {
+                    int quantity = Integer.parseInt(quantities[i]);
+                    String productName = productNames[i];
+                    int currentProductQuantity = cart.getCurrentQuantityOfProductFromCart(productName);
+                    if (currentProductQuantity != quantity) {
+                        cart.updateProductQuantityFromCart(productName, quantity);
+                    }
                 }
-            }
-            
-            double priceTotal = cart.getPriceTotal();
-            Timestamp buyTime = new Timestamp(System.currentTimeMillis());
-            try {
-                if (productDAO.recordUserOrder(email, buyTime, "hello", priceTotal)) {
-                    url = SUCCESS;                    
-                    cart.removeAllProductsFromCart();
-                    request.getSession(false).setAttribute("CART", cart);
-                } else {
-                    request.setAttribute("ERROR", "Execute Paying Failed");
+
+                double priceTotal = cart.getPriceTotal();
+                Timestamp buyTime = new Timestamp(System.currentTimeMillis());
+                try {
+                    if (productDAO.recordUserOrder(email, buyTime, "hello", priceTotal)) {
+                        url = SUCCESS;
+                        cart.removeAllProductsFromCart();
+                        request.getSession(false).setAttribute("CART", cart);
+                    } else {
+                        request.setAttribute("ERROR", "Execute Paying Failed");
+                    }
+                } catch (Exception ex) {
+                    log("ERROR at CartPayingController: " + ex.getMessage());
                 }
-            } catch (Exception ex) {
-                log("ERROR at CartPayingController: " + ex.getMessage());
             }
         } catch (NumberFormatException e) {
             log("ERROR at CartPayingController: " + e.getMessage());

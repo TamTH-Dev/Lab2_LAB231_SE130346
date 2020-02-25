@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -35,12 +34,12 @@ public class CartDataLoadingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        HttpSession session = request.getSession(false);
-        Cart cart = (Cart) session.getAttribute("CART");
+        Cart cart = null;
 
         try {
-            request.setAttribute("Cart", cart.getCart());
+            cart = (Cart) request.getSession(false).getAttribute("CART");
             url = SUCCESS;
+            request.setAttribute("Cart", cart.getCart());
         } catch (Exception e) {
             log("ERROR at CartDataLoadingController: " + e.getMessage());
         } finally {

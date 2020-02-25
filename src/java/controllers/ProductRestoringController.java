@@ -35,6 +35,7 @@ public class ProductRestoringController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
             String productName = request.getParameter("productName");
             ProductDAO productDAO = new ProductDAO();

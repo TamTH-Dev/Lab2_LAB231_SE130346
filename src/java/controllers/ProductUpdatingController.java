@@ -42,6 +42,7 @@ public class ProductUpdatingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+
         if (isMultipart) {
             ProductDAO productDAO = new ProductDAO();
             String url = ERROR;

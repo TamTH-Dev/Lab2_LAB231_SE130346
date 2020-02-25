@@ -51,7 +51,7 @@
                     </c:if>
                     <c:if test="${sessionScope.ROLE ne 'Admin'}">
                         <li style="margin-right: 10px;">
-                            <a class="cart-container" href="article-posting.jsp">
+                            <a class="cart-container" href="CartDataLoading">
                                 <i class="fas fa-shopping-cart cart"></i> 
                             </a>
                         </li>

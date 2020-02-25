@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -37,15 +36,15 @@ public class ProductDetailLoadingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        HttpSession session = request.getSession(false);
         int signal = 0;
 
-        if (session.getAttribute("ROLE") != null) {
+        if (request.getSession(false).getAttribute("ROLE") != null) {
             String role = request.getSession(false).getAttribute("ROLE").toString();
             if (role.equals("Admin")) {
                 signal = 1;
             }
         }
+
         try {
             ProductDAO productDAO = new ProductDAO();
             ProductDTO productDetail = null;

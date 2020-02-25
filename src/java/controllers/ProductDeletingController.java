@@ -35,9 +35,11 @@ public class ProductDeletingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
             String productName = request.getParameter("productName");
             ProductDAO productDAO = new ProductDAO();
+
             if (productDAO.deleteProduct(productName)) {
                 Timestamp deleteTime = new Timestamp(System.currentTimeMillis());
                 productDAO.recordDeletedProduct(productName, deleteTime);

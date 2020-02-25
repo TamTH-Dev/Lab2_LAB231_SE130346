@@ -35,16 +35,17 @@ public class CartDeletingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        HttpSession session = request.getSession(false);
-        Cart cart = (Cart) session.getAttribute("CART");
-        String productName = request.getParameter("productName");
+        Cart cart = null;
+        String productName = null;
 
         try {
+            cart = (Cart) request.getSession(false).getAttribute("CART");
+            productName = request.getParameter("productName");
             if (cart.doesProductExistInCart(productName)) {
                 cart.removeProductFromCart(productName);
             }
             url = SUCCESS;
-            request.getSession().setAttribute("CART", cart);
+            request.getSession(false).setAttribute("CART", cart);
         } catch (Exception e) {
             log("ERROR at CartDeletingController: " + e.getMessage());
         } finally {

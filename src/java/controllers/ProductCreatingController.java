@@ -45,6 +45,7 @@ public class ProductCreatingController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+
         if (isMultipart) {
             ProductDAO productDAO = new ProductDAO();
             String url = ERROR;
@@ -68,6 +69,7 @@ public class ProductCreatingController extends HttpServlet {
                 String price = (String) params.get("price");
                 double parsedPrice = Double.parseDouble(price);
                 String category = (String) params.get("category");
+
                 if (!productDAO.isDuplicate(productName)) {
                     Timestamp createdTime = new Timestamp(System.currentTimeMillis());
                     String imgPath = category;
@@ -86,6 +88,7 @@ public class ProductCreatingController extends HttpServlet {
                     } catch (Exception e) {
                         log("ERROR at ProductCreatingController: " + e.getMessage());
                     }
+
                     imgPath = imgPath + "/" + imageName;
 
                     boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime);
@@ -94,10 +97,10 @@ public class ProductCreatingController extends HttpServlet {
                     } else {
                         request.setAttribute("ERROR", "Create Product Failed");
                     }
+
                 } else {
                     url = INVALID;
                     ProductDTO product = new ProductDTO(description, parsedQuantity, parsedPrice, category);
-                    
                     request.setAttribute("CreateError", "Product existed!");
                     request.setAttribute("ProductInformation", product);
                 }

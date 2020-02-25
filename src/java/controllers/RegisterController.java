@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import supportMethods.SHA_256;
 
 /**
@@ -36,6 +35,7 @@ public class RegisterController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
             AccountDAO accountDAO = new AccountDAO();
             String email = request.getParameter("email");
@@ -44,15 +44,14 @@ public class RegisterController extends HttpServlet {
 
             boolean isDuplicate = accountDAO.checkDuplicate(email);
             if (!isDuplicate) {
-                HttpSession session = request.getSession();
                 SHA_256 sha = new SHA_256();
 
                 String encodedPassword = sha.getEncodedString(password);
                 String role = accountDAO.createAccount(email, name, encodedPassword);
                 if (role != null) {
-                    session.setAttribute("EMAIL", email);
-                    session.setAttribute("NAME", name);
-                    session.setAttribute("ROLE", role);
+                    request.getSession(true).setAttribute("EMAIL", email);
+                    request.getSession(true).setAttribute("NAME", name);
+                    request.getSession(true).setAttribute("ROLE", role);
                     url = SUCCESS;
                 } else {
                     request.setAttribute("ERROR", "Register Account Failed!");

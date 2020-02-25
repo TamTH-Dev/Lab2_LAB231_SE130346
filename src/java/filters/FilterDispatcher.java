@@ -103,12 +103,6 @@ public class FilterDispatcher implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        if (httpRequest.isRequestedSessionIdFromURL()) {
-            HttpSession session = httpRequest.getSession();
-            if (session != null) {
-                session.invalidate();
-            }
-        }
 
         String uri = httpRequest.getRequestURI();
         String url = indexPage;

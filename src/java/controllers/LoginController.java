@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import supportMethods.SHA_256;
 
 /**
@@ -37,7 +36,8 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String url = ERROR;
+        String url = ERROR;
+
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
@@ -46,15 +46,15 @@ public class LoginController extends HttpServlet {
             SHA_256 sha = new SHA_256();
             String encodedPassword = sha.getEncodedString(password);
             String role = accountDAO.handleLogin(email, encodedPassword);
+
             if (role.equals("failed")) {
                 request.setAttribute("InvalidAccount", "Username or Password is invalid!");
                 url = INVALID;
             } else {
-                HttpSession session = request.getSession();
                 String name = accountDAO.getLoginName(email, encodedPassword);
-                session.setAttribute("EMAIL", email);
-                session.setAttribute("NAME", name);
-                session.setAttribute("ROLE", role);
+                request.getSession(true).setAttribute("EMAIL", email);
+                request.getSession(true).setAttribute("NAME", name);
+                request.getSession(true).setAttribute("ROLE", role);
 
                 switch (role) {
                     case "Admin":
