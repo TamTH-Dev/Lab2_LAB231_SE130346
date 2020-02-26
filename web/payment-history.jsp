@@ -82,7 +82,7 @@
         </header>
 
         <div class="container">
-            <form action="ProductNameAndPriceLevelSearching" method="POST" class="form-inline search-form">
+            <form action="ProductNameAndShoppingTimeSearching" method="POST" class="form-inline search-form">
                 <div class="form-group mr-3">
                     <label for="productName" class="sr-only">Product Name</label>
                     <input id="productName" name="searchedProductName" value="${param.searchedProductName}" type="text" class="form-control" placeholder="Product Name" />
@@ -90,12 +90,12 @@
 
                 <div class="form-group mr-3">
                     <label for="searchedStartingShoppingTime" class="sr-only">Shopping Time</label>
-                    <input id="searchedStartingShoppingTime" name="searchedStaringShoppingTime" value="${param.searchedProductName}" type="text" class="form-control" placeholder="From Time" />
+                    <input id="searchedStartingShoppingTime" name="searchedStartingShoppingTime" value="${param.searchedStartingShoppingTime}" type="text" class="form-control" placeholder="From Time" />
                 </div>
 
                 <div class="form-group mr-3">
                     <label for="searchedEndingShoppingTime" class="sr-only">Shopping Time</label>
-                    <input id="searchedEndingShoppingTime" name="searchedEndingShoppingTime" value="${param.searchedProductName}" type="text" class="form-control" placeholder="To Time" />
+                    <input id="searchedEndingShoppingTime" name="searchedEndingShoppingTime" value="${param.searchedEndingShoppingTime}" type="text" class="form-control" placeholder="To Time" />
                 </div>
 
                 <button type="submit" class="btn btn-primary search-btn" id="search-btn">

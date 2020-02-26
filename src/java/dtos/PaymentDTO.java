@@ -6,6 +6,7 @@
 package dtos;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  *
@@ -13,14 +14,15 @@ import java.io.Serializable;
  */
 public class PaymentDTO implements Serializable {
 
-    private String paymentMethod, productName, buyTime;
+    private Timestamp buyTime;
+    private String paymentMethod, productName;
     private double billPriceTotal, productPriceTotal;
     private int saleID, quantity;
 
     public PaymentDTO() {
     }
 
-    public PaymentDTO(int saleID, String buyTime, String paymentMethod, double billPriceTotal) {
+    public PaymentDTO(int saleID, Timestamp buyTime, String paymentMethod, double billPriceTotal) {
         this.saleID = saleID;
         this.buyTime = buyTime;
         this.paymentMethod = paymentMethod;
@@ -34,11 +36,11 @@ public class PaymentDTO implements Serializable {
         this.productPriceTotal = producePriceTotal;
     }
 
-    public String getBuyTime() {
+    public Timestamp getBuyTime() {
         return buyTime;
     }
 
-    public void setBuyTime(String buyTime) {
+    public void setBuyTime(Timestamp buyTime) {
         this.buyTime = buyTime;
     }
 

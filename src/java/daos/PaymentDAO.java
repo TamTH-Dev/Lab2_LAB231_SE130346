@@ -55,9 +55,8 @@ public class PaymentDAO {
                 Timestamp buyTime = rs.getTimestamp("BuyTime");
                 String paymentMethod = rs.getString("PaymentMethod");
                 double billPriceTotal = rs.getDouble("BillPriceTotal");
-                SimpleDateFormat sdf = new SimpleDateFormat();
 
-                PaymentDTO paymentDTO = new PaymentDTO(saleID, sdf.format(buyTime), paymentMethod, billPriceTotal);
+                PaymentDTO paymentDTO = new PaymentDTO(saleID, buyTime, paymentMethod, billPriceTotal);
                 paymentHistoryOfUser.add(paymentDTO);
             }
         } finally {
@@ -93,41 +92,15 @@ public class PaymentDAO {
         return paymentHistoryDetailOfUser;
     }
 
-    public List<PaymentDTO> getSearchedPaymentHistoryByProductName(String email, String productName) throws Exception {
-        List<PaymentDTO> searchedList = null;
-
-        try {
-            String sql = "select SaleID, BuyTime, PaymentMethod, BillPriceTotal from SaleHistory where Email = ?";
-            conn = MyConnection.getMyConnection();
-            preStm = conn.prepareStatement(sql);
-            preStm.setString(1, email);
-            rs = preStm.executeQuery();
-            searchedList = new ArrayList<>();
-            while (rs.next()) {
-                int saleID = rs.getInt("SaleID");
-                Timestamp buyTime = rs.getTimestamp("BuyTime");
-                String paymentMethod = rs.getString("PaymentMethod");
-                double billPriceTotal = rs.getDouble("BillPriceTotal");
-                SimpleDateFormat sdf = new SimpleDateFormat();
-
-                PaymentDTO paymentDTO = new PaymentDTO(saleID, sdf.format(buyTime), paymentMethod, billPriceTotal);
-                searchedList.add(paymentDTO);
-            }
-        } finally {
-            closeConnection();
-        }
-
-        return searchedList;
-    }
-
     public List<PaymentDTO> getPaymentHistoryDetailByProductName(String email, String searchedProductName) throws Exception {
         List<PaymentDTO> searchedList = null;
 
         try {
-            String sql = "select SaleID, ProductName, Quantity, ProductPriceTotal from SaleDetail where SaleID in (select SaleID from SaleHistory where Email = ?)";
+            String sql = "select SaleID, ProductName, Quantity, ProductPriceTotal from SaleDetail where SaleID in (select SaleID from SaleHistory where Email = ?) and ProductName like ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, email);
+            preStm.setString(2, "%" + searchedProductName + "%");
             rs = preStm.executeQuery();
             searchedList = new ArrayList<>();
             while (rs.next()) {
@@ -144,5 +117,61 @@ public class PaymentDAO {
         }
 
         return searchedList;
+    }
+
+    public List<PaymentDTO> getPaymentHistoryByShoppingTime(String email, Timestamp searchedStartingTime, Timestamp searchedEndingTime) throws Exception {
+        List<PaymentDTO> searchedList = null;
+
+        try {
+            String sql = "select SaleID, BuyTime, PaymentMethod, BillPriceTotal from SaleHistory where Email = ? and BuyTime between ? and ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, email);
+            preStm.setTimestamp(2, searchedStartingTime);
+            preStm.setTimestamp(3, searchedEndingTime);
+            rs = preStm.executeQuery();
+            searchedList = new ArrayList<>();
+            while (rs.next()) {
+                int saleID = rs.getInt("SaleID");
+                Timestamp buyTime = rs.getTimestamp("BuyTime");
+                String paymentMethod = rs.getString("PaymentMethod");
+                double billPriceTotal = rs.getDouble("BillPriceTotal");
+
+                PaymentDTO paymentDTO = new PaymentDTO(saleID, buyTime, paymentMethod, billPriceTotal);
+                searchedList.add(paymentDTO);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return searchedList;
+    }
+
+    public List<PaymentDTO> getPaymentHistoryDetailByShoppingTime(String email, Timestamp searchedStartingTime, Timestamp searchedEndingTime) throws Exception {
+        List<PaymentDTO> paymentHistoryDetailOfUser = null;
+
+        try {
+            String sql = "select SaleID, ProductName, Quantity, ProductPriceTotal from SaleDetail where SaleID in (select SaleID from SaleHistory where SaleHistory.Email = ? and SaleHistory.BuyTime between ? and ?)";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, email);
+            preStm.setTimestamp(2, searchedStartingTime);
+            preStm.setTimestamp(3, searchedEndingTime);
+            rs = preStm.executeQuery();
+            paymentHistoryDetailOfUser = new ArrayList<>();
+            while (rs.next()) {
+                int saleID = rs.getInt("SaleID");
+                String productName = rs.getString("ProductName");
+                int quantity = rs.getInt("Quantity");
+                double productPriceTotal = rs.getDouble("ProductPriceTotal");
+
+                PaymentDTO paymentDTO = new PaymentDTO(saleID, productName, quantity, productPriceTotal);
+                paymentHistoryDetailOfUser.add(paymentDTO);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return paymentHistoryDetailOfUser;
     }
 }

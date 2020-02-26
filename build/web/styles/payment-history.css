@@ -23,7 +23,7 @@
 
 
 .container .payment-history-item .buytime {
-    width: 30%;
+    width: 40%;
 }
 
 .container .payment-history-item .payment-method {
@@ -31,7 +31,7 @@
 }
 
 .container .payment-history-item .bill-price-total {
-    width: 30%;
+    width: 20%;
 }
 
 .container .payment-history-item .collapse-history-btn {

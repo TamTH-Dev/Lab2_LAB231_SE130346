@@ -3,10 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/cart/Cart.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/daos/ProductDAO.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/cart-management.jsp</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/controllers/CartPayingController.java</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/payment-history.jsp</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/scripts/payment-history-handling.js</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/controllers/ProductNameAndShoppingTimeSearchingController.java</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/daos/PaymentDAO.java</file>
         </group>
     </open-files>
 </project-private>

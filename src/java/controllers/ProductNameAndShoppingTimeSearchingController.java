@@ -5,8 +5,15 @@
  */
 package controllers;
 
+import daos.PaymentDAO;
+import dtos.PaymentDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,9 +41,53 @@ public class ProductNameAndShoppingTimeSearchingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        List<PaymentDTO> paymentHistory = null;
+        List<PaymentDTO> searchedPaymentHistoryDetail = null;
+        List<PaymentDTO> searchedPaymentHistory = null;
+        String searchedProductName = null;
+        String searchedStartingShoppingTime = null;
+        String searchedEndingShoppingTime = null;
+        String email = null;
 
         try {
+            PaymentDAO paymentDAO = new PaymentDAO();
+            email = request.getSession(false).getAttribute("EMAIL").toString();
+            searchedProductName = request.getParameter("searchedProductName");
+            searchedStartingShoppingTime = request.getParameter("searchedStartingShoppingTime");
+            searchedEndingShoppingTime = request.getParameter("searchedEndingShoppingTime");
 
+            if (!searchedProductName.equals("") && (searchedStartingShoppingTime.equals("") && searchedEndingShoppingTime.equals(""))) {
+                paymentHistory = paymentDAO.getPaymentHistory(email);
+                if (paymentHistory != null) {
+                    searchedPaymentHistoryDetail = paymentDAO.getPaymentHistoryDetailByProductName(email, searchedProductName);
+                    if (searchedPaymentHistoryDetail != null) {
+                        searchedPaymentHistory = new ArrayList<>();
+                        for (PaymentDTO item : paymentHistory) {
+                            for (PaymentDTO it : searchedPaymentHistoryDetail) {
+                                if (item.getSaleID() == it.getSaleID()) {
+                                    searchedPaymentHistory.add(it);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (searchedProductName.equals("") && (!searchedStartingShoppingTime.equals("") && !searchedEndingShoppingTime.equals(""))) {
+                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                Date startingDate = formatter.parse(searchedStartingShoppingTime);
+                Timestamp parsedStartingTime = new Timestamp(startingDate.getTime());
+                Date endingDate = formatter.parse(searchedEndingShoppingTime);
+                Timestamp parsedEndingTime = new Timestamp(endingDate.getTime());
+
+                paymentHistory = paymentDAO.getPaymentHistoryByShoppingTime(email, parsedStartingTime, parsedEndingTime);
+                if (paymentHistory != null) {
+                    searchedPaymentHistoryDetail = paymentDAO.getPaymentHistoryDetailByShoppingTime(email, parsedStartingTime, parsedEndingTime);
+                }
+            }
+
+            url = SUCCESS;
+            request.setAttribute("PaymentHistory", searchedPaymentHistory);
+            request.setAttribute("PaymentHistoryDetail", searchedPaymentHistoryDetail);
         } catch (Exception e) {
             log("ERROR at ProductNameAndShoppingTimeSearchingController: " + e.getMessage());
         } finally {
