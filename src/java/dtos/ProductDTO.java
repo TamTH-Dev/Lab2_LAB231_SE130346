@@ -46,6 +46,11 @@ public class ProductDTO implements Serializable {
         this.category = category;
     }
 
+    public ProductDTO(String productName, int quantity) {
+        this.productName = productName;
+        this.quantity = quantity;
+    }
+
     public String getProductName() {
         return productName;
     }

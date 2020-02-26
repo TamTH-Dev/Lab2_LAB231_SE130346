@@ -820,6 +820,41 @@ public class ProductDAO implements Serializable {
             closeConnection();
         }
 
+        return isSuccess;
+    }
+
+    public int getCurrentProductQuantity(String productName) throws Exception {
+        int quantity = -1;
+        
+        try {
+            String sql = "select Quantity from Product where ProductName = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, productName);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                quantity = rs.getInt("Quantity");
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return quantity;
+    }
+
+    public boolean updateBuyedProductQuantity(String productName, int quantity) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "update Product set Quantity = Quantity - ? where Productname = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setInt(1, quantity);
+            preStm.setString(2, productName);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
 
         return isSuccess;
     }

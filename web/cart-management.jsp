@@ -114,6 +114,13 @@
                                         <button type="button" class="increase-amount-btn">
                                             <i class="fas fa-plus"></i>
                                         </button>
+                                        <c:if test="${requestScope.ShoppingErrors != null}">
+                                            <c:forEach items="${requestScope.ShoppingErrors}" var="error">
+                                                <c:if test="${error.productName eq product.productName}">
+                                                    <div class="shopping-error">Only ${error.quantity} left product(s)</div>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:if>
                                     </div>
                                     <div class="price-col col">
                                         <input type="text" value="${product.price}" readonly="true" class="price-value"/>

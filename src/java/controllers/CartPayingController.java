@@ -11,6 +11,7 @@ import dtos.ProductDTO;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +26,7 @@ public class CartPayingController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "index.jsp";
+    private static final String INVALID = "CartDataLoadingController";
     private static final String LOGIN = "login.jsp";
 
     /**
@@ -51,33 +53,44 @@ public class CartPayingController extends HttpServlet {
                 String[] quantities = request.getParameterValues("quantity");
                 String[] productNames = request.getParameterValues("productName");
                 double billPriceTotal = Double.parseDouble(request.getParameter("billPriceTotal"));
+                List<ProductDTO> shoppingErrors = new ArrayList<>();
                 ProductDAO productDAO = new ProductDAO();
                 int size = productsList.size();
 
                 for (int i = 0; i < size; i++) {
                     int quantity = Integer.parseInt(quantities[i]);
                     String productName = productNames[i];
-                    int currentProductQuantity = cart.getCurrentQuantityOfProductFromCart(productName);
-                    if (currentProductQuantity != quantity) {
-                        cart.updateProductQuantityFromCart(productName, quantity);
+                    try {
+                        int currentQuantity = productDAO.getCurrentProductQuantity(productName);
+                        if (currentQuantity < quantity) {
+                            ProductDTO errorProduct = new ProductDTO(productName, currentQuantity);
+                            shoppingErrors.add(errorProduct);
+                        }
+                    } catch (Exception ex) {
+                        log("ERROR at CartPayingController: " + ex.getMessage());
                     }
                 }
 
-                Timestamp buyTime = new Timestamp(System.currentTimeMillis());
-                try {
-                    if (productDAO.recordUserOrder(email, buyTime, "hello", billPriceTotal)) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS    ");
-                        int saleID = productDAO.getSaleID(email, sdf.format(buyTime));
-                        if (productDAO.recordUserOrderDetail(saleID, productsList)) {
-                            cart.removeAllProductsFromCart();
-                            url = SUCCESS;
-                            request.getSession(false).setAttribute("CART", cart);
+                if (shoppingErrors.isEmpty()) {
+                    Timestamp buyTime = new Timestamp(System.currentTimeMillis());
+                    try {
+                        if (productDAO.recordUserOrder(email, buyTime, "hello", billPriceTotal)) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS    ");
+                            int saleID = productDAO.getSaleID(email, sdf.format(buyTime));
+                            if (productDAO.recordUserOrderDetail(saleID, productsList)) {
+                                cart.removeAllProductsFromCart();
+                                url = SUCCESS;
+                                request.getSession(false).setAttribute("CART", cart);
+                            }
+                        } else {
+                            request.setAttribute("ERROR", "Execute Paying Failed");
                         }
-                    } else {
-                        request.setAttribute("ERROR", "Execute Paying Failed");
+                    } catch (Exception ex) {
+                        log("ERROR at CartPayingController: " + ex.getMessage());
                     }
-                } catch (Exception ex) {
-                    log("ERROR at CartPayingController: " + ex.getMessage());
+                } else {
+                    url = INVALID;
+                    request.setAttribute("ShoppingErrors", shoppingErrors);
                 }
             }
         } catch (NumberFormatException e) {
