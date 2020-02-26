@@ -148,7 +148,7 @@ public class PaymentDAO {
     }
 
     public List<PaymentDTO> getPaymentHistoryDetailByShoppingTime(String email, Timestamp searchedStartingTime, Timestamp searchedEndingTime) throws Exception {
-        List<PaymentDTO> paymentHistoryDetailOfUser = null;
+        List<PaymentDTO> searchedList = null;
 
         try {
             String sql = "select SaleID, ProductName, Quantity, ProductPriceTotal from SaleDetail where SaleID in (select SaleID from SaleHistory where SaleHistory.Email = ? and SaleHistory.BuyTime between ? and ?)";
@@ -158,7 +158,7 @@ public class PaymentDAO {
             preStm.setTimestamp(2, searchedStartingTime);
             preStm.setTimestamp(3, searchedEndingTime);
             rs = preStm.executeQuery();
-            paymentHistoryDetailOfUser = new ArrayList<>();
+            searchedList = new ArrayList<>();
             while (rs.next()) {
                 int saleID = rs.getInt("SaleID");
                 String productName = rs.getString("ProductName");
@@ -166,12 +166,41 @@ public class PaymentDAO {
                 double productPriceTotal = rs.getDouble("ProductPriceTotal");
 
                 PaymentDTO paymentDTO = new PaymentDTO(saleID, productName, quantity, productPriceTotal);
-                paymentHistoryDetailOfUser.add(paymentDTO);
+                searchedList.add(paymentDTO);
             }
         } finally {
             closeConnection();
         }
 
-        return paymentHistoryDetailOfUser;
+        return searchedList;
+    }
+
+    public List<PaymentDTO> getPaymentHistoryDetailByProductNameAndShoppingTime(String email, String pdName, Timestamp searchedStartingShoppingTime, Timestamp searchedEndingShoppingTime) throws Exception {
+        List<PaymentDTO> searchedList = null;
+
+        try {
+            String sql = "select SaleID, ProductName, Quantity, ProductPriceTotal from SaleDetail where SaleID in (select SaleID from SaleHistory where SaleHistory.Email = ? and SaleHistory.BuyTime between ? and ?) and ProductName like ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, email);
+            preStm.setTimestamp(2, searchedStartingShoppingTime);
+            preStm.setTimestamp(3, searchedEndingShoppingTime);
+            preStm.setString(4, "%" + pdName + "%");
+            rs = preStm.executeQuery();
+            searchedList = new ArrayList<>();
+            while (rs.next()) {
+                int saleID = rs.getInt("SaleID");
+                String productName = rs.getString("ProductName");
+                int quantity = rs.getInt("Quantity");
+                double productPriceTotal = rs.getDouble("ProductPriceTotal");
+
+                PaymentDTO paymentDTO = new PaymentDTO(saleID, productName, quantity, productPriceTotal);
+                searchedList.add(paymentDTO);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return searchedList;
     }
 }

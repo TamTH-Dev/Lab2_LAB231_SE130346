@@ -65,7 +65,7 @@ public class ProductNameAndShoppingTimeSearchingController extends HttpServlet {
                         for (PaymentDTO item : paymentHistory) {
                             for (PaymentDTO it : searchedPaymentHistoryDetail) {
                                 if (item.getSaleID() == it.getSaleID()) {
-                                    searchedPaymentHistory.add(it);
+                                    searchedPaymentHistory.add(item);
                                     break;
                                 }
                             }
@@ -73,15 +73,35 @@ public class ProductNameAndShoppingTimeSearchingController extends HttpServlet {
                     }
                 }
             } else if (searchedProductName.equals("") && (!searchedStartingShoppingTime.equals("") && !searchedEndingShoppingTime.equals(""))) {
-                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                 Date startingDate = formatter.parse(searchedStartingShoppingTime);
-                Timestamp parsedStartingTime = new Timestamp(startingDate.getTime());
+                Timestamp parsedStartingShoppingTime = new Timestamp(startingDate.getTime());
                 Date endingDate = formatter.parse(searchedEndingShoppingTime);
-                Timestamp parsedEndingTime = new Timestamp(endingDate.getTime());
+                Timestamp parsedEndingShoppingTime = new Timestamp(endingDate.getTime());
 
-                paymentHistory = paymentDAO.getPaymentHistoryByShoppingTime(email, parsedStartingTime, parsedEndingTime);
+                searchedPaymentHistory = paymentDAO.getPaymentHistoryByShoppingTime(email, parsedStartingShoppingTime, parsedEndingShoppingTime);
+                if (searchedPaymentHistory != null) {
+                    searchedPaymentHistoryDetail = paymentDAO.getPaymentHistoryDetailByShoppingTime(email, parsedStartingShoppingTime, parsedEndingShoppingTime);
+                }
+            } else if (!searchedProductName.equals("") && (!searchedStartingShoppingTime.equals("") && !searchedEndingShoppingTime.equals(""))) {
+                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                Date startingDate = formatter.parse(searchedStartingShoppingTime);
+                Timestamp parsedStartingShoppingTime = new Timestamp(startingDate.getTime());
+                Date endingDate = formatter.parse(searchedEndingShoppingTime);
+                Timestamp parsedEndingShoppingTime = new Timestamp(endingDate.getTime());
+
+                paymentHistory = paymentDAO.getPaymentHistoryByShoppingTime(email, parsedStartingShoppingTime, parsedEndingShoppingTime);
                 if (paymentHistory != null) {
-                    searchedPaymentHistoryDetail = paymentDAO.getPaymentHistoryDetailByShoppingTime(email, parsedStartingTime, parsedEndingTime);
+                    searchedPaymentHistoryDetail = paymentDAO.getPaymentHistoryDetailByProductNameAndShoppingTime(email, searchedProductName, parsedStartingShoppingTime, parsedEndingShoppingTime);
+                    searchedPaymentHistory = new ArrayList<>();
+                    for (PaymentDTO item : paymentHistory) {
+                        for (PaymentDTO it : searchedPaymentHistoryDetail) {
+                            if (item.getSaleID() == it.getSaleID()) {
+                                searchedPaymentHistory.add(item);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 

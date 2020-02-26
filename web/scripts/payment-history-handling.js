@@ -1,3 +1,5 @@
+/* global moment */
+
 // Toggle payment history detail
 const paymentHistoryItem = document.getElementsByClassName("payment-history-item")
 const paymentHistoryDetailContainer = document.getElementsByClassName("payment-history-detail-container")
@@ -18,12 +20,39 @@ const productName = document.getElementById('productName')
 const searchedStartingShoppingTime = document.getElementById('searchedStartingShoppingTime')
 const searchedEndingShoppingTime = document.getElementById('searchedEndingShoppingTime')
 const searchBtn = document.getElementById('search-btn')
-const searchError = document.getElementById('search-error')
+const filloutSearchError = document.getElementById('fillout-search-error')
+const validSearchError = document.getElementById('valid-search-error')
 
 searchBtn.addEventListener('click', (e) => {
-    if (productName.value.trim() === '' && (searchedStartingShoppingTime.value.trim() === '' || searchedEndingShoppingTime.value.trim() === '')) {
+    let isFillOuted = true
+    if (productName.value.trim() === '') {
+        if (searchedStartingShoppingTime.value.trim() === '' || searchedEndingShoppingTime.value.trim() === '') {
+            isFillOuted = false
+        }
+    } else if (productName.value.trim() !== '') {
+        if (searchedStartingShoppingTime.value.trim() === '' || searchedEndingShoppingTime.value.trim() === '') {
+            isFillOuted = false
+        }
+        if (searchedStartingShoppingTime.value.trim() === '' && searchedEndingShoppingTime.value.trim() === '') {
+            isFillOuted = true
+        }
+    }
+
+    if (isFillOuted) {
+        if (searchedEndingShoppingTime.value !== '' && searchedEndingShoppingTime !== '') {
+            if (!moment(searchedStartingShoppingTime.value, 'DD-MM-YYYY', true).isValid() ||
+                    !moment(searchedEndingShoppingTime.value, 'DD-MM-YYYY', true).isValid()) {
+                e.preventDefault()
+                validSearchError.style.display = 'block'
+            }
+        }
+        filloutSearchError.style.display = 'none'
+        productName.value = productName.value.trim()
+        searchedStartingShoppingTime.value = searchedStartingShoppingTime.value.trim()
+        searchedEndingShoppingTime.value = searchedEndingShoppingTime.value.trim()
+    } else {
         e.preventDefault()
-        searchError.style.display = 'block'
+        filloutSearchError.style.display = 'block'
         productName.value = productName.value.trim()
         searchedStartingShoppingTime.value = searchedStartingShoppingTime.value.trim()
         searchedEndingShoppingTime.value = searchedEndingShoppingTime.value.trim()

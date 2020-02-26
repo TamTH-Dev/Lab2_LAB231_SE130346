@@ -4,6 +4,7 @@
     Author     : hoang
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -101,15 +102,18 @@
                 <button type="submit" class="btn btn-primary search-btn" id="search-btn">
                     Search
                 </button>
-                <span id="search-error" style="display: none; color: #f00; position: absolute; top: 42px;">Please Fill Out At Least One Form To Search</span>
+                <span id="fillout-search-error" style="display: none; color: #f00; position: absolute; top: 42px;">Please Fill Out At Least One Form To Search</span>
+                <span id="valid-search-error" style="display: none; color: #f00; position: absolute; top: 42px;">Searched Time Should Be In Format (dd-MM-yyyy)</span>
                 <a class="view-all-btn" href="UserPaymentHistory">View All</a>
             </form>
 
-            <c:if test="${requestScope.PaymentHistory != null}">
+            <c:if test="${requestScope.PaymentHistory.size() != 0}">
                 <c:forEach items="${requestScope.PaymentHistory}" var="paymentHistoryItem">
                     <div class="payment-history-container">
                         <div class="payment-history-item">
-                            <span class="buytime">Buy Time:  ${paymentHistoryItem.buyTime}</span>
+                            <span class="buytime">
+                                Buy Time:  <fmt:formatDate type="date" value="${paymentHistoryItem.buyTime}" pattern="dd-MM-yyyy" />
+                            </span>
                             <span class="payment-method">Payment Method:  ${paymentHistoryItem.paymentMethod}</span>
                             <span class="bill-price-total">Bill Total:  ${paymentHistoryItem.billPriceTotal} $</span>
                             <span class="collapse-history-btn">
@@ -120,15 +124,24 @@
                             <c:forEach items="${requestScope.PaymentHistoryDetail}" var="paymentHistoryDetailItem">
                                 <c:if test="${paymentHistoryDetailItem.saleID == paymentHistoryItem.saleID}">
                                     <ul class="payment-history-detail-item">
-                                        <li class="product-name">${paymentHistoryDetailItem.productName}</li>
-                                        <li class="quantity">${paymentHistoryDetailItem.quantity}</li>
-                                        <li class="product-price-total">${paymentHistoryDetailItem.productPriceTotal}</li>
+                                        <li class="product-name">
+                                            ${paymentHistoryDetailItem.productName}
+                                        </li>
+                                        <li class="quantity">
+                                            ${paymentHistoryDetailItem.quantity}
+                                        </li>
+                                        <li class="product-price-total">
+                                            ${paymentHistoryDetailItem.productPriceTotal}
+                                        </li>
                                     </ul>
                                 </c:if>
                             </c:forEach>
                         </div>
                     </div>
                 </c:forEach>
+            </c:if>
+            <c:if test="${requestScope.PaymentHistory.size() == 0}">
+                <div style="text-align: center; font-size: 28px; color: #f00;">Can't not find appropriate result!</div>
             </c:if>
         </div>
 
@@ -180,6 +193,7 @@
         </footer>
 
         <script src="./scripts/all.js"></script>
+        <script src="./scripts/moment.js"></script>
         <script src="./scripts/payment-history-handling.js"></script>
     </body>
 </html>
