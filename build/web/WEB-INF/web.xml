@@ -72,6 +72,10 @@
         <servlet-name>UserPaymentHistoryController</servlet-name>
         <servlet-class>controllers.UserPaymentHistoryController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductNameAndShoppingTimeSearchingController</servlet-name>
+        <servlet-class>controllers.ProductNameAndShoppingTimeSearchingController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/RegisterController</url-pattern>
@@ -136,10 +140,15 @@
         <servlet-name>UserPaymentHistoryController</servlet-name>
         <url-pattern>/UserPaymentHistoryController</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductNameAndShoppingTimeSearchingController</servlet-name>
+        <url-pattern>/ProductNameAndShoppingTimeSearchingController</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
+        <tracking-mode>COOKIE</tracking-mode>
     </session-config>
     <resource-ref>
         <res-ref-name>Store</res-ref-name>

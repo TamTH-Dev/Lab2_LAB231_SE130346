@@ -3,7 +3,7 @@
     Created on : Feb 25, 2020, 9:55:16 PM
     Author     : hoang
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="./styles/bootstrap.min.css" />
         <link rel="stylesheet" href="./styles/header.css" />
         <link rel="stylesheet" href="./styles/footer.css" />
+        <link rel="stylesheet" href="./styles/payment-history.css" />
     </head>
     <body>
         <header>
@@ -21,12 +22,12 @@
                 <div class="logo">
                     <a href="
                        <c:if test="${sessionScope.ROLE ne 'Admin'}">
-                        index.jsp
-                        </c:if>
-                        <c:if test="${sessionScope.ROLE eq 'Admin'}">
-                            admin.jsp
-                        </c:if> 
-                        ">
+                           index.jsp
+                       </c:if>
+                       <c:if test="${sessionScope.ROLE eq 'Admin'}">
+                           admin.jsp
+                       </c:if> 
+                       ">
                         <img src="./images/logo.png" alt="">
                     </a>
                 </div>
@@ -34,26 +35,33 @@
                     <li>
                         <a href="
                            <c:if test="${sessionScope.ROLE ne 'Admin'}">
-                            index.jsp
-                            </c:if>
-                            <c:if test="${sessionScope.ROLE eq 'Admin'}">
-                                admin.jsp
-                            </c:if>
-                            ">
+                               index.jsp
+                           </c:if>
+                           <c:if test="${sessionScope.ROLE eq 'Admin'}">
+                               admin.jsp
+                           </c:if>
+                           ">
                             Home
                         </a>
                     </li>
-                    <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
-                        <li>
-                            <a href="#">Hello, ${sessionScope.NAME}!</a>
-                        </li>
-                    </c:if>
                     <c:if test="${sessionScope.ROLE ne 'Admin'}">
                         <li style="margin-right: 10px;">
                             <a class="cart-container" href="CartDataLoading">
                                 <i class="fas fa-shopping-cart cart"></i> 
                                 <span>(${sessionScope.CART.getTotalProductsFromCart()})</span>
                             </a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.ROLE eq 'User'}">
+                        <li style="width: 140px;">
+                            <a class="cart-container" style="width:140px;" href="UserPaymentHistory">
+                                Payment History
+                            </a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
+                        <li>
+                            <a href="#">Hello, ${sessionScope.NAME}!</a>
                         </li>
                     </c:if>
                     <c:if test="${sessionScope.ROLE ne 'User' && sessionScope.ROLE ne 'Admin'}">
@@ -73,7 +81,56 @@
             </nav>
         </header>
 
+        <div class="container">
+            <form action="ProductNameAndPriceLevelSearching" method="POST" class="form-inline search-form">
+                <div class="form-group mr-3">
+                    <label for="productName" class="sr-only">Product Name</label>
+                    <input id="productName" name="searchedProductName" value="${param.searchedProductName}" type="text" class="form-control" placeholder="Product Name" />
+                </div>
 
+                <div class="form-group mr-3">
+                    <label for="searchedStartingShoppingTime" class="sr-only">Shopping Time</label>
+                    <input id="searchedStartingShoppingTime" name="searchedStaringShoppingTime" value="${param.searchedProductName}" type="text" class="form-control" placeholder="From Time" />
+                </div>
+
+                <div class="form-group mr-3">
+                    <label for="searchedEndingShoppingTime" class="sr-only">Shopping Time</label>
+                    <input id="searchedEndingShoppingTime" name="searchedEndingShoppingTime" value="${param.searchedProductName}" type="text" class="form-control" placeholder="To Time" />
+                </div>
+
+                <button type="submit" class="btn btn-primary search-btn" id="search-btn">
+                    Search
+                </button>
+                <span id="search-error" style="display: none; color: #f00; position: absolute; top: 42px;">Please Fill Out At Least One Form To Search</span>
+                <a class="view-all-btn" href="UserPaymentHistory">View All</a>
+            </form>
+
+            <c:if test="${requestScope.PaymentHistory != null}">
+                <c:forEach items="${requestScope.PaymentHistory}" var="paymentHistoryItem">
+                    <div class="payment-history-container">
+                        <div class="payment-history-item">
+                            <span class="buytime">Buy Time:  ${paymentHistoryItem.buyTime}</span>
+                            <span class="payment-method">Payment Method:  ${paymentHistoryItem.paymentMethod}</span>
+                            <span class="bill-price-total">Bill Total:  ${paymentHistoryItem.billPriceTotal} $</span>
+                            <span class="collapse-history-btn">
+                                <span><i class="fas fa-plus"></i></span>
+                            </span>
+                        </div>
+                        <div class="payment-history-detail-container">
+                            <c:forEach items="${requestScope.PaymentHistoryDetail}" var="paymentHistoryDetailItem">
+                                <c:if test="${paymentHistoryDetailItem.saleID == paymentHistoryItem.saleID}">
+                                    <ul class="payment-history-detail-item">
+                                        <li class="product-name">${paymentHistoryDetailItem.productName}</li>
+                                        <li class="quantity">${paymentHistoryDetailItem.quantity}</li>
+                                        <li class="product-price-total">${paymentHistoryDetailItem.productPriceTotal}</li>
+                                    </ul>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:if>
+        </div>
 
         <footer class="container-fluid main-footer">
             <div class="row">
@@ -123,5 +180,6 @@
         </footer>
 
         <script src="./scripts/all.js"></script>
+        <script src="./scripts/payment-history-handling.js"></script>
     </body>
 </html>

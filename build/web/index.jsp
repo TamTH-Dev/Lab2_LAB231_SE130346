@@ -59,7 +59,7 @@
                             </a>
                         </li>
                     </c:if>
-                    <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
+                    <c:if test="${sessionScope.ROLE eq 'User'}">
                         <li style="width: 140px;">
                             <a class="cart-container" style="width:140px;" href="UserPaymentHistory">
                                 Payment History

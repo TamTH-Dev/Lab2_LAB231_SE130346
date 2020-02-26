@@ -5,8 +5,10 @@
  */
 package controllers;
 
+import daos.PaymentDAO;
+import dtos.PaymentDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author hoang
  */
 public class UserPaymentHistoryController extends HttpServlet {
+
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "payment-history.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,6 +35,29 @@ public class UserPaymentHistoryController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = ERROR;
+        String email = null;
+        List<PaymentDTO> paymentHistory = null;
+        List<PaymentDTO> paymentHistoryDetail = null;
+
+        try {
+            PaymentDAO paymentDAO = new PaymentDAO();
+            email = request.getSession(false).getAttribute("EMAIL").toString();
+            
+            paymentHistory = paymentDAO.getPaymentHistory(email);
+            if (paymentHistory != null) {
+                paymentHistoryDetail = paymentDAO.getPaymentHistoryDetail(email);
+                if (paymentHistoryDetail != null) {
+                    url = SUCCESS;
+                    request.setAttribute("PaymentHistory", paymentHistory);
+                    request.setAttribute("PaymentHistoryDetail", paymentHistoryDetail);
+                }
+            }
+        } catch (Exception e) {
+            log("ERROR at UserPaymentHistoryController: " + e.getMessage());
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

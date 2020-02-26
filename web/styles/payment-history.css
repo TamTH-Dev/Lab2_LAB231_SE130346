@@ -1,0 +1,119 @@
+.container {
+    padding: 40px 0 80px 0;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+.container .payment-history-container {
+    margin-bottom: 10px;
+}
+
+.container .payment-history-item {
+    display: flex;
+    height: 55px;
+    line-height: 55px;
+    background: #131627;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 0 5%;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+
+.container .payment-history-item .buytime {
+    width: 30%;
+}
+
+.container .payment-history-item .payment-method {
+    width: 30%;
+}
+
+.container .payment-history-item .bill-price-total {
+    width: 30%;
+}
+
+.container .payment-history-item .collapse-history-btn {
+    width: 10%;
+    position: relative;
+}
+
+.container .payment-history-item .collapse-history-btn span {
+    width: 35px;
+    height: 35px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: #131627;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.container .payment-history-detail-container {
+    border: 1px solid #aaa;
+    box-sizing: border-box;
+    display: none;
+    flex-flow: column wrap;
+}
+
+.container .payment-history-detail-container .payment-history-detail-item {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 0 5%;
+    height: 40px;
+    line-height: 40px;
+}
+
+.container .payment-history-detail-container .payment-history-detail-item .product-name {
+    width: 30%;
+}
+
+.container .payment-history-detail-container .payment-history-detail-item .quantity {
+    width: 30%;
+}
+
+.container .payment-history-detail-container .payment-history-detail-item .product-price-total {
+    width: 30%;
+}
+
+.container .search-form {
+    position:relative;
+    margin: 30px 0 50px 0;
+    padding: 0;
+    justify-content: center;
+}
+
+.container .search-form .search-btn {
+    color: #fff;
+    background: #131627;
+    transition: all .2s;
+    border: none;
+    border-radius: 0;
+}
+
+.container .search-form .search-btn:hover {
+    color: #21d397;
+}
+
+.container .search-form .view-all-btn {
+    position: absolute; 
+    top: 0;
+    right: 0; 
+    display: block; 
+    padding: 0 20px; 
+    height: 36px; 
+    line-height: 36px; 
+    border: none;
+    color: #fff;
+    background: #131627;
+    transition: all .2s;
+}
+
+.container .search-form .view-all-btn:hover {
+    color: #21d397;
+}
