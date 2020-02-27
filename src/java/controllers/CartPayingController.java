@@ -60,6 +60,9 @@ public class CartPayingController extends HttpServlet {
                 for (int i = 0; i < size; i++) {
                     int quantity = Integer.parseInt(quantities[i]);
                     String productName = productNames[i];
+                    if (cart.getCurrentQuantityOfProductFromCart(productName) != quantity) {
+                        cart.updateProductQuantityFromCart(productName, quantity);
+                    }
                     try {
                         int currentQuantity = productDAO.getCurrentProductQuantity(productName);
                         if (currentQuantity < quantity) {
