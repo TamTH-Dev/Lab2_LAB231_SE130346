@@ -39,7 +39,7 @@ a:visited {
 .login-form .form-title {
     text-align: center;
     font-size: 36px;
-    padding: 60px 0 10px 0;
+    padding: 30px 0 0 0;
 }
 
 .login-form .form-input {
@@ -96,7 +96,6 @@ a:visited {
 }
 
 .login-form .new-account-creation {
-    margin-top: 20px;
     text-align: center;
     padding: 0 0 0 0;
 }
@@ -146,8 +145,22 @@ a:visited {
     color: #f00;
     display: block;
     text-align: right;
-    margin-bottom: 15px;
+    margin: 90px 0 10px 0;
     padding-right: 20px;
+}
+
+.login-form #google-signin-btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 100px;
+}
+
+.login-form .separator {
+    width: 80%;
+    height: 1px;
+    margin: 0 auto;
+    background: #555;
 }
 
 

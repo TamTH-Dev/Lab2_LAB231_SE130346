@@ -10,13 +10,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="google-signin-client_id" content="1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com">
         <title>Blogs World</title>
         <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700|Roboto:400,500&display=swap"
               rel="stylesheet" />
         <link rel="stylesheet" href="./styles/all.css" />
         <link rel="stylesheet" href="./styles/login.css" />
     </head>
-    <body>
+    <body id="body">
         <div class="login-page">
             <form class="login-form" id="login-form" method="POST" action="Login">
                 <h3 class="form-title">LOGIN</h3>
@@ -36,11 +37,14 @@
                     <span>If you're a new one, <a href="register.jsp">Create new account!</a></span>
                 </div>
                 <button type="submit" name="action" value="Login" id="login-btn">Login</button>
+                <div class="separator"></div>
+                <div class="g-signin2" id="google-signin-btn" data-onsuccess="onSignIn"></div>
                 <a class="home-back" href="index.jsp">Back to Home Page</a>
             </form>
         </div>
 
         <script src="./scripts/all.js"></script>
         <script src="./scripts/login-handling.js"></script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
     </body>
 </html>

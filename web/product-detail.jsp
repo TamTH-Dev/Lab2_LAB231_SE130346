@@ -9,6 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="google-signin-client_id" content="1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com">
         <title>JSP Page</title>
         <link rel="stylesheet" href="./styles/all.css"/>
         <link rel="stylesheet" href="./styles/bootstrap.min.css" />
@@ -74,7 +75,7 @@
                     </c:if>
                     <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
                         <li>
-                            <button><a class="header-btn" href="Logout">Sign Out</a></button>
+                            <button><a class="header-btn" href="#" onclick="signOut();">Sign Out</a></button>
                         </li>
                     </c:if>
                 </ul>
@@ -160,5 +161,6 @@
 
         <script src="./scripts/all.js"></script>
         <script src="./scripts/product-detail-handling.js"></script>
+        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     </body>
 </html>

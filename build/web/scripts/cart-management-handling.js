@@ -1,4 +1,4 @@
-/* global parseFloat */
+/* global parseFloat, gapi */
 
 // Handle quantity increasement and descreasement
 const paymentTotal = document.getElementById('payment-total')
@@ -69,3 +69,18 @@ orderBtn.addEventListener('click', (e) => {
     const doesOrders = confirm('Are you sure you want to order')
     if (!doesOrders) e.preventDefault()
 })
+
+// Google Sign-Out
+function signOut() {
+    const auth2 = gapi.auth2.getAuthInstance()
+    auth2.signOut().then(function () {
+        console.log('User signed out.')
+    });
+    window.location = 'Logout'
+}
+
+function onLoad() {
+    gapi.load('auth2', function () {
+        gapi.auth2.init();
+    });
+}

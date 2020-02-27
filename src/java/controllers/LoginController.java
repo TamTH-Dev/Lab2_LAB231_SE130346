@@ -5,12 +5,21 @@
  */
 package controllers;
 
-import daos.AccountDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import daos.AccountDAO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import supportMethods.SHA_256;
 
@@ -21,9 +30,10 @@ import supportMethods.SHA_256;
 public class LoginController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
-    private static final String ADMIN = "index.jsp";
+    private static final String ADMIN = "admin.jsp";
     private static final String USER = "index.jsp";
     private static final String INVALID = "login.jsp";
+    private static final String GOOGLE_CLIENT_ID = "1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,41 +47,78 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String idToken = request.getParameter("id_token");
         HttpSession session = request.getSession(true);
+        AccountDAO accountDAO = new AccountDAO();
         String url = ERROR;
+        String email = null;
+        String password = null;
+        String name = null;
+        String role = null;
 
         try {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-
-            AccountDAO accountDAO = new AccountDAO();
-            SHA_256 sha = new SHA_256();
-            String encodedPassword = sha.getEncodedString(password);
-            String role = accountDAO.handleLogin(email, encodedPassword);
-
-            if (role.equals("failed")) {
-                request.setAttribute("InvalidAccount", "Username or Password is invalid!");
-                url = INVALID;
+            if (idToken != null) {
+                JacksonFactory jacksonFactory = new JacksonFactory();
+                GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), jacksonFactory)
+                        .setAudience(Collections.singletonList(GOOGLE_CLIENT_ID))
+                        .build();
+                try {
+                    GoogleIdToken accessToken = verifier.verify(idToken);
+                    if (accessToken != null) {
+                        Payload payload = accessToken.getPayload();
+                        email = payload.getEmail();
+                        name = (String) payload.get("name");
+                        try {
+                            if (!accountDAO.checkDuplicate(email)) {
+                                accountDAO.handleLoginByGmail(email, name);
+                            }
+                            role = "User";
+                            url = USER;
+                        } catch (Exception ex) {
+                            log("Error at LoginController: " + ex.getMessage());
+                        }
+                    } else {
+                        log("Error at LoginController: Invalid Token!");
+                    }
+                } catch (GeneralSecurityException e) {
+                    log("Error at LoginController:" + e.getMessage());
+                }
             } else {
-                String name = accountDAO.getLoginName(email, encodedPassword);
-                session.setAttribute("EMAIL", email);
-                session.setAttribute("NAME", name);
-                session.setAttribute("ROLE", role);
+                try {
+                    email = request.getParameter("email");
+                    password = request.getParameter("password");
 
-                switch (role) {
-                    case "Admin":
-                        url = ADMIN;
-                        break;
-                    case "User":
-                        url = USER;
-                        break;
-                    default:
-                        request.setAttribute("ERROR", "Your role is invalid");
-                        break;
+                    SHA_256 sha = new SHA_256();
+                    String encodedPassword = sha.getEncodedString(password);
+                    role = accountDAO.handleLogin(email, encodedPassword);
+
+                    if (role.equals("failed")) {
+                        request.setAttribute("InvalidAccount", "Username or Password is invalid!");
+                        url = INVALID;
+                    } else {
+                        name = accountDAO.getLoginName(email, encodedPassword);
+
+                        switch (role) {
+                            case "Admin":
+                                url = ADMIN;
+                                break;
+                            case "User":
+                                url = USER;
+                                break;
+                            default:
+                                request.setAttribute("ERROR", "Your role is invalid");
+                                break;
+                        }
+                    }
+                } catch (Exception e) {
+                    log("Error at LoginController:" + e.getMessage());
                 }
             }
-        } catch (Exception e) {
-            log("Error at LoginController:" + e.getMessage());
+            session.setAttribute("EMAIL", email);
+            session.setAttribute("NAME", name);
+            session.setAttribute("ROLE", role);
+        } catch (IOException e) {
+            log("ERROR at LoginController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

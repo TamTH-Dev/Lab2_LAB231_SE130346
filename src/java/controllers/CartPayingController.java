@@ -81,9 +81,21 @@ public class CartPayingController extends HttpServlet {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS    ");
                             int saleID = productDAO.getSaleID(email, sdf.format(buyTime));
                             if (productDAO.recordUserOrderDetail(saleID, productsList)) {
-                                cart.removeAllProductsFromCart();
-                                url = SUCCESS;
-                                request.getSession(false).setAttribute("CART", cart);
+                                boolean isSuccess = true;
+                                for (int i = 0; i < size; i++) {
+                                    int quantity = Integer.parseInt(quantities[i]);
+                                    String productName = productNames[i];
+                                    if (!productDAO.updateBuyedProductQuantity(productName, quantity)) {
+                                        isSuccess = false;
+                                    }
+                                }
+                                if (isSuccess) {
+                                    cart.removeAllProductsFromCart();
+                                    url = SUCCESS;
+                                    request.getSession(false).setAttribute("CART", cart);
+                                } else {
+                                    request.setAttribute("ERROR", "Execute Paying Failed");
+                                }
                             }
                         } else {
                             request.setAttribute("ERROR", "Execute Paying Failed");

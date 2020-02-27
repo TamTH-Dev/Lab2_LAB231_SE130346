@@ -92,6 +92,23 @@ public class AccountDAO implements Serializable {
         return role;
     }
 
+    public boolean handleLoginByGmail(String email, String name) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "insert into Account(Email, Name, Password, Role) values(?, ?, NULL, 'User')";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, email);
+            preStm.setString(2, name);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
     public String getLoginName(String email, String password) throws Exception {
         String name = null;
 

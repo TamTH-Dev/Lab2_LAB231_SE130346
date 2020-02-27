@@ -1,3 +1,5 @@
+/* global gapi */
+
 // Validate for Searching
 const productName = document.getElementById('productName')
 const priceLevels = document.getElementsByClassName('price-level')
@@ -23,5 +25,20 @@ searchBtn.addEventListener('click', (e) => {
         productName.value = productName.value.trim()
     }
 })
+
+// Google Sign-Out
+function signOut() {
+    const auth2 = gapi.auth2.getAuthInstance()
+    auth2.signOut().then(function () {
+        console.log('User signed out.')
+    });
+    window.location = 'Logout'
+}
+
+function onLoad() {
+    gapi.load('auth2', function () {
+        gapi.auth2.init();
+    });
+}
 
 

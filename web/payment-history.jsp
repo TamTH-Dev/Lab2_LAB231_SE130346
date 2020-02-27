@@ -10,6 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <meta name="google-signin-client_id" content="1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com">
         <title>JSP Page</title>
         <link rel="stylesheet" href="./styles/all.css"/>
         <link rel="stylesheet" href="./styles/bootstrap.min.css" />
@@ -75,7 +76,7 @@
                     </c:if>
                     <c:if test="${sessionScope.ROLE eq 'User' || sessionScope.ROLE eq 'Admin'}">
                         <li>
-                            <button><a class="header-btn" href="Logout">Sign Out</a></button>
+                            <button><a class="header-btn" href="#" onclick="signOut();">Sign Out</a></button>
                         </li>
                     </c:if>
                 </ul>
@@ -140,8 +141,15 @@
                     </div>
                 </c:forEach>
             </c:if>
-            <c:if test="${requestScope.PaymentHistory.size() == 0}">
-                <div style="text-align: center; font-size: 28px; color: #f00;">Can't not find appropriate result!</div>
+            <c:if test="${param.searchedProductName != null || (param.searchedStartingShoppingTime != null && param.searchedEndingShoppingTime != null)}">
+                <c:if test="${requestScope.PaymentHistory.size() == 0}">
+                    <div style="text-align: center; font-size: 28px; color: #f00;">Can't not find appropriate result!</div>
+                </c:if>
+            </c:if>
+            <c:if test="${param.searchedProductName == null && (param.searchedStartingShoppingTime == null && param.searchedEndingShoppingTime == null)}">
+                <c:if test="${requestScope.PaymentHistory.size() == 0}">
+                    <div style="text-align: center; font-size: 28px; color: #f00;">Your payment history is empty!</div>
+                </c:if>
             </c:if>
         </div>
 
@@ -195,5 +203,6 @@
         <script src="./scripts/all.js"></script>
         <script src="./scripts/moment.js"></script>
         <script src="./scripts/payment-history-handling.js"></script>
+        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     </body>
 </html>

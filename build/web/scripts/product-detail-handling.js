@@ -1,3 +1,5 @@
+/* global gapi */
+
 const increaseAmountBtn = document.getElementById('increase-amount-btn')
 const descreaseAmountBtn = document.getElementById('descrease-amount-btn')
 const productAmount = document.getElementById('product-amount')
@@ -20,3 +22,18 @@ productAmount.addEventListener('change', () => {
         productAmount.value = parseInt(productAmountValue)
     }
 })
+
+// Google Sign-Out
+function signOut() {
+    const auth2 = gapi.auth2.getAuthInstance()
+    auth2.signOut().then(function () {
+        console.log('User signed out.')
+    });
+    window.location = 'Logout'
+}
+
+function onLoad() {
+    gapi.load('auth2', function () {
+        gapi.auth2.init();
+    });
+}

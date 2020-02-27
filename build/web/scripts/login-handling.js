@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/* global gapi */
+
 const loginBtn = document.getElementById('login-btn')
 const email = document.getElementById('email')
 const password = document.getElementById('password')
@@ -38,4 +40,18 @@ loginBtn.addEventListener('click', (e) => {
     }
 })
 
+function onSignIn(googleUser) {
+    const body = document.getElementById('body')
+    const form = document.createElement('form')
+    form.setAttribute('action', 'Login')
+    form.setAttribute('method', 'POST')
 
+    const input = document.createElement('input')
+    input.setAttribute('type', 'text')
+    input.setAttribute('name', 'id_token')
+    input.setAttribute('value', googleUser.getAuthResponse().id_token)
+
+    form.appendChild(input)
+    body.appendChild(form)
+    form.submit();
+}
