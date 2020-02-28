@@ -16,6 +16,7 @@
               rel="stylesheet" />
         <link rel="stylesheet" href="./styles/all.css" />
         <link rel="stylesheet" href="./styles/login.css" />
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
     </head>
     <body id="body">
         <div class="login-page">
@@ -39,12 +40,13 @@
                 <button type="submit" name="action" value="Login" id="login-btn">Login</button>
                 <div class="separator"></div>
                 <div class="g-signin2" id="google-signin-btn" data-onsuccess="onSignIn"></div>
-                <a class="home-back" href="index.jsp">Back to Home Page</a>
+                <div class="home-back">
+                    <a href="index.jsp">Back to Home Page</a>
+                </div>
             </form>
         </div>
 
         <script src="./scripts/all.js"></script>
         <script src="./scripts/login-handling.js"></script>
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
     </body>
 </html>

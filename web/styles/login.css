@@ -34,6 +34,7 @@ a:visited {
     padding-bottom: 10px;
     font-family: 'Poppins', sans-serif;
     color: #fff;
+    position: relative;
 }
 
 .login-form .form-title {
@@ -143,9 +144,8 @@ a:visited {
 
 .login-form .home-back {
     color: #f00;
-    display: block;
     text-align: right;
-    margin: 90px 0 10px 0;
+    margin: 80px 0 10px 0;
     padding-right: 20px;
 }
 
@@ -153,14 +153,14 @@ a:visited {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 100px;
+    bottom: 60px;
 }
 
 .login-form .separator {
     width: 80%;
     height: 1px;
     margin: 0 auto;
-    background: #555;
+    background: #777;
 }
 
 
