@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>ERROR PAGE</h1>
-        <c:if test="${requestScope.ERROR != null}">
+        <c:if test="${ERROR != null}">
             <h1 style="color: #f00; text-align: center;">${requestScope.ERROR}</h1>
         </c:if>
     </body>

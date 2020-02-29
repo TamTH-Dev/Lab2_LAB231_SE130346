@@ -33,7 +33,7 @@ public class LoginController extends HttpServlet {
     private static final String ADMIN = "admin.jsp";
     private static final String USER = "index.jsp";
     private static final String INVALID = "login.jsp";
-    private static final String GOOGLE_CLIENT_ID = "1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com";
+    private static final String CLIENT_ID = "1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -60,7 +60,7 @@ public class LoginController extends HttpServlet {
             if (idToken != null) {
                 JacksonFactory jacksonFactory = new JacksonFactory();
                 GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), jacksonFactory)
-                        .setAudience(Collections.singletonList(GOOGLE_CLIENT_ID))
+                        .setAudience(Collections.singletonList(CLIENT_ID))
                         .build();
                 try {
                     GoogleIdToken accessToken = verifier.verify(idToken);

@@ -76,6 +76,18 @@
         <servlet-name>ProductNameAndShoppingTimeSearchingController</servlet-name>
         <servlet-class>controllers.ProductNameAndShoppingTimeSearchingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AuthorizePaymentController</servlet-name>
+        <servlet-class>controllers.AuthorizePaymentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReviewPaymentController</servlet-name>
+        <servlet-class>controllers.ReviewPaymentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PaymentExecutingController</servlet-name>
+        <servlet-class>controllers.PaymentExecutingController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/RegisterController</url-pattern>
@@ -143,6 +155,18 @@
     <servlet-mapping>
         <servlet-name>ProductNameAndShoppingTimeSearchingController</servlet-name>
         <url-pattern>/ProductNameAndShoppingTimeSearchingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuthorizePaymentController</servlet-name>
+        <url-pattern>/AuthorizePaymentController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewPaymentController</servlet-name>
+        <url-pattern>/ReviewPaymentController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaymentExecutingController</servlet-name>
+        <url-pattern>/PaymentExecutingController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

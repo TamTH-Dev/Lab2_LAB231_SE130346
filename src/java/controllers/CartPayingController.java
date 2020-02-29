@@ -26,6 +26,7 @@ public class CartPayingController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "index.jsp";
+    private static final String AUTHORIZE_PAYMENT = "AuthorizePaymentController";
     private static final String INVALID = "CartDataLoadingController";
     private static final String LOGIN = "login.jsp";
 
@@ -52,59 +53,72 @@ public class CartPayingController extends HttpServlet {
                 String email = request.getSession(false).getAttribute("EMAIL").toString();
                 String[] quantities = request.getParameterValues("quantity");
                 String[] productNames = request.getParameterValues("productName");
-                double billPriceTotal = Double.parseDouble(request.getParameter("billPriceTotal"));
+                String billPriceTotal = request.getParameter("billPriceTotal");
+                double parsedBillPriceTotal = -1;
+                if (billPriceTotal != null) {
+                    parsedBillPriceTotal = Double.parseDouble(billPriceTotal);
+                }
+                String paymentMethod = request.getParameter("paymentMethod");
+
                 List<ProductDTO> shoppingErrors = new ArrayList<>();
                 ProductDAO productDAO = new ProductDAO();
                 int size = productsList.size();
 
-                for (int i = 0; i < size; i++) {
-                    int quantity = Integer.parseInt(quantities[i]);
-                    String productName = productNames[i];
-                    if (cart.getCurrentQuantityOfProductFromCart(productName) != quantity) {
-                        cart.updateProductQuantityFromCart(productName, quantity);
-                    }
-                    try {
-                        int currentQuantity = productDAO.getCurrentProductQuantity(productName);
-                        if (currentQuantity < quantity) {
-                            ProductDTO errorProduct = new ProductDTO(productName, currentQuantity);
-                            shoppingErrors.add(errorProduct);
+                if (billPriceTotal != null) {
+                    for (int i = 0; i < size; i++) {
+                        int quantity = Integer.parseInt(quantities[i]);
+                        String productName = productNames[i];
+                        if (cart.getCurrentQuantityOfProductFromCart(productName) != quantity) {
+                            cart.updateProductQuantityFromCart(productName, quantity);
                         }
-                    } catch (Exception ex) {
-                        log("ERROR at CartPayingController: " + ex.getMessage());
+                        try {
+                            int currentQuantity = productDAO.getCurrentProductQuantity(productName);
+                            if (currentQuantity < quantity) {
+                                ProductDTO errorProduct = new ProductDTO(productName, currentQuantity);
+                                shoppingErrors.add(errorProduct);
+                            }
+                        } catch (Exception ex) {
+                            log("ERROR at CartPayingController: " + ex.getMessage());
+                        }
                     }
                 }
 
                 if (shoppingErrors.isEmpty()) {
                     Timestamp buyTime = new Timestamp(System.currentTimeMillis());
                     try {
-                        if (productDAO.recordUserOrder(email, buyTime, "hello", billPriceTotal)) {
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS    ");
-                            int saleID = productDAO.getSaleID(email, sdf.format(buyTime));
-                            if (productDAO.recordUserOrderDetail(saleID, productsList)) {
-                                boolean isSuccess = true;
-                                for (int i = 0; i < size; i++) {
-                                    int quantity = Integer.parseInt(quantities[i]);
-                                    String productName = productNames[i];
-                                    if (!productDAO.updateBuyedProductQuantity(productName, quantity)) {
-                                        isSuccess = false;
+                        if (paymentMethod.equals("cash")) {
+                            if (productDAO.recordUserOrder(email, buyTime, paymentMethod, parsedBillPriceTotal)) {
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS    ");
+                                int saleID = productDAO.getSaleID(email, sdf.format(buyTime));
+                                if (productDAO.recordUserOrderDetail(saleID, productsList)) {
+                                    boolean isSuccess = true;
+                                    for (int i = 0; i < size; i++) {
+                                        int quantity = Integer.parseInt(quantities[i]);
+                                        String productName = productNames[i];
+                                        if (!productDAO.updateBuyedProductQuantity(productName, quantity)) {
+                                            isSuccess = false;
+                                        }
+                                    }
+                                    if (isSuccess) {
+                                        cart.removeAllProductsFromCart();
+                                        url = SUCCESS;
+                                        request.getSession(false).setAttribute("CART", cart);
+                                    } else {
+                                        request.setAttribute("ERROR", "Execute Paying Failed");
                                     }
                                 }
-                                if (isSuccess) {
-                                    cart.removeAllProductsFromCart();
-                                    url = SUCCESS;
-                                    request.getSession(false).setAttribute("CART", cart);
-                                } else {
-                                    request.setAttribute("ERROR", "Execute Paying Failed");
-                                }
+                            } else {
+                                request.setAttribute("ERROR", "Execute Paying Failed");
                             }
-                        } else {
-                            request.setAttribute("ERROR", "Execute Paying Failed");
+                        } else if (paymentMethod.equals("paypal")) {
+                            url = AUTHORIZE_PAYMENT;
                         }
                     } catch (Exception ex) {
                         log("ERROR at CartPayingController: " + ex.getMessage());
                     }
                 } else {
                     url = INVALID;
+                    request.setAttribute("PaymentMethod", paymentMethod);
                     request.setAttribute("ShoppingErrors", shoppingErrors);
                 }
             }

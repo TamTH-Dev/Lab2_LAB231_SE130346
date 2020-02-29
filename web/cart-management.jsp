@@ -145,6 +145,25 @@
                     <div class="payment-total">
                         Total: <input id="payment-total" name="billPriceTotal" type="text" value="${total}" readonly="true"/> $
                     </div>
+                    <div class="payment-method">
+                        <div class="payment-method-title">Payment Method:</div>
+                        <div class="payment-method-item">
+                            <label for="cash">Cash</label>
+                            <input id="cash" type="radio" name="paymentMethod" value="cash"                                 <c:if test="${requestScope.PaymentMethod eq 'cash'}">
+                                   checked="checked"
+                                </c:if> 
+                                />
+                        </div>
+                        <div class="payment-method-item">
+                            <label for="paypal">Paypal</label>
+                            <input id="paypal" type="radio" name="paymentMethod" value="paypal" 
+                                   <c:if test="${requestScope.PaymentMethod eq 'paypal'}">
+                                       checked="checked"
+                                   </c:if>
+                                   />
+                        </div>
+                    </div>
+                    <div id="payment-error" style="color: #f00; font-size: 14px; display: none;">Please choose the payment method to order!</div>
                     <button type="submit" class="order-btn" id="order-btn">Order</button>
                 </form>
             </c:if>

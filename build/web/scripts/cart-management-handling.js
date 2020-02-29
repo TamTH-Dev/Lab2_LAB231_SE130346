@@ -64,11 +64,29 @@ for (let i = 0; i < length; i++) {
 
 // Handle ordering 
 const orderBtn = document.getElementById('order-btn')
+const paymentMethod = document.getElementsByName('paymentMethod')
+const paymentError = document.getElementById('payment-error')
 
 orderBtn.addEventListener('click', (e) => {
     const doesOrders = confirm('Are you sure you want to order')
+    const isValid = false
+
+    for (let i = 0; i < paymentMethod.length; i++) {
+       if (paymentMethod[i].checked) {
+           isValid = true
+       } 
+    }
+
     if (!doesOrders) e.preventDefault()
+
+    if (doesOrders) {
+        if (!isValid) {
+            e.preventDefault()
+            paymentError.style.display = 'block'
+        }
+    }
 })
+
 
 // Google Sign-Out
 function signOut() {
