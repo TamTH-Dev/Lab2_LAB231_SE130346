@@ -21,7 +21,7 @@ import supportMethods.PaymentServices;
  * @author hoang
  */
 public class PaymentExecutingController extends HttpServlet {
-    
+
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "payment-receipt.jsp";
 
@@ -40,15 +40,13 @@ public class PaymentExecutingController extends HttpServlet {
         String url = ERROR;
         String paymentId = request.getParameter("paymentId");
         String payerId = request.getParameter("PayerID");
-        
+
         try {
             PaymentServices paymentServices = new PaymentServices();
             Payment payment = paymentServices.executePayment(paymentId, payerId);
 
             PayerInfo payerInfo = payment.getPayer().getPayerInfo();
             Transaction transaction = payment.getTransactions().get(0);
-
-            
 
             request.setAttribute("payer", payerInfo);
             request.setAttribute("transaction", transaction);

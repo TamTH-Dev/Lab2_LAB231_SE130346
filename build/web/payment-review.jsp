@@ -97,6 +97,26 @@
                     <h3>Bill details:</h3>
                     <div>Total: ${transaction.amount.total} $</div>
                 </div>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Product's Name</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Product's Price Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${transaction.getItemList().getItems()}" var="item" varStatus="counter">
+                        <tr>
+                            <th scope="row">${counter.count}</th>
+                            <td>${item.name}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.price * item.quantity} $</td>
+                        </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
                 <button type="submit" class="pay-btn">Pay Now</button>
             </form>
         </div>

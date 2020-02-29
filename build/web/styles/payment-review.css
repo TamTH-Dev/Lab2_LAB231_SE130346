@@ -9,7 +9,7 @@
 }
 
 .container .review-form {
-    width: 30%;
+    width: 80%;
     margin: 40px auto;
 }
 
@@ -50,6 +50,11 @@
     margin: 30px auto;
 }
 
-.container .view-form .back-btn:hover {
+.container .review-form .back-btn:hover {
     color: #21d397;
+}
+
+.container .review-form table {
+    margin-top: 30px;
+    box-shadow: 0 4px 8px 3px rgba(0, 0, 0, .2);
 }

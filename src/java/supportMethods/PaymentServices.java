@@ -6,6 +6,9 @@
 package supportMethods;
 
 import com.paypal.api.payments.Amount;
+import com.paypal.api.payments.Details;
+import com.paypal.api.payments.Item;
+import com.paypal.api.payments.ItemList;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payer;
 import com.paypal.api.payments.PayerInfo;
@@ -15,6 +18,7 @@ import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import dtos.ProductDTO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +32,10 @@ public class PaymentServices {
     private static final String CLIENT_SECRET = "EC9LI3SpNhKYzeVJdiHQy2dsMINVz_osE89FZiWrUbb9dFsHmu0A98lX9MSv7HKFYm6EizJnHSaa9cMe";
     private static final String MODE = "sandbox";
 
-    public String authorizePayment(double billPriceTotal) {
+    public String authorizePayment(List<ProductDTO> productList, double billPriceTotal) {
         Payer payer = getPayerInformation();
         RedirectUrls redirectUrls = getRedirectUrls();
-        List<Transaction> listTransaction = getTransactionInformation(billPriceTotal);
+        List<Transaction> listTransaction = getTransactionInformation(productList, billPriceTotal);
 
         Payment requestPayment = new Payment();
         requestPayment.setTransactions(listTransaction)
@@ -46,7 +50,6 @@ public class PaymentServices {
         } catch (PayPalRESTException ex) {
             ex.printStackTrace();
         }
-
         return getApprovalLink(approvedPayment);
     }
 
@@ -92,7 +95,7 @@ public class PaymentServices {
         return payer;
     }
 
-    private List<Transaction> getTransactionInformation(double billPriceTotal) {
+    private List<Transaction> getTransactionInformation(List<ProductDTO> productList, double billPriceTotal) {
         Amount amount = new Amount();
         amount.setCurrency("USD");
         amount.setTotal(String.format("%.2f", billPriceTotal));
@@ -100,6 +103,23 @@ public class PaymentServices {
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
         transaction.setDescription("Bill Total");
+
+        ItemList itemList = new ItemList();
+        List<Item> items = new ArrayList<>();
+
+        productList.stream().map(product -> {
+            Item item = new Item();
+            item.setCurrency("USD")
+                    .setName(product.getProductName())
+                    .setPrice(String.format("%.2f", product.getPrice()))
+                    .setQuantity(String.format("%d", product.getQuantity()));
+            return item;
+        }).forEachOrdered((item) -> {
+            items.add(item);
+        });
+
+        itemList.setItems(items);
+        transaction.setItemList(itemList);
 
         List<Transaction> listTransaction = new ArrayList<>();
         listTransaction.add(transaction);

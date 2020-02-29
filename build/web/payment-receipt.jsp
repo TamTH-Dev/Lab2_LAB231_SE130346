@@ -22,12 +22,12 @@
                 <div class="logo">
                     <a href="
                        <c:if test="${sessionScope.ROLE ne 'Admin'}">
-                        index.jsp
-                        </c:if>
-                        <c:if test="${sessionScope.ROLE eq 'Admin'}">
-                            admin.jsp
-                        </c:if> 
-                        ">
+                           index.jsp
+                       </c:if>
+                       <c:if test="${sessionScope.ROLE eq 'Admin'}">
+                           admin.jsp
+                       </c:if> 
+                       ">
                         <img src="./images/logo.png" alt="">
                     </a>
                 </div>
@@ -35,12 +35,12 @@
                     <li>
                         <a href="
                            <c:if test="${sessionScope.ROLE ne 'Admin'}">
-                            index.jsp
-                            </c:if>
-                            <c:if test="${sessionScope.ROLE eq 'Admin'}">
-                                admin.jsp
-                            </c:if>
-                            ">
+                               index.jsp
+                           </c:if>
+                           <c:if test="${sessionScope.ROLE eq 'Admin'}">
+                               admin.jsp
+                           </c:if>
+                           ">
                             Home
                         </a>
                     </li>
@@ -93,6 +93,26 @@
                     <h3>Bill details:</h3>
                     <div>Total: ${transaction.amount.total} $</div>
                 </div>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Product's Name</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Product's Price Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${transaction.getItemList().getItems()}" var="item" varStatus="counter">
+                            <tr>
+                                <th scope="row">${counter.count}</th>
+                                <td>${item.name}</td>
+                                <td>${item.quantity}</td>
+                                <td>${item.price * item.quantity} $</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
                 <a href="DataLoading" class="back-btn">Back To Home Page</a>
             </div>
         </div>

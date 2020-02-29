@@ -5,8 +5,10 @@
  */
 package controllers;
 
+import cart.Cart;
+import dtos.ProductDTO;
 import java.io.IOException;
-import java.sql.Timestamp;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +34,12 @@ public class AuthorizePaymentController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         double billPriceTotal = Double.parseDouble(request.getParameter("billPriceTotal"));
+        Cart cart = (Cart) request.getSession(false).getAttribute("CART");
+        List<ProductDTO> productList = cart.getCart();
+        System.out.println(productList);
         try {
             PaymentServices paymentServices = new PaymentServices();
-            String approvalLink = paymentServices.authorizePayment(billPriceTotal);
+            String approvalLink = paymentServices.authorizePayment(productList, billPriceTotal);
             if (approvalLink != null) {
                 response.sendRedirect(approvalLink);
             }
