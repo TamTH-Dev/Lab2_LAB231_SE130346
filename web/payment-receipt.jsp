@@ -108,7 +108,7 @@
                                 <th scope="row">${counter.count}</th>
                                 <td>${item.name}</td>
                                 <td>${item.quantity}</td>
-                                <td>${item.price * item.quantity} $</td>
+                                <td>${Math.round(item.price * item.quantity * 100.0) / 100.0} $</td>
                             </tr>
                         </c:forEach>
                     </tbody>

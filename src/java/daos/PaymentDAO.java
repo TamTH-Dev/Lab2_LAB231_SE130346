@@ -7,11 +7,11 @@ package daos;
 
 import db.MyConnection;
 import dtos.PaymentDTO;
+import dtos.ProductDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,5 +202,66 @@ public class PaymentDAO {
         }
 
         return searchedList;
+    }
+
+    public int getSaleID(String email, String buyTime) throws Exception {
+        int saleID = -1;
+
+        try {
+            String sql = "select SaleID from SaleHistory where Email = ? and BuyTime = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, email);
+            preStm.setString(2, buyTime);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                saleID = rs.getInt("SaleID");
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return saleID;
+    }
+
+    public boolean recordUserOrderDetail(int sailID, List<ProductDTO> productsList) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "insert into SaleDetail(SaleID, ProductName, Quantity, ProductPriceTotal) values (?)";
+            String sqlIn = "";
+            for (ProductDTO product : productsList) {
+                double productPriceTotal = Math.round(product.getPrice() * product.getQuantity() * 100) / 100;
+                sqlIn += "(" + sailID + ",'" + product.getProductName() + "'," + product.getQuantity() + "," + productPriceTotal + "), ";
+            }
+            sqlIn = sqlIn.substring(0, sqlIn.length() - 2);
+            sql = sql.replace("(?)", sqlIn);
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
+    }
+
+    public boolean recordUserOrder(String email, Timestamp buyTime, String paymentMethod, double billPriceTotal) throws Exception {
+        boolean isSuccess = false;
+
+        try {
+            String sql = "insert into SaleHistory(Email, BuyTime, PaymentMethod, BillPriceTotal)  values(?, ?, ?, ?)";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, email);
+            preStm.setTimestamp(2, buyTime);
+            preStm.setString(3, paymentMethod);
+            preStm.setDouble(4, billPriceTotal);
+            isSuccess = preStm.executeUpdate() > 0;
+        } finally {
+            closeConnection();
+        }
+
+        return isSuccess;
     }
 }

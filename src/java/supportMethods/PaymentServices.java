@@ -6,7 +6,6 @@
 package supportMethods;
 
 import com.paypal.api.payments.Amount;
-import com.paypal.api.payments.Details;
 import com.paypal.api.payments.Item;
 import com.paypal.api.payments.ItemList;
 import com.paypal.api.payments.Links;

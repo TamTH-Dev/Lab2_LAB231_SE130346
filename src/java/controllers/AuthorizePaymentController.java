@@ -36,7 +36,7 @@ public class AuthorizePaymentController extends HttpServlet {
         double billPriceTotal = Double.parseDouble(request.getParameter("billPriceTotal"));
         Cart cart = (Cart) request.getSession(false).getAttribute("CART");
         List<ProductDTO> productList = cart.getCart();
-        System.out.println(productList);
+
         try {
             PaymentServices paymentServices = new PaymentServices();
             String approvalLink = paymentServices.authorizePayment(productList, billPriceTotal);

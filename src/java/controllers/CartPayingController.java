@@ -6,6 +6,7 @@
 package controllers;
 
 import cart.Cart;
+import daos.PaymentDAO;
 import daos.ProductDAO;
 import dtos.ProductDTO;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class CartPayingController extends HttpServlet {
                 url = LOGIN;
             } else {
                 Cart cart = (Cart) request.getSession(false).getAttribute("CART");
-                List<ProductDTO> productsList = cart.getCart();
+                List<ProductDTO> productList = cart.getCart();
                 String email = request.getSession(false).getAttribute("EMAIL").toString();
                 String[] quantities = request.getParameterValues("quantity");
                 String[] productNames = request.getParameterValues("productName");
@@ -62,7 +63,7 @@ public class CartPayingController extends HttpServlet {
 
                 List<ProductDTO> shoppingErrors = new ArrayList<>();
                 ProductDAO productDAO = new ProductDAO();
-                int size = productsList.size();
+                int size = productList.size();
 
                 if (billPriceTotal != null) {
                     for (int i = 0; i < size; i++) {
@@ -87,14 +88,15 @@ public class CartPayingController extends HttpServlet {
                     Timestamp buyTime = new Timestamp(System.currentTimeMillis());
                     try {
                         if (paymentMethod.equals("cash")) {
-                            if (productDAO.recordUserOrder(email, buyTime, paymentMethod, parsedBillPriceTotal)) {
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS    ");
-                                int saleID = productDAO.getSaleID(email, sdf.format(buyTime));
-                                if (productDAO.recordUserOrderDetail(saleID, productsList)) {
+                            PaymentDAO paymentDAO = new PaymentDAO();
+                            if (paymentDAO.recordUserOrder(email, buyTime, paymentMethod, parsedBillPriceTotal)) {
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                                int saleID = paymentDAO.getSaleID(email, sdf.format(buyTime));
+                                if (paymentDAO.recordUserOrderDetail(saleID, productList)) {
                                     boolean isSuccess = true;
-                                    for (int i = 0; i < size; i++) {
-                                        int quantity = Integer.parseInt(quantities[i]);
-                                        String productName = productNames[i];
+                                    for (ProductDTO product : productList) {
+                                        int quantity = product.getQuantity();
+                                        String productName = product.getProductName();
                                         if (!productDAO.updateBuyedProductQuantity(productName, quantity)) {
                                             isSuccess = false;
                                         }

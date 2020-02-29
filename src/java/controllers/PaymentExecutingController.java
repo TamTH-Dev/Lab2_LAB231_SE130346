@@ -5,11 +5,18 @@
  */
 package controllers;
 
+import cart.Cart;
 import com.paypal.api.payments.PayerInfo;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
+import daos.PaymentDAO;
+import daos.ProductDAO;
+import dtos.ProductDTO;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,10 +55,42 @@ public class PaymentExecutingController extends HttpServlet {
             PayerInfo payerInfo = payment.getPayer().getPayerInfo();
             Transaction transaction = payment.getTransactions().get(0);
 
-            request.setAttribute("payer", payerInfo);
-            request.setAttribute("transaction", transaction);
+            PaymentDAO paymentDAO = new PaymentDAO();
+            String email = (String) request.getSession(false).getAttribute("EMAIL");
+            double billPriceTotal = Double.parseDouble(transaction.getAmount().getTotal());
+            Timestamp buyTime = new Timestamp(System.currentTimeMillis());
 
-            url = SUCCESS;
+            try {
+                if (paymentDAO.recordUserOrder(email, buyTime, "paypal", billPriceTotal)) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                    int saleID = paymentDAO.getSaleID(email, sdf.format(buyTime));
+                    Cart cart = (Cart) request.getSession(false).getAttribute("CART");
+
+                    List<ProductDTO> productList = cart.getCart();
+                    if (paymentDAO.recordUserOrderDetail(saleID, productList)) {
+                        ProductDAO productDAO = new ProductDAO();
+                        boolean isSuccess = true;
+                        for (ProductDTO product : productList) {
+                            int quantity = product.getQuantity();
+                            String productName = product.getProductName();
+                            if (!productDAO.updateBuyedProductQuantity(productName, quantity)) {
+                                isSuccess = false;
+                            }
+                        }
+                        if (isSuccess) {
+                            cart.removeAllProductsFromCart();
+                            url = SUCCESS;
+                            request.getSession(false).setAttribute("CART", cart);
+                            request.setAttribute("payer", payerInfo);
+                            request.setAttribute("transaction", transaction);
+                        } else {
+                            request.setAttribute("ERROR", "Execute Paying Failed");
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                log("ERROR at PaymentExecutingController: " + ex.getMessage());
+            }
         } catch (PayPalRESTException ex) {
             request.setAttribute("ERROR", ex.getMessage());
             log("ERROR at PaymentExecutingController: " + ex.getMessage());
