@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -132,6 +131,9 @@ public class FilterDispatcher implements Filter {
                     url = resource;
                 }
                 if (resource.lastIndexOf(".png") > 0) {
+                    url = resource;
+                }
+                if (resource.lastIndexOf(".jpeg") > 0) {
                     url = resource;
                 }
             }

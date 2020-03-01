@@ -70,7 +70,7 @@
             <form action="ProductCreating" enctype="multipart/form-data" method="POST">
                 <div class="form-group">
                     <label for="productName">Product Name</label>
-                    <input type="text" name="productName" class="form-control" id="productName" />
+                    <input type="text" name="productName" class="form-control" id="productName" value="${ProductInformation.productName}"/>
                     <span class="error" id="product-name-error">
                         <c:if test="${CreateError != null}">
                             ${CreateError}
@@ -126,10 +126,13 @@
                     </select>
                     <span class="error" id="category-error"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="height: 90px;">
                     <label for="image">Image</label>
                     <input type="file" name="image" class="form-control-file" id="image" />
                     <span class="error" style="top: 60px;" id="image-error"></span>
+                            <c:if test="${DuplicateError != null}">
+                        <div style="position: absolute; bottom: 0; left: 0; color: #f00;">${DuplicateError}</div> 
+                    </c:if>
                 </div>
                 <button type="submit" class="btn btn-primary" id="add-btn">Add</button>
             </form>

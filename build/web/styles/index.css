@@ -40,6 +40,12 @@
     color: #21d397;
 }
 
+.container .products-container-title {
+    font-size: 30px;
+    font-weight: 700;
+    padding: 0 0 30px 10px;
+}
+
 .container .products-container {
     display: flex;
     flex-flow: row wrap;
@@ -69,6 +75,7 @@
 }
 
 .container .products-container .card .card-body .card-text {
+    margin-bottom: 50px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -79,7 +86,14 @@
     font-size: 24px;
     font-weight: bold;
     position: absolute;
-    right: 10px;
+    right: 15px;
+    bottom: 15px;
+}
+
+.container .products-container .card .card-body .add-btn {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
 }
 
 .container .page-container {
@@ -111,3 +125,4 @@
     background: #131627;
     color: #21d397;
 }
+

@@ -40,6 +40,7 @@ public class DataLoadingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
+        String email = (String) session.getAttribute("EMAIL");
         String url = ERROR;
         int signal = 0;
 
@@ -63,6 +64,7 @@ public class DataLoadingController extends HttpServlet {
             int numOfBlogsPerPage = 20;
             int page = pagingHandler.getPage(pg);
             List<ProductDTO> productsData = null;
+            List<ProductDTO> recommendationProductByUserPreferencesData = null;
             int productsTotal;
 
             if (signal == 1) {
@@ -71,6 +73,9 @@ public class DataLoadingController extends HttpServlet {
             } else {
                 productsTotal = productDAO.getProductsTotalForUserPage();
                 productsData = productDAO.getAllProductsForUserPage(page, numOfBlogsPerPage);
+                if (email != null) {
+                    recommendationProductByUserPreferencesData = productDAO.getRecommendationProductListByUserPreferences(email);
+                }
             }
 
             int totalPage = pagingHandler.getTotalPage(pg, productsTotal, numOfBlogsPerPage);
@@ -85,6 +90,9 @@ public class DataLoadingController extends HttpServlet {
                     request.setAttribute("TotalPage", totalPage);
                 }
                 request.setAttribute("ProductsData", productsData);
+                if (email != null) {
+                    request.setAttribute("RecommendationProductByUserPreferencesData", recommendationProductByUserPreferencesData);
+                }
             } else {
                 request.setAttribute("ERROR", "Load Data Failed");
             }

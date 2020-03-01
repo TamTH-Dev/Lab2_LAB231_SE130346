@@ -6,6 +6,7 @@
 package controllers;
 
 import daos.ProductDAO;
+import dtos.ProductDTO;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -28,6 +29,7 @@ public class ProductUpdatingController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "DataLoadingController";
+    private static final String INVALID = "product-detail-management.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -68,6 +70,7 @@ public class ProductUpdatingController extends HttpServlet {
                 String category = (String) params.get("category");
                 String imgPath = category;
                 String imageName = null;
+                boolean isImageDuplicate = false;
 
                 CurrentPathGetting currentPath = new CurrentPathGetting();
                 String uploadPath = currentPath.getPath() + "/web/uploads/" + category;
@@ -79,25 +82,16 @@ public class ProductUpdatingController extends HttpServlet {
                         File newImage = new File(uploadPath + File.separator + imageName);
 
                         String currentImgPath = productDAO.getCurrentImgPath(productName);
-                        boolean isImageUsedByOtherProducts = productDAO.isImageUsedByOtherProducts(productName, currentImgPath);
 
                         if (!newImage.exists()) {
-                            if (!isImageUsedByOtherProducts) {
-                                String fullCurrentImgPath = currentPath.getPath() + "/web/uploads/" + currentImgPath;
-                                File currentImage = new File(fullCurrentImgPath);
+                            String fullCurrentImgPath = currentPath.getPath() + "/web/uploads/" + currentImgPath;
+                            File currentImage = new File(fullCurrentImgPath);
 
-                                if (currentImage.delete()) {
-                                    imageItem.write(newImage);
-                                }
-                            } else {
+                            if (currentImage.delete()) {
                                 imageItem.write(newImage);
                             }
                         } else {
-                            if (!isImageUsedByOtherProducts) {
-                                String fullCurrentImgPath = currentPath.getPath() + "/web/uploads/" + currentImgPath;
-                                File currentImage = new File(fullCurrentImgPath);
-                                currentImage.delete();
-                            }
+                            isImageDuplicate = true;
                         }
                     } else {
                         imageName = "";
@@ -107,19 +101,33 @@ public class ProductUpdatingController extends HttpServlet {
                 }
 
                 if (!imageName.equals("")) {
-                    imgPath = imgPath + "/" + imageName;
-                }
-
-                boolean isSuccess = imageName.equals("")
-                        ? productDAO.updateProductWithoutImage(productName, description, parsedQuantity, parsedPrice, category)
-                        : productDAO.updateProductWithImage(productName, imgPath, description, parsedQuantity, parsedPrice, category);
-
-                if (isSuccess) {
-                    Timestamp updateTime = new Timestamp(System.currentTimeMillis());
-                    productDAO.recordUpdatedProduct(productName, updateTime);
-                    url = SUCCESS;
+                    if (!isImageDuplicate) {
+                        imgPath = imgPath + "/" + imageName;
+                        boolean isSuccess = productDAO.updateProductWithImage(productName, imgPath, description, parsedQuantity, parsedPrice, category);
+                        if (isSuccess) {
+                            Timestamp updateTime = new Timestamp(System.currentTimeMillis());
+                            productDAO.recordUpdatedProduct(productName, updateTime);
+                            url = SUCCESS;
+                        } else {
+                            request.setAttribute("ERROR", "Update Product Failed");
+                        }
+                    } else {
+                        url = INVALID;
+                        String status = productDAO.getStatus(productName);
+                        String currentImgPath = productDAO.getCurrentImgPath(productName);
+                        ProductDTO productDetail = new ProductDTO(productName, currentImgPath, description, parsedQuantity, parsedPrice, category, status);
+                        request.setAttribute("ProductInformation", productDetail);
+                        request.setAttribute("DuplicateError", "Image existed. Please rename or choose another image to upload!");
+                    }
                 } else {
-                    request.setAttribute("ERROR", "Update Product Failed");
+                    boolean isSuccess = productDAO.updateProductWithoutImage(productName, description, parsedQuantity, parsedPrice, category);
+                    if (isSuccess) {
+                        Timestamp updateTime = new Timestamp(System.currentTimeMillis());
+                        productDAO.recordUpdatedProduct(productName, updateTime);
+                        url = SUCCESS;
+                    } else {
+                        request.setAttribute("ERROR", "Update Product Failed");
+                    }
                 }
             } catch (Exception e) {
                 log("ERROR at ProductUpdatingController: " + e.getMessage());

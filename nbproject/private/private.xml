@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/supportMethods/PaymentServices.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/payment-receipt.jsp</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/controllers/PaymentExecutingController.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/daos/PaymentDAO.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/controllers/CartPayingController.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/controllers/ReviewPaymentController.java</file>
-            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/payment-review.jsp</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/styles/index.css</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/daos/ProductDAO.java</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/src/java/controllers/DataLoadingController.java</file>
+            <file>file:/C:/Users/hoang/Documents/NetBeansProjects/Lab2_Lab231_TranHoangTam_SE130346/web/index.jsp</file>
         </group>
     </open-files>
 </project-private>

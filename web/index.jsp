@@ -130,7 +130,40 @@
                 <a class="view-all-btn" href="DataLoading">View All</a>
             </form>
 
+            <c:if test="${sessionScope.ROLE eq 'User'}">
+                <c:if test="${RecommendationProductByUserPreferencesData.size() != 0}">
+                    <h3 class="products-container-title">Products You Like Most</h3>
+                    <div class="products-container">
+                        <c:forEach items="${RecommendationProductByUserPreferencesData}" var="product">
+                            <div class="card">
+                                <img src="./uploads/${product.imgPath}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <c:url value="ProductDetailLoading" var="loadProductDetail" >
+                                            <c:param name="productName" value="${product.productName}" />
+                                        </c:url>
+                                        <a href="${loadProductDetail}" class="product-title">
+                                            ${product.productName}
+                                        </a>
+                                    </h5>
+                                    <p class="card-text">${product.description}</p>
+                                    <c:url value="CartAdding" var="addToCart">
+                                        <c:param name="productName" value="${product.productName}" />
+                                        <c:param name="price" value="${product.price}" />
+                                        <c:param name="quantity" value="1" />
+                                        <c:param name="category" value="${product.category}" />
+                                        <c:param name="imgPath" value="${product.imgPath}" />
+                                    </c:url>
+                                    <a href="${addToCart}" class="add-btn btn btn-primary">Add to Cart</a>
+                                    <span class="card-price">${product.price} $</span>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </c:if>
+            </c:if>
             <c:if test="${requestScope.ProductsData.size() != 0}">
+                <h3 class="products-container-title">All Products List</h3>
                 <div class="products-container">
                     <c:forEach items="${requestScope.ProductsData}" var="product">
                         <div class="card">
@@ -152,7 +185,7 @@
                                     <c:param name="category" value="${product.category}" />
                                     <c:param name="imgPath" value="${product.imgPath}" />
                                 </c:url>
-                                <a href="${addToCart}" class="btn btn-primary">Add to Cart</a>
+                                <a href="${addToCart}" class="add-btn btn btn-primary">Add to Cart</a>
                                 <span class="card-price">${product.price} $</span>
                             </div>
                         </div>

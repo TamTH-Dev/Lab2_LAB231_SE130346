@@ -74,6 +74,7 @@ public class ProductCreatingController extends HttpServlet {
                     Timestamp createdTime = new Timestamp(System.currentTimeMillis());
                     String imgPath = category;
                     String imageName = null;
+                    boolean isImageDuplicate = false;
 
                     CurrentPathGetting currentPath = new CurrentPathGetting();
                     String uploadPath = currentPath.getPath() + "/web/uploads/" + category;
@@ -84,20 +85,28 @@ public class ProductCreatingController extends HttpServlet {
                         File newImage = new File(uploadPath + File.separator + imageName);
                         if (!newImage.exists()) {
                             imageItem.write(newImage);
+                        } else {
+                            isImageDuplicate = true;
                         }
                     } catch (Exception e) {
                         log("ERROR at ProductCreatingController: " + e.getMessage());
                     }
 
-                    imgPath = imgPath + "/" + imageName;
+                    if (!isImageDuplicate) {
+                        imgPath = imgPath + "/" + imageName;
 
-                    boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime);
-                    if (isSuccess) {
-                        url = SUCCESS;
+                        boolean isSuccess = productDAO.createProduct(productName, imgPath, description, parsedQuantity, parsedPrice, category, createdTime);
+                        if (isSuccess) {
+                            url = SUCCESS;
+                        } else {
+                            request.setAttribute("ERROR", "Create Product Failed");
+                        }
                     } else {
-                        request.setAttribute("ERROR", "Create Product Failed");
+                        url = INVALID;
+                        ProductDTO productInformation = new ProductDTO(productName, description, parsedQuantity, parsedPrice, category);
+                        request.setAttribute("ProductInformation", productInformation);
+                        request.setAttribute("DuplicateError", "Image existed. Please rename or choose another image to upload!");
                     }
-
                 } else {
                     url = INVALID;
                     ProductDTO product = new ProductDTO(description, parsedQuantity, parsedPrice, category);

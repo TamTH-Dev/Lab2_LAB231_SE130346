@@ -166,6 +166,9 @@
                     <label for="image">Image</label>
                     <img src="./uploads/${ProductDetail.imgPath}" class="product-img" />
                     <input type="file" name="image" class="form-control-file" id="image" style="position: absolute; top: 250px;">
+                    <c:if test="${DuplicateError != null}">
+                        <div style="position: absolute; bottom: 0; left: 0; color: #f00;">${DuplicateError}</div> 
+                    </c:if>
                 </div>
                 <c:if test="${ProductDetail.status eq 'Active'}">
                     <button type="submit" class="btn btn-primary" id="update-btn">Update</button>
