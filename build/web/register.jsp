@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Blogs World</title>
+        <title>Register</title>
         <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700|Roboto:400,500&display=swap"
               rel="stylesheet">
         <link rel="stylesheet" href="./styles/register.css">

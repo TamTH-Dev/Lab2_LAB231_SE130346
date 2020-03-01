@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="google-signin-client_id" content="1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com">
-        <title>JSP Page</title>
+        <title>Store</title>
         <link rel="stylesheet" href="./styles/all.css"/>
         <link rel="stylesheet" href="./styles/bootstrap.min.css" />
         <link rel="stylesheet" href="./styles/header.css" />
@@ -130,36 +130,48 @@
                 <a class="view-all-btn" href="DataLoading">View All</a>
             </form>
 
-            <c:if test="${sessionScope.ROLE eq 'User'}">
-                <c:if test="${RecommendationProductByUserPreferencesData.size() != 0}">
-                    <h3 class="products-container-title">Products You Like Most</h3>
-                    <div class="products-container">
-                        <c:forEach items="${RecommendationProductByUserPreferencesData}" var="product">
-                            <div class="card">
-                                <img src="./uploads/${product.imgPath}" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        <c:url value="ProductDetailLoading" var="loadProductDetail" >
+            <c:if test="${param.searchedProductName == null && param.searchedPriceLevel == null}">
+                <c:if test="${sessionScope.ROLE eq 'User'}">
+                    <c:if test="${RecommendationProductByUserPreferencesData.size() != 0}">
+                        <h3 class="products-container-title">Products You Like Most</h3>
+                        <div class="products-container">
+                            <c:forEach items="${RecommendationProductByUserPreferencesData}" var="product">
+                                <div class="card">
+                                    <img src="./uploads/${product.imgPath}" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <c:url value="ProductDetailLoading" var="loadProductDetail" >
+                                                <c:param name="productName" value="${product.productName}" />
+                                            </c:url>
+                                            <a href="${loadProductDetail}" class="product-title">
+                                                ${product.productName}
+                                            </a>
+                                        </h5>
+                                        <p class="card-text">${product.description}</p>
+                                        <c:url value="CartAdding" var="addToCart">
                                             <c:param name="productName" value="${product.productName}" />
+                                            <c:param name="price" value="${product.price}" />
+                                            <c:param name="quantity" value="1" />
+                                            <c:param name="category" value="${product.category}" />
+                                            <c:param name="imgPath" value="${product.imgPath}" />
                                         </c:url>
-                                        <a href="${loadProductDetail}" class="product-title">
-                                            ${product.productName}
-                                        </a>
-                                    </h5>
-                                    <p class="card-text">${product.description}</p>
-                                    <c:url value="CartAdding" var="addToCart">
-                                        <c:param name="productName" value="${product.productName}" />
-                                        <c:param name="price" value="${product.price}" />
-                                        <c:param name="quantity" value="1" />
-                                        <c:param name="category" value="${product.category}" />
-                                        <c:param name="imgPath" value="${product.imgPath}" />
-                                    </c:url>
-                                    <a href="${addToCart}" class="add-btn btn btn-primary">Add to Cart</a>
-                                    <span class="card-price">${product.price} $</span>
+                                        <c:if test="${product.status eq 'Active' && product.quantity > 0}">
+                                            <a href="${addToCart}" class="add-btn btn btn-primary">Add to Cart</a>
+                                        </c:if>
+                                        <c:if test="${product.status eq 'Inactive'}">
+                                            <span style="color: #aaa; position: absolute; left: 15px; bottom: 15px; font-size: 24px; font-weight: 600;">Stopped Sale</span>
+                                        </c:if>
+                                        <c:if test="${product.status eq 'Active'}">
+                                            <c:if test="${product.quantity == 0}">
+                                                <span class="card-status">Sold Out</span>
+                                            </c:if>
+                                        </c:if>
+                                        <span class="card-price">${product.price} $</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </c:forEach>
-                    </div>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                 </c:if>
             </c:if>
             <c:if test="${requestScope.ProductsData.size() != 0}">
@@ -185,7 +197,12 @@
                                     <c:param name="category" value="${product.category}" />
                                     <c:param name="imgPath" value="${product.imgPath}" />
                                 </c:url>
-                                <a href="${addToCart}" class="add-btn btn btn-primary">Add to Cart</a>
+                                <c:if test="${product.quantity > 0}">
+                                    <a href="${addToCart}" class="add-btn btn btn-primary">Add to Cart</a>
+                                </c:if>
+                                <c:if test="${product.quantity == 0}">
+                                    <span class="card-status">Sold Out</span>
+                                </c:if>
                                 <span class="card-price">${product.price} $</span>
                             </div>
                         </div>

@@ -82,6 +82,15 @@
     -webkit-box-orient: vertical;  
 } 
 
+.container .products-container .card .card-body .card-status {
+    color: #f00;
+    font-size: 24px;
+    font-weight: 600;
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+}
+
 .container .products-container .card .card-body .card-price {
     font-size: 24px;
     font-weight: bold;

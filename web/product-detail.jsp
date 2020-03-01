@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="google-signin-client_id" content="1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com">
-        <title>JSP Page</title>
+        <title>${ProductDetail.productName}</title>
         <link rel="stylesheet" href="./styles/all.css"/>
         <link rel="stylesheet" href="./styles/bootstrap.min.css" />
         <link rel="stylesheet" href="./styles/header.css" />
@@ -91,24 +91,32 @@
                 <div class="description">
                     ${ProductDetail.description}
                 </div>
-                <c:url var="addToCart" value="CartAdding">
-                    <c:param name="productName" value="${ProductDetail.productName}" />
-                    <c:param name="price" value="${ProductDetail.price}" />
-                    <c:param name="category" value="${ProductDetail.category}" />
-                    <c:param name="imgPath" value="${ProductDetail.imgPath}" />
-                </c:url>
-                <form action="${addToCart}" method="POST" class="product-order">
-                    <div class="product-amount">
-                        <button type="button" class="edit-amount-btn" id="descrease-amount-btn">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <input type="text" name="quantity" value="1" id="product-amount" />
-                        <button type="button" class="edit-amount-btn" id="increase-amount-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <button type="submit" id="order-btn">Add to Cart</button>
-                </form>
+                <c:if test="${ProductDetail.status eq 'Inactive'}">
+                    <div style="color: #aaa;" class="product-status">Stopped Sale</div>
+                </c:if>
+                <c:if test="${ProductDetail.status eq 'Active' && ProductDetail.quantity == 0}">
+                    <div class="product-status">Sold Out</div>
+                </c:if>
+                <c:if test="${ProductDetail.status eq 'Active' && ProductDetail.quantity > 0}">
+                    <c:url var="addToCart" value="CartAdding">
+                        <c:param name="productName" value="${ProductDetail.productName}" />
+                        <c:param name="price" value="${ProductDetail.price}" />
+                        <c:param name="category" value="${ProductDetail.category}" />
+                        <c:param name="imgPath" value="${ProductDetail.imgPath}" />
+                    </c:url>
+                    <form action="${addToCart}" method="POST" class="product-order">
+                        <div class="product-amount">
+                            <button type="button" class="edit-amount-btn" id="descrease-amount-btn">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="text" name="quantity" value="1" id="product-amount" />
+                            <button type="button" class="edit-amount-btn" id="increase-amount-btn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <button type="submit" id="order-btn">Add to Cart</button>
+                    </form>
+                </c:if>
             </div>
         </div>
 

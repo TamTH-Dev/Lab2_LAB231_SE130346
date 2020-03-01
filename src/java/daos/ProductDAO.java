@@ -98,8 +98,8 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                int quantity = Integer.parseInt(rs.getString("Quantity"));
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
                 String category = rs.getString("Category");
                 Timestamp createTime = rs.getTimestamp("CreateTime");
                 String status = rs.getString("Status");
@@ -146,8 +146,8 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                int quantity = Integer.parseInt(rs.getString("quantity"));
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
                 String category = rs.getString("Category");
                 Timestamp createTime = rs.getTimestamp("CreateTime");
                 SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -166,7 +166,7 @@ public class ProductDAO implements Serializable {
         ProductDTO product = null;
 
         try {
-            String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreateTime, Status from Product where ProductName = ? and Status = 'Active'";
+            String sql = "select ProductName, ImgPath, Description, Quantity, Price, Category, CreateTime, Status from Product where ProductName = ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, pdName);
@@ -175,8 +175,8 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                int quantity = Integer.parseInt(rs.getString("quantity"));
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
                 String category = rs.getString("Category");
                 Timestamp createTime = rs.getTimestamp("CreateTime");
                 SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -423,8 +423,8 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                int quantity = Integer.parseInt(rs.getString("Quantity"));
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
                 String category = rs.getString("Category");
                 String status = rs.getString("Status");
                 Timestamp createTime = rs.getTimestamp("CreateTime");
@@ -456,8 +456,8 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                int quantity = Integer.parseInt(rs.getString("Quantity"));
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
                 String category = rs.getString("Category");
                 String status = rs.getString("Status");
                 Timestamp createTime = rs.getTimestamp("CreateTime");
@@ -491,8 +491,8 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                int quantity = Integer.parseInt(rs.getString("Quantity"));
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
                 String category = rs.getString("Category");
                 String status = rs.getString("Status");
                 Timestamp createTime = rs.getTimestamp("CreateTime");
@@ -573,7 +573,7 @@ public class ProductDAO implements Serializable {
         List<ProductDTO> productsList = null;
 
         try {
-            String sql = "select ProductName, ImgPath, Description, Price from (select ProductName, ImgPath, Description, Price, ROW_NUMBER() over (order by CreateTime desc) as rowNum from Product where Status = 'Active') as product where product.rowNum between ? and ?";
+            String sql = "select ProductName, ImgPath, Description, Quantity, Price from (select ProductName, ImgPath, Description, Quantity, Price, ROW_NUMBER() over (order by CreateTime desc) as rowNum from Product where Status = 'Active') as product where product.rowNum between ? and ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setInt(1, (page - 1) * numOfbBlogsPerPage + 1);
@@ -584,9 +584,10 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
 
-                ProductDTO product = new ProductDTO(productName, imgPath, description, price);
+                ProductDTO product = new ProductDTO(productName, imgPath, description, quantity, price);
                 productsList.add(product);
             }
         } finally {
@@ -616,7 +617,7 @@ public class ProductDAO implements Serializable {
 
     public List<ProductDTO> searchDataByProductNameForUserPage(String searchedProductName, int page, int numOfProductsPerPage) throws Exception {
         List<ProductDTO> productsList = null;
-        String sql = "select ProductName, ImgPath, Description, Price from (select ProductName, ImgPath, Description, Price, ROW_NUMBER() over (order by CreateTime desc) as rowNum from Product where ProductName like ? and Status = 'Active') as product where product.rowNum between ? and ?";
+        String sql = "select ProductName, ImgPath, Description, Quantity, Price from (select ProductName, ImgPath, Description, Quantity, Price, ROW_NUMBER() over (order by CreateTime desc) as rowNum from Product where ProductName like ? and Status = 'Active') as product where product.rowNum between ? and ?";
         try {
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
@@ -630,9 +631,10 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
 
-                ProductDTO product = new ProductDTO(productName, imgPath, description, price);
+                ProductDTO product = new ProductDTO(productName, imgPath, description, quantity, price);
                 productsList.add(product);
             }
         } finally {
@@ -644,7 +646,7 @@ public class ProductDAO implements Serializable {
     public List<ProductDTO> searchDataByPriceLevelForUserPage(double minValue, double maxValue, int page, int numOfProductsPerPage) throws Exception {
         List<ProductDTO> productsList = null;
         try {
-            String sql = "select ProductName, ImgPath, Description, Price from (select ProductName, ImgPath, Description, Price, ROW_NUMBER() over (order by CreateTime desc) as rowNum from Product where Price between ? and ? and Status = 'Active') as product where product.rowNum between ? and ?";
+            String sql = "select ProductName, ImgPath, Description, Quantity, Price from (select ProductName, ImgPath, Description, Quantity, Price, ROW_NUMBER() over (order by CreateTime desc) as rowNum from Product where Price between ? and ? and Status = 'Active') as product where product.rowNum between ? and ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setDouble(1, minValue);
@@ -658,9 +660,10 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
 
-                ProductDTO product = new ProductDTO(productName, imgPath, description, price);
+                ProductDTO product = new ProductDTO(productName, imgPath, description, quantity, price);
                 productsList.add(product);
             }
         } finally {
@@ -673,7 +676,7 @@ public class ProductDAO implements Serializable {
     public List<ProductDTO> searchDataByProductNameAndPriceLevelForUserPage(String searchedProductName, double minValue, double maxValue, int page, int numOfProductsPerPage) throws Exception {
         List<ProductDTO> productsList = null;
         try {
-            String sql = "select ProductName, ImgPath, Description, Price from (select ProductName, ImgPath, Description, Price, ROW_NUMBER() over (order by CreateTime desc) as rowNum from Product where ProductName like ? and Price between ? and ? and Status = 'Active') as product where product.rowNum between ? and ?";
+            String sql = "select ProductName, ImgPath, Description, Quantity, Price from (select ProductName, ImgPath, Description, Quantity, Price, ROW_NUMBER() over (order by CreateTime desc) as rowNum from Product where ProductName like ? and Price between ? and ? and Status = 'Active') as product where product.rowNum between ? and ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, "%" + searchedProductName + "%");
@@ -688,9 +691,10 @@ public class ProductDAO implements Serializable {
                 String productName = rs.getString("ProductName");
                 String imgPath = rs.getString("ImgPath");
                 String description = rs.getString("Description");
-                double price = Double.parseDouble(rs.getString("Price"));
+                int quantity = rs.getInt("Quantity");
+                double price = rs.getDouble("Price");
 
-                ProductDTO product = new ProductDTO(productName, imgPath, description, price);
+                ProductDTO product = new ProductDTO(productName, imgPath, description, quantity, price);
                 productsList.add(product);
             }
         } finally {
@@ -801,7 +805,7 @@ public class ProductDAO implements Serializable {
         List<ProductDTO> recommendProductList = null;
 
         try {
-            String sql = "select ProductName, ImgPath, Description, Price from Product where ProductName in (select top 4 ProductName from SaleDetail where SaleID in (select SaleID from SaleHistory where Email = ?) group by ProductName order by sum(quantity) desc)";
+            String sql = "select ProductName, ImgPath, Description, Quantity, Price, Status from Product where ProductName in (select top 4 ProductName from SaleDetail where SaleID in (select SaleID from SaleHistory where Email = ?) group by ProductName order by sum(quantity) desc)";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, email);
@@ -809,10 +813,12 @@ public class ProductDAO implements Serializable {
             recommendProductList = new ArrayList<>();
             while (rs.next()) {
                String productName = rs.getString("ProductName");
-               String imgPath = rs.getString("imgPath");
-               String description = rs.getString("description");
+               String imgPath = rs.getString("ImgPath");
+               String description = rs.getString("Description");
+               int quantity = rs.getInt("Quantity");
                double price = rs.getDouble("Price");
-               ProductDTO product = new ProductDTO(productName, imgPath, description, price);
+               String status = rs.getString("Status");
+               ProductDTO product = new ProductDTO(productName, imgPath, description, quantity, price, status);
                recommendProductList.add(product);
             }
         } finally {

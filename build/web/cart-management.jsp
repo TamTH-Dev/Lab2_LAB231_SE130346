@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="google-signin-client_id" content="1091231205111-1go7q8tg3q4h7vgs7lkp530hs31lr3dd.apps.googleusercontent.com">
-        <title>JSP Page</title>
+        <title>Cart</title>
         <link rel="stylesheet" href="./styles/all.css"/>
         <link rel="stylesheet" href="./styles/bootstrap.min.css" />
         <link rel="stylesheet" href="./styles/header.css" />

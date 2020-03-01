@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Admin</title>
         <link rel="stylesheet" href="./styles/all.css"/>
         <link rel="stylesheet" href="./styles/bootstrap.min.css" />
         <link rel="stylesheet" href="./styles/header.css" />
@@ -52,7 +52,7 @@
         </header>
 
         <div class="container">
-            <form action="ProductNameAndShoppingTimeSearching" method="POST" class="form-inline search-form">
+            <form action="ProductNameAndPriceLevelSearching" method="POST" class="form-inline search-form">
                 <div class="form-group mr-3">
                     <label for="productName" class="sr-only">Product Name</label>
                     <input id="productName" name="searchedProductName" value="${param.searchedProductName}" type="text" class="form-control" placeholder="Product Name" />
